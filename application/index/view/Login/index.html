@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>用户管理系统-登录界面</title>
+<link href="__PUBLIC__static/easyui/css/easyui.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__static/easyui/css/icon.css" rel="stylesheet" type="text/css" />
+<script src="__PUBLIC__static/easyui/js/jquery.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__static/easyui/js/jquery.easyui.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__static/easyui/js/easyui-lang-zh_CN.js" type="text/javascript"></script>
+</head>
+<body>
+	<!-- <div style="margin:20px 0;"></div> -->
+	<h2 style="text-align: center;position: absolute;top: 20%;left: 0;right: 0;">用户管理系统</h2>
+	<div class="easyui-dialog" title="管理员登录" style="min-width:450px" data-options="iconCls:'icon-tip',closable: false">
+		<div style="padding:10px 60px 20px 60px">
+		    <form action="{:url('Login/check')}" id="ff" method="post" class="easyui-form" data-options="novalidate:true">
+		    	<table cellpadding="5">
+		    		<tr>
+		    			<td>用户名:</td>
+		    			<td><input class="easyui-textbox" type="text" name="username" data-options="required:true" placeholder="用户名"></input></td>
+		    		</tr>
+		    		<tr>
+		    			<td>密码:</td>
+		    			<td><input class="easyui-textbox" type="password" name="password" data-options="required:true" placeholder="密码"></input></td>
+		    		</tr>
+		    		<tr>
+		    			<td>验证码:</td>
+		    			<td><input class="easyui-textbox" type="text" name="code" data-options="required:true"></td>
+
+		    		</tr>
+		    		<tr>
+		    			<td><img src="{:captcha_src()}" alt="captcha" title="点击更换" onclick="this.src='{:captcha_src()}'" id="verify" /></td>
+		    		</tr>
+		    		<!-- <tr><td>{:captcha_img()}</td></tr> -->
+		    		<!-- <tr>
+		    			<td><input type="submit" class="easyui-linkbutton" value="登录"></td>
+		    			<td><input type="reset" class="easyui-linkbutton" value="重置"></td>
+		    			<td><a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" type="submit">登录</a></td>
+		    		</tr> -->
+		    	</table>
+		    </form>
+			<div style="text-align:center;padding:5px">
+				<div></div>
+	            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">登录</a>
+	            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">清空</a>
+	        </div>
+	    </div>
+	</div>
+	<script>
+	    function submitForm(){
+	        $('#ff').form('submit',{
+	            onSubmit:function(){
+	                return $(this).form('enableValidation').form('validate');
+	            },
+	            success:function(data){
+	                var d = $.parseJSON(data);
+	                // var d=data;
+	                console.log(d.msg);
+	                if(d.code==1){
+	                    window.location= "{:url('Index/index')}";
+	                }else{
+	                	$('#verify').click();
+	                    $.messager.alert('提示:', d.msg,'error');
+	                }
+	            }
+	        });
+	    }
+	    function clearForm(){
+	        $('#ff').form('clear');
+	    }
+	    //回车提交表单
+	    $.parser.onComplete = function(){
+	        $(".textbox-text").keyup(function (e) {
+	            if (e.keyCode == 13) {
+	                submitForm();
+	            }
+	        });
+	    };
+	</script>
+</body>
+</html>
