@@ -1,6 +1,7 @@
 <?php
 namespace app\index\controller;
 // use think\Controller;
+use app\index\model\Menu;
 class Index extends Base
 {
 	public function index()
@@ -12,6 +13,13 @@ class Index extends Base
 		return $this->fetch();
 	}
 
-
+	public function menu(){
+		$menu=new Menu();
+		// var_dump($menu->getmenu());
+		// echo $menu->getmenu()['data'];
+		$json=$menu->getmenu();
+		// dump($json);
+		return $json;
+	}
 
 }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2016-09-28 18:06:04
+Date: 2016-10-07 18:07:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -63,6 +63,28 @@ CREATE TABLE `client_disease` (
 -- ----------------------------
 -- Records of client_disease
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for client_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `client_menu`;
+CREATE TABLE `client_menu` (
+  `menuid` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `menuname` varchar(255) NOT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `url` varchar(255) NOT NULL,
+  `pid` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`menuid`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of client_menu
+-- ----------------------------
+INSERT INTO `client_menu` VALUES ('1', '网电咨询管理', 'icon-sys', 'menu1/treegrid.html', '0');
+INSERT INTO `client_menu` VALUES ('2', '网电咨询', 'icon-sys', 'menu1/treegrid.html', '1');
+INSERT INTO `client_menu` VALUES ('3', '系统设置', 'icon-sys', 'menu1/treegrid.html', '0');
+INSERT INTO `client_menu` VALUES ('4', '管理员设置', 'icon-sys', 'menu1/treegrid.html', '3');
+INSERT INTO `client_menu` VALUES ('5', '权限设置', 'icon-sys', 'menu1/treegrid.html', '3');
 
 -- ----------------------------
 -- Table structure for client_role
