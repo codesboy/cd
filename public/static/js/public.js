@@ -1,4 +1,4 @@
-var _menus = {
+var _menus1 = {
     "menus": [{
         "menuid": "1",
         "icon": "icon-sys",

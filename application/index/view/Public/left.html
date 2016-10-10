@@ -4,57 +4,26 @@
     </div>
 </div>
 <script>
-	/*$('#nav').tree(
+    /*$('#nav').tree(
     {
         url:"{:url('menu')}"
     });*/
     var _menus = {};
-    //同步获取
+
     $.ajax({
-        type: 'GET',
         url: "{:url('menu')}?r=" + Math.random(),
-        async: false,//同步
+        type: 'GET',
         dataType: 'json',
-        success: function (data) {
-            _menus = data;
-            console.log(data)
-        },
-        error: function (xhr, status, error) {
-            alert("操作失败"); //xhr.responseText
-        }
+        async: false,//同步
+    })
+    .done(function(data) {
+        // console.log(typeof(data))
+        _menus=JSON.parse(data);
+        // console.log(_menus)
+
+    })
+    .fail(function() {
+        console.log("未知错误");
     });
-    _menus1={
-    "menus": [
-        {
-            "menuid": 1,
-            "menuname": "网电咨询管理",
-            "icon": "icon-sys",
-            "url": "menu1/treegrid.html"
-        },
-        {
-            "menuid": 2,
-            "menuname": "网电咨询",
-            "icon": "icon-sys",
-            "url": "menu1/treegrid.html"
-        },
-        {
-            "menuid": 3,
-            "menuname": "系统设置",
-            "icon": "icon-sys",
-            "url": "menu1/treegrid.html"
-        },
-        {
-            "menuid": 4,
-            "menuname": "管理员设置",
-            "icon": "icon-sys",
-            "url": "menu1/treegrid.html"
-        },
-        {
-            "menuid": 5,
-            "menuname": "权限设置",
-            "icon": "icon-sys",
-            "url": "menu1/treegrid.html"
-        }
-    ]
-}
+    // console.log(_menus)
 </script>
