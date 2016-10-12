@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
+Source Server         : localhost
 Source Server Version : 50547
 Source Host           : localhost:3306
 Source Database       : clients
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2016-10-12 18:08:36
+Date: 2016-10-12 22:43:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -144,6 +144,25 @@ CREATE TABLE `client_role` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for client_user
+-- ----------------------------
+DROP TABLE IF EXISTS `client_user`;
+CREATE TABLE `client_user` (
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `username` char(20) NOT NULL,
+  `password` char(32) NOT NULL,
+  `status` tinyint(4) DEFAULT NULL,
+  `power` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of client_user
+-- ----------------------------
+INSERT INTO `client_user` VALUES ('1', 'admin', '14e1b600b1fd579f47433b88e8d85291', '1', '1');
+INSERT INTO `client_user` VALUES ('2', 'rehack', 'dfc4ae407ca619b8d4a03b9f14034277', '1', '1');
+
+-- ----------------------------
 -- Table structure for client_users_consumer
 -- ----------------------------
 DROP TABLE IF EXISTS `client_users_consumer`;
@@ -164,6 +183,7 @@ CREATE TABLE `client_users_consumer` (
 DROP TABLE IF EXISTS `client_users_info`;
 CREATE TABLE `client_users_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `usersn` char(20) NOT NULL,
   `username` char(20) NOT NULL,
   `age` tinyint(2) NOT NULL,
   `sex` tinyint(1) NOT NULL,
@@ -180,14 +200,34 @@ CREATE TABLE `client_users_info` (
 -- ----------------------------
 DROP TABLE IF EXISTS `client_users_zixun`;
 CREATE TABLE `client_users_zixun` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(10) unsigned NOT NULL,
-  `zx_disease` varchar(255) NOT NULL,
-  `zx_tool` varchar(255) NOT NULL,
-  `zx_time` datetime NOT NULL
+  `disease_id` tinyint(3) unsigned NOT NULL,
+  `tool_id` tinyint(3) unsigned NOT NULL,
+  `zx_time` datetime NOT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_users_zixun
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for client_user_yuyue
+-- ----------------------------
+DROP TABLE IF EXISTS `client_user_yuyue`;
+CREATE TABLE `client_user_yuyue` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned DEFAULT NULL,
+  `disease_id` int(10) unsigned DEFAULT NULL,
+  `time` datetime DEFAULT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of client_user_yuyue
 -- ----------------------------
 
 -- ----------------------------
@@ -206,3 +246,4 @@ CREATE TABLE `client_zx_tools` (
 INSERT INTO `client_zx_tools` VALUES ('1', '商务通');
 INSERT INTO `client_zx_tools` VALUES ('2', 'QQ');
 INSERT INTO `client_zx_tools` VALUES ('3', '微信');
+SET FOREIGN_KEY_CHECKS=1;
