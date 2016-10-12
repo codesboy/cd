@@ -230,7 +230,7 @@ return [
     // 以下是自定义的配置:
     // 模板输出替换
     'view_replace_str'  =>  [
-        '__PUBLIC__'=>'/public/',
+        '__PUBLIC__'=>'/',
         '__ROOT__' => '/',
     ],
 
