@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2016-10-12 18:08:36
+Date: 2016-10-14 19:08:27
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -49,6 +49,23 @@ CREATE TABLE `client_department` (
 -- ----------------------------
 -- Records of client_department
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for client_dev_from
+-- ----------------------------
+DROP TABLE IF EXISTS `client_dev_from`;
+CREATE TABLE `client_dev_from` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `dev` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of client_dev_from
+-- ----------------------------
+INSERT INTO `client_dev_from` VALUES ('1', '企划部');
+INSERT INTO `client_dev_from` VALUES ('2', '网络部');
+INSERT INTO `client_dev_from` VALUES ('3', '网络渠道');
 
 -- ----------------------------
 -- Table structure for client_disease
@@ -93,14 +110,20 @@ DROP TABLE IF EXISTS `client_from`;
 CREATE TABLE `client_from` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `from` varchar(255) NOT NULL,
+  `pid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_from
 -- ----------------------------
-INSERT INTO `client_from` VALUES ('1', '道闸广告');
-INSERT INTO `client_from` VALUES ('2', '电梯广告');
+INSERT INTO `client_from` VALUES ('1', '道闸广告', '1');
+INSERT INTO `client_from` VALUES ('2', '电梯广告', '1');
+INSERT INTO `client_from` VALUES ('3', '搜狗pc', '2');
+INSERT INTO `client_from` VALUES ('4', '微博', '3');
+INSERT INTO `client_from` VALUES ('5', '微信', '3');
+INSERT INTO `client_from` VALUES ('6', '朋友介绍', '1');
+INSERT INTO `client_from` VALUES ('7', '朋友介绍', '2');
 
 -- ----------------------------
 -- Table structure for client_menu
@@ -123,7 +146,7 @@ INSERT INTO `client_menu` VALUES ('2', '网电咨询', 'icon-tip', 'menu1/treegr
 INSERT INTO `client_menu` VALUES ('3', '系统设置', 'icon-sys', '', '0');
 INSERT INTO `client_menu` VALUES ('4', '管理员设置', 'icon-sys', 'menu1/treegrid.html', '3');
 INSERT INTO `client_menu` VALUES ('5', '权限设置', 'icon-sys', 'menu1/treegrid.html', '3');
-INSERT INTO `client_menu` VALUES ('7', '新增客户信息', 'icon-add', 'useradd', '1');
+INSERT INTO `client_menu` VALUES ('7', '新增客户信息', 'icon-add', '../Useradd/', '1');
 INSERT INTO `client_menu` VALUES ('6', '数据字典', null, '', '3');
 
 -- ----------------------------
@@ -165,11 +188,15 @@ DROP TABLE IF EXISTS `client_users_info`;
 CREATE TABLE `client_users_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` char(20) NOT NULL,
+  `usersn` char(20) NOT NULL,
   `age` tinyint(2) NOT NULL,
   `sex` tinyint(1) NOT NULL,
   `tel` char(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `addtime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `usersn` (`usersn`),
+  UNIQUE KEY `tel` (`tel`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_users_info
@@ -183,7 +210,7 @@ CREATE TABLE `client_users_zixun` (
   `uid` int(10) unsigned NOT NULL,
   `zx_disease` varchar(255) NOT NULL,
   `zx_tool` varchar(255) NOT NULL,
-  `zx_time` datetime NOT NULL
+  `zx_time` int(10) unsigned NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
