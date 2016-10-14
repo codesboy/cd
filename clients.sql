@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
+Source Server         : localhost
 Source Server Version : 50547
 Source Host           : localhost:3306
 Source Database       : clients
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2016-10-14 19:12:40
+Date: 2016-10-15 00:20:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -203,6 +203,23 @@ CREATE TABLE `client_users_info` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for client_users_yuyue
+-- ----------------------------
+DROP TABLE IF EXISTS `client_users_yuyue`;
+CREATE TABLE `client_users_yuyue` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(10) unsigned DEFAULT NULL,
+  `disease_id` int(10) unsigned DEFAULT NULL,
+  `time` datetime DEFAULT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of client_users_yuyue
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for client_users_zixun
 -- ----------------------------
 DROP TABLE IF EXISTS `client_users_zixun`;
@@ -233,3 +250,4 @@ CREATE TABLE `client_zx_tools` (
 INSERT INTO `client_zx_tools` VALUES ('1', '商务通');
 INSERT INTO `client_zx_tools` VALUES ('2', 'QQ');
 INSERT INTO `client_zx_tools` VALUES ('3', '微信');
+SET FOREIGN_KEY_CHECKS=1;
