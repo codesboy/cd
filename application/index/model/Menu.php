@@ -2,7 +2,7 @@
 namespace app\index\model;
 use think\Model;
 use think\Db;
-
+// 左侧导航菜单模型
 class Menu extends Model{
 	public function getmenu(){
         // 查询数据

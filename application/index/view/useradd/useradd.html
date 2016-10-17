@@ -21,7 +21,6 @@
     	    		<tr>
     	    			<td>姓名：</td>
     	    			<td><input class="easyui-textbox" type="text" name="name" data-options="required:true"></input></td>
-
     	    			<td>性别：</td>
     	    			<td>
     	    				<select name="sex" class="easyui-combobox" data-options="panelHeight:'auto',editable:false">
@@ -30,13 +29,12 @@
     	    					<option value="2">女</option>
     	    				</select>
     	    			</td>
-
     	    		</tr>
     	    		<tr>
                         <td>年龄：</td>
-                        <td><input class="easyui-textbox" type="number" value="0" name="age"></input></td>
+                        <td><input class="easyui-textbox" type="number" name="age"></input></td>
     	    			<td>手机号码：</td>
-    	    			<td><input class="easyui-textbox" type="text" name="tel" required="true" data-options="required:true"></input></td>
+                        <td><input class="easyui-textbox" type="text" name="tel" required="true" data-options="required:true"></input></td>
 
     	    		</tr>
                     <tr>
@@ -62,7 +60,7 @@
     	    		<tr>
     	    			<td>咨询工具：</td>
     	    			<td>
-    	    				<select id="tool" class="easyui-combobox" name="tool" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['tool','请选择咨询工具']">
+    	    				<select id="tool" class="easyui-combobox" name="tool" data-options="panelHeight:'auto',editable:false">
     	    					<option value="0">--------------请选择-------------</option>
     	    					{volist name="zx_tools" id="b" }
     	    					<option value="{$b.id}">{$b.tool}</option>
@@ -96,10 +94,6 @@
     	    			<td>网电咨询备注：</td>
     	    			<td>
     	    				<textarea class="" name="comment" id="" cols="21" rows="5"></textarea>
-    	    				<!-- 客户编号预约号 -->
-                            <input class="easyui-textbox" name="usersn" type="hidden" value="{$num}"></input>
-                            <!-- 提交时间 -->
-    	    				<input class="easyui-textbox" name="addtime" type="hidden" value="{$addtime}"></input>
     	    			</td>
     	    		</tr>
                     <!-- <tr>
@@ -116,6 +110,7 @@
     	    	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">保存</a>
     	    	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
     	    </div>
+            <div style="color: red;font-size: 16px;margin-top: 20px;"><span id="getmsg"></span></div>
     	    </div>
     	</div>
 	</center>
@@ -124,11 +119,19 @@
     			$('#useradd').form('submit',{
     				onSubmit:function(){
     					return $(this).form('enableValidation').form('validate');
-    				}
+    				},
+                    success:function(data){
+                        // console.log(data);
+                        if(data=='客户添加成功!'){
+                            clearForm();
+                        }
+                        $('#getmsg').html('操作提示：'+data);
+                    }
+
     			});
     		}
     		function clearForm(){
-    			$('#ff').form('clear');
+                $('#useradd').form('reset');
     		}
 
 

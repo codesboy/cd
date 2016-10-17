@@ -1,10 +1,10 @@
 <?php
 namespace app\index\controller;
-// use think\Controller;
 // use app\index\model\Menu;
 use think\Validate;
 use think\Db;
 use app\index\model\AddForm;
+use app\index\model\UsersInfo;
 class Useradd extends Base{
 	// 填充表单数据
 	public function index(){
@@ -31,32 +31,22 @@ class Useradd extends Base{
 	}
 
 	// 联动
-	public function link1(){
-		$addform=new AddForm;
-		if(request()->isPost()){
-			// dump(input('post.'));
-			$dev=$addform->getinfo('dev_from'); //开发渠道
-			// return json($dev);
-			return $dev;
-		}
-
-	}
 	public function link($id){
 		$addform=new AddForm;
-		if(request()->isPost()){
-			// dump(input('post.'));
-			$from=$addform->linkage($id); //信息来源
-			return json($from);
-		}
+		// dump(input('post.'));
+		$from=$addform->linkage($id); //信息来源
+		return json($from);
 
 	}
 
-	// 新增客户信息
+	// 新增客户基本信息、
 	public function useradd(){
+
+		$num=build_order_no(); //客户编号 预约号
 
 		// dump(input('post.'));
 		if(request()->isPost()){
-			$data=[
+			$info_data=[
 				'username'=>input('name'),
 				'age'=>input('age'),
 				'sex'=>input('sex'),
@@ -64,25 +54,43 @@ class Useradd extends Base{
 				// 'tool'=>input('tool'),
 				// 'disease'=>input('disease'),
 				// 'doctor'=>input('doctor'),
-				'addtime'=>input('addtime'),
+				'addtime'=>time(),
 				// 'comment'=>input('comment'),
-				'usersn'=>input('usersn')
+				'usersn'=>$num
 			];
 
-			$validate = Loader::validate('User');
+			$zixun_data=[
+				'zx_disease' =>input('disease'),
+				'zx_tool' =>input('tool'),
+				'zx_time' =>time()
+			];
 
-			if(!$validate->check($data)){
-			    dump($validate->getError());
-			}
+			$yuyue_data=[
+				'yy_disease_id' =>input('disease'),
+				'yy_doctor_id' =>input('doctor'),
+				'yy_time' =>strtotime(input('time'))
+			];
 
-			dump($data);
 
 
-			if(Db::name('users_info')->insert($data)){
-				return "客户添加成功";
+			// $validate = Loader::validate('Useradd');
+			$validate = validate('User');
+
+			if(!$validate->check($info_data)){
+			    // $this->error($validate->getError());
+			    return $validate->getError();
+			    exit;
 			}else{
-				return "客户添加失败";
+				$user=new UsersInfo;
+				$user->save($info_data);
+				if($user->zixun()->save($zixun_data) && $user->yuyue()->save($yuyue_data)){
+					return "客户添加成功!";
+					// return $this->success('客户添加成功!','');
+				}else{
+					return "客户添加失败!";
+				}
 			}
+			
 		}else{
 			return $this->fetch();
 		}

@@ -1,6 +1,8 @@
 <?php
 namespace app\index\model;
 use think\Model;
+
+// 登录模型 验证
 class Login extends Model{
 	public function login($username,$password,$code){
 
