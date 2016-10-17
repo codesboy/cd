@@ -14,8 +14,7 @@ class Useradd extends Base{
 		$disease=$addform->getinfo('disease'); //咨询病种
 		$zx_tools=$addform->getinfo('zx_tools'); //咨询工具
 		$doctors=$addform->getinfo('doctors'); //预约医生
-		$num=build_order_no(); //客户编号 预约号
-		$addtime=time();
+
 
 		$this->assign([
             'dev'  => $dev,
@@ -23,8 +22,6 @@ class Useradd extends Base{
             'disease' => $disease,
             'zx_tools' => $zx_tools,
             'doctors' => $doctors,
-            'num' => $num,
-            'addtime' => $addtime,
 
         ]);
 		return $this->fetch('useradd');
@@ -39,7 +36,7 @@ class Useradd extends Base{
 
 	}
 
-	// 新增客户基本信息、
+	// 新增客户
 	public function useradd(){
 
 		$num=build_order_no(); //客户编号 预约号
@@ -51,18 +48,18 @@ class Useradd extends Base{
 				'age'=>input('age'),
 				'sex'=>input('sex'),
 				'tel'=>input('tel'),
-				// 'tool'=>input('tool'),
-				// 'disease'=>input('disease'),
-				// 'doctor'=>input('doctor'),
+				'dev_id'=>input('dev'),
+				'from_id'=>input('from'),
+				'tool_id'=>input('tool'),
 				'addtime'=>time(),
-				// 'comment'=>input('comment'),
 				'usersn'=>$num
 			];
 
 			$zixun_data=[
-				'zx_disease' =>input('disease'),
-				'zx_tool' =>input('tool'),
-				'zx_time' =>time()
+				'zx_tool_id' =>input('tool'),
+				'zx_disease_id' =>input('disease'),
+				'zx_comment' => input('comment'),
+				'zx_time' =>time(),
 			];
 
 			$yuyue_data=[
@@ -71,12 +68,21 @@ class Useradd extends Base{
 				'yy_time' =>strtotime(input('time'))
 			];
 
-
+			// dump($zixun_data);
+			// exit;
 
 			// $validate = Loader::validate('Useradd');
 			$validate = validate('User');
 
-			if(!$validate->check($info_data)){
+			$users_info_scene=$validate->scene('users_info')->check($info_data);
+			$users_zixun_scene=$validate->scene('users_zixun')->check($zixun_data);
+			$users_yuyue_scene=$validate->scene('users_yuyue')->check($yuyue_data);
+
+
+			dump($info_data);
+			exit;
+
+			if(!$users_info_scene || !$users_zixun_scene || !$users_yuyue_scene){
 			    // $this->error($validate->getError());
 			    return $validate->getError();
 			    exit;
@@ -90,9 +96,10 @@ class Useradd extends Base{
 					return "客户添加失败!";
 				}
 			}
-			
+
 		}else{
-			return $this->fetch();
+			return '非法操作！';
+			exit;
 		}
 	}
 }

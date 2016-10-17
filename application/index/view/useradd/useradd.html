@@ -12,35 +12,35 @@
 </head>
 <body>
     <center>
-    	<p>请在以下表单中正确地录入用户的基本信息.</p>
-    	<div style="margin:20px 0;"></div>
-    	<div class="easyui-panel" title="用户基本信息" style="width:880px;">
-    		<div style="padding:10px 60px 20px 60px">
+        <p>请在以下表单中正确地录入用户的基本信息.</p>
+        <div style="margin:20px 0;"></div>
+        <div class="easyui-panel" title="用户基本信息" style="width:880px;">
+            <div style="padding:10px 60px 20px 60px">
             <form action="{:url('useradd')}" id="useradd" class="easyui-form" method="post" data-options="novalidate:true">
-    	    	<table cellpadding="5">
-    	    		<tr>
-    	    			<td>姓名：</td>
-    	    			<td><input class="easyui-textbox" type="text" name="name" data-options="required:true"></input></td>
-    	    			<td>性别：</td>
-    	    			<td>
-    	    				<select name="sex" class="easyui-combobox" data-options="panelHeight:'auto',editable:false">
-    	    					<option value="0">未知</option>
-    	    					<option value="1">男</option>
-    	    					<option value="2">女</option>
-    	    				</select>
-    	    			</td>
-    	    		</tr>
-    	    		<tr>
+                <table cellpadding="5">
+                    <tr>
+                        <td>姓名：</td>
+                        <td><input class="easyui-textbox" type="text" name="name" data-options="required:true"></input></td>
+                        <td>性别：</td>
+                        <td>
+                            <select name="sex" class="easyui-combobox" data-options="panelHeight:'auto',editable:false">
+                                <option value="0">未知</option>
+                                <option value="1">男</option>
+                                <option value="2">女</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>年龄：</td>
                         <td><input class="easyui-textbox" type="number" name="age"></input></td>
-    	    			<td>手机号码：</td>
+                        <td>手机号码：</td>
                         <td><input class="easyui-textbox" type="text" name="tel" required="true" data-options="required:true"></input></td>
 
-    	    		</tr>
+                    </tr>
                     <tr>
                         <td>开发渠道：</td>
                         <td>
-                            <select id="dev" class="easyui-combobox" name="dev" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['dev','请选择开发渠道']">
+                            <select id="dev" class="easyui-combobox" name="dev" required="true" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['dev','请选择开发渠道']">
                                 <option value="0">--------------请选择-------------</option>
                                 {volist name="dev" id="e" }
                                 <option value="{$e.id}">{$e.dev}</option>
@@ -49,7 +49,7 @@
                         </td>
                         <td>信息来源：</td>
                         <td>
-                            <select id="from" class="easyui-combobox" name="from" required="true" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['from','请选择信息来源']">
+                            <select id="from" class="easyui-combobox easyui-validatebox" name="from" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['from','请选择信息来源']">
                                 <option value="0">--------------请选择-------------</option>
                                 {volist name="forminfo" id="a" }
                                 <option value="{$a.id}">{$a.from}</option>
@@ -57,45 +57,45 @@
                             </select>
                         </td>
                     </tr>
-    	    		<tr>
-    	    			<td>咨询工具：</td>
-    	    			<td>
-    	    				<select id="tool" class="easyui-combobox" name="tool" data-options="panelHeight:'auto',editable:false">
-    	    					<option value="0">--------------请选择-------------</option>
-    	    					{volist name="zx_tools" id="b" }
-    	    					<option value="{$b.id}">{$b.tool}</option>
-    	    					{/volist}
-    	    				</select>
-    	    			</td>
-    	    			<td>咨询病种：</td>
-    	    			<td>
-    	    				<select id="disease" class="easyui-combobox" name="disease" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['disease','请选择咨询病种']">
-    	    					<option value="0">--------------请选择-------------</option>
-    	    					{volist name="disease" id="c" }
-    	    					<option value="{$c.id}">{$c.disease_name}</option>
-    	    					{/volist}
-    	    				</select>
-    	    			</td>
-    	    		</tr>
-    	    		<tr>
-    	    			<td>预约医生：</td>
-    	    			<td>
-    	    				<select class="easyui-combobox" name="doctor" data-options="panelHeight:'auto',editable:false">
-    	    					<option value="0">--------------请选择-------------</option>
-    	    					{volist name="doctors" id="d" }
-    	    					<option value="{$d.id}">{$d.doctor}</option>
-    	    					{/volist}
-    	    				</select>
-    	    			</td>
-    	    			<td>预约时间：</td>
-    	    			<td><input class="easyui-datetimebox" name="time" id="time"></input></td>
-    	    		</tr>
-    	    		<tr>
-    	    			<td>网电咨询备注：</td>
-    	    			<td>
-    	    				<textarea class="" name="comment" id="" cols="21" rows="5"></textarea>
-    	    			</td>
-    	    		</tr>
+                    <tr>
+                        <td>咨询工具：</td>
+                        <td>
+                            <select id="tool" class="easyui-combobox" name="tool" data-options="panelHeight:'auto',editable:false">
+                                <option value="0">--------------请选择-------------</option>
+                                {volist name="zx_tools" id="b" }
+                                <option value="{$b.id}">{$b.tool}</option>
+                                {/volist}
+                            </select>
+                        </td>
+                        <td>咨询病种：</td>
+                        <td>
+                            <select id="disease" class="easyui-combobox" name="disease" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['disease','请选择咨询病种']">
+                                <option value="0">--------------请选择-------------</option>
+                                {volist name="disease" id="c" }
+                                <option value="{$c.id}">{$c.disease_name}</option>
+                                {/volist}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>预约医生：</td>
+                        <td>
+                            <select class="easyui-combobox" name="doctor" data-options="panelHeight:'auto',editable:false">
+                                <option value="0">--------------请选择-------------</option>
+                                {volist name="doctors" id="d" }
+                                <option value="{$d.id}">{$d.doctor}</option>
+                                {/volist}
+                            </select>
+                        </td>
+                        <td>预约时间：</td>
+                        <td><input class="easyui-datetimebox" name="time" id="time"></input></td>
+                    </tr>
+                    <tr>
+                        <td>网电咨询备注：</td>
+                        <td>
+                            <textarea class="" name="comment" id="" cols="21" rows="5"></textarea>
+                        </td>
+                    </tr>
                     <!-- <tr>
                         <td>
                             <input type="submit" class="easyui-linkbutton" value="保存">
@@ -104,22 +104,22 @@
                             <input type="reset" class="easyui-linkbutton" value="重置">
                         </td>
                     </tr> -->
-    	    	</table>
-    	    </form>
-    	    <div style="text-align:center;padding:5px">
-    	    	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">保存</a>
-    	    	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
-    	    </div>
+                </table>
+            </form>
+            <div style="text-align:center;padding:5px">
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">保存</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
+            </div>
             <div style="color: red;font-size: 16px;margin-top: 20px;"><span id="getmsg"></span></div>
-    	    </div>
-    	</div>
-	</center>
-    	<script>
-    		function submitForm(){
-    			$('#useradd').form('submit',{
-    				onSubmit:function(){
-    					return $(this).form('enableValidation').form('validate');
-    				},
+            </div>
+        </div>
+    </center>
+        <script>
+            function submitForm(){
+                $('#useradd').form('submit',{
+                    onSubmit:function(){
+                        return $(this).form('enableValidation').form('validate');
+                    },
                     success:function(data){
                         // console.log(data);
                         if(data=='客户添加成功!'){
@@ -128,41 +128,41 @@
                         $('#getmsg').html('操作提示：'+data);
                     }
 
-    			});
-    		}
-    		function clearForm(){
+                });
+            }
+            function clearForm(){
                 $('#useradd').form('reset');
-    		}
+            }
 
 
 
-			$(function(){
-				$('#time').datebox().datebox('calendar').calendar({
-					validator: function(date){
-						var now = new Date();
-						var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-						return d1<=date;
-					}
-				});
+            $(function(){
+                $('#time').datebox().datebox('calendar').calendar({
+                    validator: function(date){
+                        var now = new Date();
+                        var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                        return d1<=date;
+                    }
+                });
 
-				// 下拉列表扩展验证
-				$.extend($.fn.validatebox.defaults.rules, {
-				    comboxValidate : {
-				        validator : function(value, param,missingMessage) {
-				            if($('#'+param).combobox('getValue')!=0 && $('#'+param).combobox('getValue')!=null){
-				                return true;
-				            }
-				            return false;
-				        },
-				        message : "{1}"
-				    }
-				});
+                // 下拉列表扩展验证
+                $.extend($.fn.validatebox.defaults.rules, {
+                    comboxValidate : {
+                        validator : function(value, param,missingMessage) {
+                            if($('#'+param).combobox('getValue')!=0 && $('#'+param).combobox('getValue')!=null){
+                                return true;
+                            }
+                            return false;
+                        },
+                        message : "{1}"
+                    }
+                });
 
                 // 联动
                 $('#dev').combobox({
                     onChange:function(){
                         var pid = $('#dev').combobox('getValue');
-                        $('#from').combobox('setValue' , '');
+                        $('#from').combobox('setValue','');
                         //信息来源
                         $('#from').combobox({
                         valueField:'id', //值字段
@@ -176,11 +176,14 @@
                     }
                 });
 
+                $('#from').combobox({
+                    required:true,
+                })
 
 
-			})
+            })
 
 
-    	</script>
+        </script>
 </body>
 </html>
