@@ -2,16 +2,28 @@
 namespace app\index\model;
 use think\Model;
 use think\Db;
-
+use think\paginator;
 // 填充表单数据模型
 
 class GetMainData extends Model{
-	
+
 	// 获取表单数据
-	function getinfo($v){
-		$data=Db::name($v)
-		->select();
-		$total=db($v)->count();;
+	function getinfo($table,$page=1,$rows=10){
+	// function getinfo($table){
+		//计算当前偏移值
+        $offset=($page-1)*$rows;
+
+		/*$data=Db::name($table)->paginate(2,true,[
+		    'type'     => 'bootstrap',
+		    'var_page' => 'page',
+		]);*/
+		// ->select();
+
+		//查询指定分页的数据
+		$data=Db::name($table)
+			->limit($offset,$rows)
+			->select();
+		$total=db($table)->count();
 		$result=[
 			'total'=>$total,
 			'rows'=>$data
