@@ -6,6 +6,10 @@ use think\Model;
 // 用户信息模型
 class UsersInfo extends Model
 {
+    protected $type = [
+        'yy_time'    =>  'timestamp'
+    ];
+
     public function zixun()
     {
         return $this->hasMany('users_zixun','uid');

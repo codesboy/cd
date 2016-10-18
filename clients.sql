@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
+Source Server         : localhost_3306
 Source Server Version : 50547
 Source Host           : localhost:3306
 Source Database       : clients
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2016-10-18 01:21:31
+Date: 2016-10-18 18:02:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -142,11 +142,11 @@ CREATE TABLE `client_menu` (
 -- Records of client_menu
 -- ----------------------------
 INSERT INTO `client_menu` VALUES ('1', '网电咨询管理', 'icon-sys', '', '0');
-INSERT INTO `client_menu` VALUES ('2', '网电咨询', 'icon-tip', 'menu1/treegrid.html', '1');
+INSERT INTO `client_menu` VALUES ('2', '网电咨询', 'icon-tip', '/index/maindata/', '1');
 INSERT INTO `client_menu` VALUES ('3', '系统设置', 'icon-sys', '', '0');
 INSERT INTO `client_menu` VALUES ('4', '管理员设置', 'icon-sys', 'menu1/treegrid.html', '3');
 INSERT INTO `client_menu` VALUES ('5', '权限设置', 'icon-sys', 'menu1/treegrid.html', '3');
-INSERT INTO `client_menu` VALUES ('7', '新增客户信息', 'icon-add', '/index/Useradd/', '1');
+INSERT INTO `client_menu` VALUES ('7', '新增客户', 'icon-add', '/index/useradd/', '1');
 INSERT INTO `client_menu` VALUES ('6', '数据字典', null, '', '3');
 
 -- ----------------------------
@@ -199,11 +199,14 @@ CREATE TABLE `client_users_info` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `usersn` (`usersn`),
   UNIQUE KEY `tel` (`tel`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_users_info
 -- ----------------------------
+INSERT INTO `client_users_info` VALUES ('1', 'd', 'FA18769947020403', '0', '0', '13999999999', '1', '1', '1', '1476776994');
+INSERT INTO `client_users_info` VALUES ('2', '22', 'FA18848421248925', '0', '0', '13266554412', '1', '1', '1', '1476784842');
+INSERT INTO `client_users_info` VALUES ('3', '222', 'FA18849194653144', '56', '0', '13699955415', '3', '5', '2', '1476784919');
 
 -- ----------------------------
 -- Table structure for client_users_yuyue
@@ -216,11 +219,14 @@ CREATE TABLE `client_users_yuyue` (
   `yy_doctor_id` tinyint(3) unsigned NOT NULL,
   `yy_time` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_users_yuyue
 -- ----------------------------
+INSERT INTO `client_users_yuyue` VALUES ('1', '1', '2', '2', '1478332160');
+INSERT INTO `client_users_yuyue` VALUES ('2', '2', '1', '2', '1480500031');
+INSERT INTO `client_users_yuyue` VALUES ('3', '3', '5', '1', '0');
 
 -- ----------------------------
 -- Table structure for client_users_zixun
@@ -234,11 +240,14 @@ CREATE TABLE `client_users_zixun` (
   `zx_time` int(11) unsigned NOT NULL,
   `zx_comment` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_users_zixun
 -- ----------------------------
+INSERT INTO `client_users_zixun` VALUES ('1', '1', '2', '1', '1476776994', '备注');
+INSERT INTO `client_users_zixun` VALUES ('2', '2', '1', '1', '1476784842', 'beuz');
+INSERT INTO `client_users_zixun` VALUES ('3', '3', '5', '2', '1476784919', '');
 
 -- ----------------------------
 -- Table structure for client_zx_tools
@@ -256,4 +265,3 @@ CREATE TABLE `client_zx_tools` (
 INSERT INTO `client_zx_tools` VALUES ('1', '商务通');
 INSERT INTO `client_zx_tools` VALUES ('2', 'QQ');
 INSERT INTO `client_zx_tools` VALUES ('3', '微信');
-SET FOREIGN_KEY_CHECKS=1;

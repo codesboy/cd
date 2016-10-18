@@ -10,7 +10,7 @@ class Useradd extends Base{
 	public function index(){
 		$addform=new AddForm;
 		$dev=$addform->getinfo('dev_from'); //开发渠道
-		$forminfo=$addform->getinfo('from'); //信息来源
+		$from=$addform->getinfo('from'); //信息来源
 		$disease=$addform->getinfo('disease'); //咨询病种
 		$zx_tools=$addform->getinfo('zx_tools'); //咨询工具
 		$doctors=$addform->getinfo('doctors'); //预约医生
@@ -18,7 +18,7 @@ class Useradd extends Base{
 
 		$this->assign([
             'dev'  => $dev,
-            'forminfo'  => $forminfo,
+            'from'  => $from,
             'disease' => $disease,
             'zx_tools' => $zx_tools,
             'doctors' => $doctors,
@@ -65,29 +65,17 @@ class Useradd extends Base{
 			$yuyue_data=[
 				'yy_disease_id' =>input('disease'),
 				'yy_doctor_id' =>input('doctor'),
-				'yy_time' =>strtotime(input('time'))
+				'yy_time' =>input('time')
 			];
 
-			// dump($zixun_data);
-			// exit;
 
-			// $validate = Loader::validate('Useradd');
+
 			$validate = validate('User');
 
-			$users_info_scene=$validate->scene('users_info')->check($info_data);
-			$users_zixun_scene=$validate->scene('users_zixun')->check($zixun_data);
-			$users_yuyue_scene=$validate->scene('users_yuyue')->check($yuyue_data);
-
-
-			dump($info_data);
-			exit;
-
-			if(!$users_info_scene || !$users_zixun_scene || !$users_yuyue_scene){
-			    // $this->error($validate->getError());
-			    return $validate->getError();
-			    exit;
-			}else{
+			if($validate->scene('users_info')->check($info_data) && $validate->scene('users_zixun')->check($zixun_data) && $validate->scene('users_yuyue')->check($yuyue_data)){
 				$user=new UsersInfo;
+				$yuyue_data['yy_time']=strtotime($yuyue_data['yy_time']);
+
 				$user->save($info_data);
 				if($user->zixun()->save($zixun_data) && $user->yuyue()->save($yuyue_data)){
 					return "客户添加成功!";
@@ -95,6 +83,10 @@ class Useradd extends Base{
 				}else{
 					return "客户添加失败!";
 				}
+			}else{
+				// $this->error($validate->getError());
+				return $validate->getError();
+				exit;
 			}
 
 		}else{
