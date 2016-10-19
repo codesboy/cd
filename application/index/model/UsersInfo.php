@@ -7,7 +7,9 @@ use think\Model;
 class UsersInfo extends Model
 {
     protected $type = [
-        'yy_time'    =>  'timestamp'
+        'yy_time'    =>  'timestamp',
+        'addtime'    =>  'timestamp'
+
     ];
 
     public function zixun()

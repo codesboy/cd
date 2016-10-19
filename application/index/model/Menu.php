@@ -7,7 +7,8 @@ class Menu extends Model{
 	public function getmenu(){
         // 查询数据
         $data = Db::name('menu')
-            ->field('menuid,menuname,icon,url,pid')
+            ->order('id')
+            // ->field('id,menuname,icon,url,pid')
             // ->where("pid = $pid")
             ->select();
         $menudata=array();
@@ -24,7 +25,7 @@ class Menu extends Model{
                 $v['level'] = $level;
                 $array[] = $v;
                 unset($data[$k]);
-                $array = array_merge($array, self::_cate_level($data, $v['menuid'],$level+1));
+                $array = array_merge($array, self::_cate_level($data, $v['id'],$level+1));
             }
         }
         return $array;
@@ -39,7 +40,7 @@ class Menu extends Model{
         $array = array();
         foreach ($data as $k => $v){
             if ($v['pid'] == $pid){
-                $v['menus'] = self::_get_child($data, $v['menuid']);
+                $v['menus'] = self::_get_child($data, $v['id']);
                 $array[] = $v;
             }
         }
