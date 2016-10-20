@@ -10,29 +10,47 @@ class Useradd extends Base{
 	public function index(){
 		$addform=new AddForm;
 		$dev=$addform->getinfo('dev_from'); //开发渠道
-		$from=$addform->getinfo('from'); //信息来源
-		$disease=$addform->getinfo('disease'); //咨询病种
+		// $from=$addform->getinfo('from'); //信息来源
+		$disease=$addform->getinfo('disease'); //病种
 		$zx_tools=$addform->getinfo('zx_tools'); //咨询工具
-		$doctors=$addform->getinfo('doctors'); //预约医生
-
+		$doctors=$addform->getinfo('doctors'); //医生
+		$province=$addform->getinfo('province'); //省份列表
+		$wdzxs=$addform->getinfo('wangdian_zixun'); //网电咨询师
+		$qtzxs=$addform->getinfo('qiantai_zixun'); //前台咨询师
 
 		$this->assign([
             'dev'  => $dev,
-            'from'  => $from,
+            // 'from'  => $from,
             'disease' => $disease,
             'zx_tools' => $zx_tools,
             'doctors' => $doctors,
+            'province' => $province,
+            'wdzxs' => $wdzxs,
+            'qtzxs' => $qtzxs,
 
         ]);
 		return $this->fetch('useradd');
 	}
 
-	// 联动
+	// 信息来源联动
 	public function link($id){
 		$addform=new AddForm;
 		// dump(input('post.'));
 		$from=$addform->linkage($id); //信息来源
 		return json($from);
+
+	}
+	// 市级联动
+	public function citylink($province_id){
+		$citys=db('city')->where('province_id',$province_id)->field('city_id,city_name')->select();
+		return json($citys);
+
+	}
+
+	// 区县联动
+	public function countylink($city_id){
+		$countys=db('county')->where('city_id',$city_id)->field('county_id,county_name')->select();
+		return json($countys);
 
 	}
 

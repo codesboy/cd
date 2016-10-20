@@ -9,41 +9,76 @@
 <script src="__PUBLIC__static/easyui/js/jquery.min.js" type="text/javascript"></script>
 <script src="__PUBLIC__static/easyui/js/jquery.easyui.min.js" type="text/javascript"></script>
 <script src="__PUBLIC__static/easyui/js/easyui-lang-zh_CN.js" type="text/javascript"></script>
+<style>
+    span.tit{display: inline-block;width: 100px;text-align: right;}
+    form{font-size: 14px;font-family: 微软雅黑;}
+</style>
 </head>
 <body>
     <center>
-        <p>请在以下表单中正确地录入用户的基本信息.</p>
+        <p>请在以下表单中正确地录入客户的基本信息.</p>
         <div style="margin:20px 0;"></div>
-        <div class="easyui-panel" title="用户基本信息" style="width:700px;">
+        <div class="easyui-panel" title="用户基本信息" style="width:1000px;">
             <div style="padding:10px 60px 20px 60px">
             <form action="{:url('useradd')}" id="useradd" class="easyui-form" method="post" data-options="novalidate:true">
                 <table cellpadding="5">
                     <tr>
-                        <td>姓名：</td>
+                        <!-- <td>姓名：</td> -->
                         <td>
+                            <span class="tit">姓&emsp;&emsp;名：</span>
                             <input id="name" class="easyui-validatebox easyui-textbox" type="text" name="name" data-options="required:true"></input>
                         </td>
-                        <td>性别：</td>
+                        <!-- <td>性别：</td> -->
                         <td>
+                            <span class="tit">性&emsp;&emsp;别：</span>
                             <select name="sex" class="easyui-combobox" data-options="panelHeight:'auto',editable:false">
-                                <option value="0">未知</option>
+                                <option value="">未知</option>
                                 <option value="1">男</option>
                                 <option value="2">女</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td>年龄：</td>
-                        <td><input class="easyui-textbox" type="number" name="age"></input></td>
-                        <td>手机号码：</td>
+                        <!-- <td>年龄：</td> -->
                         <td>
+                            <span class="tit">出生日期：</span>
+                            <input name="time" id="time"></input>
+                        </td>
+                        <!-- <td>手机号码：</td> -->
+                        <td>
+                            <span class="tit">手机号码：</span>
                             <input id="tel" class="easyui-textbox" type="text" name="tel" required="true" data-options="required:true"></input>
                         </td>
-
                     </tr>
                     <tr>
-                        <td>开发渠道：</td>
+                        <!-- <td>客户地址：</td> -->
                         <td>
+                            <span class="tit">省&emsp;&emsp;份：</span>
+                            <!-- <span>省-</span> -->
+                            <select name="province_id" id="userAttrArea" class="easyui-combobox" style="width:auto">
+                                <option value="">---------请选择省---------------</option>
+                                {volist name='province' id="f"}
+                                <option value="{$f.province_id}">{$f.province_name}</option>
+                                {/volist}
+                            </select>
+                        </td>
+                        <td>
+                            <span class="tit">市&emsp;&emsp;级：</span>
+                            <input name="city_id" id="userAttrCity" class="easyui-combobox" required="true">
+                                <!-- <option value="">市</option> -->
+                            </input>
+                        </td>
+                        <td>
+                            <span class="tit">区&emsp;&emsp;县：</span>
+                            <input name="county_id" id="userAttrCounty" class="easyui-combobox" required="true">
+                                <!-- <option value="">区县</option> -->
+                            </input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- <td>开发渠道：</td> -->
+                        <td>
+                            <span class="tit">开发渠道：</span>
                             <select id="dev" class="easyui-combobox" name="dev" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['dev','请选择开发渠道']">
                                 <option value="0">--------------请选择-------------</option>
                                 {volist name="dev" id="e" }
@@ -51,19 +86,15 @@
                                 {/volist}
                             </select>
                         </td>
-                        <td>信息来源：</td>
+                        <!-- <td>信息来源：</td> -->
                         <td>
-                            <select id="from" class="easyui-combobox" name="from" required="true" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['from','请选择信息来源']">
-                                <option value="0">--------------请选择-------------</option>
-                                {volist name="from" id="a" }
-                                <option value="{$a.id}">{$a.from}</option>
-                                {/volist}
-                            </select>
+                            <span class="tit">信息来源：</span>
+                            <input id="from" class="easyui-combobox" name="from" required="true" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['from','请选择信息来源']">
+                                
+                            </input>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>咨询工具：</td>
                         <td>
+                            <span class="tit">咨询工具：</span>
                             <select id="tool" class="easyui-combobox" name="tool" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['tool','请选择咨询工具']">
                                 <option value="0">--------------请选择-------------</option>
                                 {volist name="zx_tools" id="b" }
@@ -71,19 +102,36 @@
                                 {/volist}
                             </select>
                         </td>
-                        <td>咨询病种：</td>
-                        <td>
-                            <select id="disease" class="easyui-combobox" name="disease" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['disease','请选择咨询病种']">
-                                <option value="0">--------------请选择-------------</option>
-                                {volist name="disease" id="c" }
-                                <option value="{$c.id}">{$c.disease_name}</option>
-                                {/volist}
-                            </select>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <p style="border-bottom: 1px solid #ccc;text-align: center;color: #888;">以上是客户基本信息</p>
                         </td>
                     </tr>
                     <tr>
-                        <td>预约医生：</td>
+                        <!-- <td>咨询工具：</td> -->
+                        
+                        <!-- <td>咨询病种：</td> -->
                         <td>
+                            <span class="tit">网电咨询师：</span>
+                            <select id="disease" class="easyui-combobox" name="disease" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['disease','请选择咨询病种']">
+                                <option value="0">--------------请选择-------------</option>
+                                {volist name="wdzxs" id="wd" }
+                                <option value="{$wd.id}">{$wd.name}</option>
+                                {/volist}
+                            </select>
+                        </td>
+                        <td>
+                            <span class="tit">前台咨询师：</span>
+                            <select id="disease" class="easyui-combobox" name="disease" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['disease','请选择咨询病种']">
+                                <option value="0">--------------请选择-------------</option>
+                                {volist name="qtzxs" id="qt" }
+                                <option value="{$qt.id}">{$qt.name}</option>
+                                {/volist}
+                            </select>
+                        </td>
+                        <td>
+                            <span class="tit">接诊医生：</span>
                             <select class="easyui-combobox" name="doctor" data-options="panelHeight:'auto',editable:false">
                                 <option value="0">--------------请选择-------------</option>
                                 {volist name="doctors" id="d" }
@@ -91,14 +139,38 @@
                                 {/volist}
                             </select>
                         </td>
-                        <td>预约时间：</td>
-                        <td><input class="easyui-datetimebox" name="time" id="time"></input></td>
                     </tr>
                     <tr>
-                        <td>网电咨询备注：</td>
                         <td>
+                            <span class="tit">就诊&ensp;&ensp;病种：</span>
+                            <select id="disease" class="easyui-combobox" name="disease" data-options="required:true,panelHeight:'auto',editable:false" validType="comboxValidate['disease','请选择咨询病种']">
+                                <option value="0">--------------请选择-------------</option>
+                                {volist name="disease" id="c" }
+                                <option value="{$c.id}">{$c.disease_name}</option>
+                                {/volist}
+                            </select>
+                        </td>
+                        <!-- <td>预约医生：</td> -->
+                        <td>
+                            <span class="tit">初诊&ensp;&ensp;日期：</span>
+                            <input name="jz_time" id="jz_time" class="easyui-datebox"></input>
+                        </td>
+                        <td>
+                            <span class="tit">消费金额：</span>
+                            <input type="text" class="easyui-textbox" value="0">
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <!-- <td>网电咨询备注：</td> -->
+                        <td>
+                            <span class="tit">病情描述：</span>
                             <textarea class="" name="comment" id="" cols="21" rows="5"></textarea>
                         </td>
+                    </tr>
+                    <tr>
+                        <!-- <td>网电咨询备注：</td> -->
+                        
                     </tr>
                     <!-- <tr>
                         <td>
@@ -145,7 +217,7 @@
                     validator: function(date){
                         var now = new Date();
                         var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                        return d1<=date;
+                        return d1>=date;
                     }
                 });
 
@@ -162,7 +234,7 @@
                     }
                 });
 
-                // 联动
+                // 开发渠道、信息来源联动
                 $('#dev').combobox({
                     onChange:function(newValue,oldValue){
                         //信息来源
@@ -170,7 +242,7 @@
                         // console.info(pid);
                         $.getJSON('{:url('link')}?id='+pid,function(result){
                             var data = $.makeArray(result);
-                            data.unshift({"id":"","from":"--------------请选择-------------"});
+                            // data.unshift({"id":"","from":"--------------请选择-------------"});
                             // console.info(data);
                             $('#from').combobox({
                                 valueField:'id', //值字段
@@ -178,9 +250,10 @@
                                 data:data,
                                 panelHeight:'auto',
                                 required:true,
-                                editable:false//不可编辑，只能选择                            
+                                editable:false,//不可编辑，只能选择                            
+                                value:'请选择信息来源'
                             });
-                            $('#from').combobox('setValue' , '');
+                            // $('#from').combobox('setValue' , '');
                         });
                         
                     }
@@ -205,6 +278,53 @@
                     }
                 });*/
 
+                //省市区三级联动  
+                var $province = $('#userAttrArea');  
+                var $city = $('#userAttrCity');  
+                var $County = $('#userAttrCounty');  
+                var provinceId = $province.combobox({
+                    editable:false,
+                    onChange:function(newValue, oldValue){  
+                        //刷新数据，重新读取城市，并清空当前输入的值  
+                        if(newValue != ""){  
+                            var city = $city.combobox({
+                                editable:false,
+                                disabled:false,  
+                                url:'{:url('citylink')}?province_id='+newValue, 
+                                valueField:'city_id',  
+                                textField:'city_name',
+                                value:'请选择市',
+                                onLoadSuccess:function(){ //第2选中  
+                                    var combobox = $city.combobox('getData');
+
+                                    // console.log(combobox);
+                                    // $city.combobox('setText',combobox[1].city_name).combobox('setValue',combobox[1].city_id);  
+                                },  
+                                onChange:function(newValue, oldValue){  
+                                        // var cityid=newValue;
+                                    if(newValue != ""){
+                                        // console.log(newValue)
+                                        //刷新数据，重新读取区县，并清空当前输入的值  
+                                        $County.combobox({
+                                            editable:false,
+                                            disabled:false,  
+                                            url:'{:url('countylink')}?city_id='+newValue,  
+                                            valueField:'county_id',  
+                                            textField:'county_name',
+                                            value:'请选择区县',
+                                            /*onLoadSuccess:function(){ //第2选中  
+                                                var combobox = $County.combobox('getData');  
+                                                $County.combobox('setText',combobox[1].name).combobox('setValue',combobox[1].id);  
+                                            }  */
+              
+                                        });//.combobox('clear');  
+              
+                                    }  
+                                }  
+                            });//.combobox('clear');   .combobox('select','510100')
+                        }  
+                    }  
+                }).combobox('select','510000');  
 
 
 
