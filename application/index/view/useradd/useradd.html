@@ -6,15 +6,11 @@
     <title>新增客户</title>
     <link rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="__PUBLIC__static/bootstrap/css/bootstrap.min.css">
-    <!-- <link href="__PUBLIC__static/easyui/css/easyui.css" rel="stylesheet" type="text/css" /> -->
-    <!-- <link href="__PUBLIC__static/easyui/css/icon.css" rel="stylesheet" type="text/css" /> -->
     <script src="__PUBLIC__static/easyui/js/jquery.min.js" type="text/javascript"></script>
-    <!-- <script src="__PUBLIC__static/easyui/js/jquery.easyui.min.js" type="text/javascript"></script> -->
-    <!-- <script src="__PUBLIC__static/easyui/js/easyui-lang-zh_CN.js" type="text/javascript"></script> -->
     <script src="__PUBLIC__static/bootstrap/js/bootstrap.min.js"></script>
     <style>
         .form-group{padding-bottom: 20px;}
-        .control-label{text-align: right;width: 20%;margin-right: 2%;}
+        .control-label{text-align: right;/* width: 20%; */margin-right: 2%;}
         .form-control{width: 60%!important;}
         .line{border-bottom: 1px dashed #ccc;text-align: center;color: #888;margin-bottom: 20px;}
         .btns{text-align: center;}
@@ -30,7 +26,7 @@
             <div class="panel-body">
                 <form class="form-inline" role="form">
                     <div class="row">
-                        
+
                         <div class="col-md-4 form-group">
                             <label class="control-label" for="name">姓&emsp;&emsp;名</label>
                             <input class="form-control" id="name" type="text" name="name" placeholder="姓名" required="required" />
@@ -46,7 +42,7 @@
                         <div class="col-md-4"></div>
                     </div>
                     <div class="row">
-                        
+
                         <div class="col-md-4 form-group">
                             <label class="control-label" for="brithday">出生日期</label>
                             <input class="form-control" id="brithday" type="text" placeholder="姓名" required="required" />
@@ -58,38 +54,30 @@
                         <div class="col-md-4"></div>
                     </div>
                     <div class="row">
-                        
+
                         <div class="col-md-4 form-group">
                             <label class="control-label" for="userAttrArea">省&emsp;&emsp;份</label>
                             <select name="province_id" id="userAttrArea" required="required" class="form-control">
-                                <option value="">请选择</option>
-                                <option value="110000" <if condition="$province['province_id'] eq 110000">selected</if>>北京市</option>
-                                <option value="120000" <if condition="$province['province_id'] eq 120000">selected</if>>天津市</option>
-                                <option value="120000" <if condition="$province['province_id'] eq 120000">selected</if>>天津市</option>
-                                <option value="120000" <if condition="$province['province_id'] eq 120000">selected</if>>天津市</option>
-                                <option value="120000" <if condition="$province['province_id'] eq 120000">selected</if>>天津市</option>
-                                <option value="120000" <if condition="$province['province_id'] eq 120000">selected</if>>天津市</option>
-                                <option value="120000" <if condition="$province['province_id'] eq 120000">selected</if>>天津市</option>
-                                <option value="120000" <if condition="$province['province_id'] eq 120000">selected</if>>天津市</option>
-                                <option value="120000" <if condition="$province['province_id'] eq 120000">selected</if>>天津市</option>
-                                <option value="120000" <if condition="$province['province_id'] eq 120000">selected</if>>天津市</option>
+                                {volist name="province" id="f"}
+                                <option value="{$f.province_id}" {if condition="510000 eq $f['province_id']"} selected{/if}>{$f.province_name}</option>
+                                {/volist}
                             </select>
                         </div>
                         <div class="col-md-4 form-group">
                             <label class="control-label" for="userAttrCity">市&emsp;&emsp;级</label>
                             <select name="city_id" id="userAttrCity" required="required" class="form-control">
-                                
+
                             </select>
                         </div>
                         <div class="col-md-4 form-group">
                             <label class="control-label" for="userAttrCounty">区&emsp;&emsp;县</label>
                             <select name="county_id" id="userAttrCounty" required="required" class="form-control">
-                                
+
                             </select>
                         </div>
                     </div>
                     <div class="row">
-                        
+
                         <div class="col-md-4 form-group">
                             <label class="control-label" for="dev">开发渠道</label>
                             <select name="dev_id" id="dev" required="required" class="form-control">
@@ -205,6 +193,18 @@
                     console.log("error");
                 });
             };
+
+
+            var initdata=function(){
+                var nextdom=$('#userAttrCity'),
+                    url="{:url('citylink')}"
+                    pid=$("#userAttrArea").val(),
+                    postdata={'province_id': pid},
+                    value='city_id',
+                    text='city_name';
+                link(nextdom,url,postdata,value,text);
+            }
+            initdata();
             $('#dev').change(function() {
                 var nextdom=$('#from'),
                     url="{:url('link')}"
@@ -215,13 +215,7 @@
                 link(nextdom,url,postdata,value,text);
             });
             $('#userAttrArea').change(function() {
-                var nextdom=$('#userAttrCity'),
-                    url="{:url('citylink')}"
-                    pid=$(this).val(),
-                    postdata={'province_id': pid},
-                    value='city_id',
-                    text='city_name',
-                link(nextdom,url,postdata,value,text);
+                initdata();
             });
             $('#userAttrCity').change(function() {
                 var nextdom=$('#userAttrCounty'),
@@ -229,7 +223,7 @@
                     pid=$(this).val(),
                     postdata={'city_id': pid},
                     value='county_id',
-                    text='county_name',
+                    text='county_name';
                 link(nextdom,url,postdata,value,text);
             });
         })
