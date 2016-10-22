@@ -62,40 +62,43 @@ class Useradd extends Base{
 		// dump(input('post.'));
 		if(request()->isPost()){
 			$info_data=[
-				'username'=>input('name'),
-				'age'=>input('age'),
+				'name'=>input('name'),
 				'sex'=>input('sex'),
-				'tel'=>input('tel'),
-				'dev_id'=>input('dev'),
-				'from_id'=>input('from'),
-				'tool_id'=>input('tool'),
+				'birthday'=>input('birthday'),
+				'telephone'=>input('telephone'),
+				'province_id'=>input('province_id'),
+				'city_id'=>input('city_id'),
+				'county_id'=>input('county_id'),
+				'dev_id'=>input('dev_id'),
+				'from_id'=>input('from_id'),
+				'tool_id'=>input('tool_id'),
 				'addtime'=>time(),
 				'usersn'=>$num
 			];
 
-			$zixun_data=[
-				'zx_tool_id' =>input('tool'),
-				'zx_disease_id' =>input('disease'),
-				'zx_comment' => input('comment'),
-				'zx_time' =>time(),
+			$consumption_data=[
+				'wdzx_id'=>input('wdzx_id'),
+				'qtzx_id'=>input('qtzx_id'),
+				'doctor_id'=>input('doctor_id'),
+				'disease_id'=>input('disease_id'),
+				'jz_time'=>input('jz_time'),
+				'money'=>input('money'),
+				'ill_desc'=>input('ill_desc')
 			];
 
-			$yuyue_data=[
-				'yy_disease_id' =>input('disease'),
-				'yy_doctor_id' =>input('doctor'),
-				'yy_time' =>input('time')
-			];
+			// dump($info_data);
+			// exit;
 
 
 
 			$validate = validate('User');
 
-			if($validate->scene('users_info')->check($info_data) && $validate->scene('users_zixun')->check($zixun_data) && $validate->scene('users_yuyue')->check($yuyue_data)){
+			if($validate->scene('users_info')->check($info_data) && $validate->scene('users_consumption')->check($consumption_data)){
+			// if($validate->scene('users_info')->check($info_data)){
 				$user=new UsersInfo;
-				$yuyue_data['yy_time']=strtotime($yuyue_data['yy_time']);
 
 				$user->save($info_data);
-				if($user->zixun()->save($zixun_data) && $user->yuyue()->save($yuyue_data)){
+				if($user->consumptions()->save($consumption_data)){
 					return "客户添加成功!";
 					// return $this->success('客户添加成功!','');
 				}else{

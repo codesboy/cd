@@ -6,21 +6,15 @@ use think\Model;
 // 用户信息模型
 class UsersInfo extends Model
 {
+    protected $pk    = 'id';
     protected $type = [
-        'yy_time'    =>  'timestamp',
-        'addtime'    =>  'timestamp'
+        'addtime'    =>  'timestamp:Y-m-d',
+        'birthday'    =>  'timestamp:Y-m-d'
 
     ];
 
-    public function zixun()
-    {
-        return $this->hasMany('users_zixun','uid');
-        // return $this->belongsTo('users_zixun','uid');
-    }
-
-    public function yuyue()
-    {
-        return $this->hasMany('users_yuyue','uid');
-        // return $this->belongsTo('users_zixun','uid');
+    // 定义关联
+    public function consumptions(){
+        return $this->hasMany('Consumption','uid');
     }
 }

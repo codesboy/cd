@@ -1,6 +1,6 @@
 <?php
 namespace app\index\controller;
-use app\index\model\GetMainData;
+use app\index\model\UsersInfo;
 class Maindata extends Base
 {
 	public function index()
@@ -18,10 +18,10 @@ class Maindata extends Base
 			// $data=$data_model->getinfo('users_info');
 			// return $data;
 			// dump($data);
-			$user = GetMainData::all();
-			
+			$user = UsersInfo::all();
 
-			$aa=new GetMainData;
+
+			$aa=new UsersInfo;
 			// dump($user);//array
 			$page=input('page');
 			$rows=input('rows');
@@ -30,15 +30,26 @@ class Maindata extends Base
 			->join('dev_from a','a.id=m.dev_id')
 			->join('from b','b.id=m.from_id')
 			->join('zx_tools c','c.id=m.tool_id')
+			->order('m.id desc')
 			->limit($offset,$rows)
 			->select();
-			
-			$total=GetMainData::count();
+			/*echo $data[0]['birthday'];
+			exit;*/
+			// $age=getAge($data[0]['birthday']);
+			$age=getAge('2009-01-03');
+			$data['age']=14;
+
+			dump($data);
+			exit;
+			$total=UsersInfo::count();
 			$result=[
 				'total'=>$total,
 				'rows'=>$data
 			];
 			//重要，easyui的标准数据格式，数据总数和数据内容在同一个json中
+
+
+
 
 	        $result=json($result);
 			return $result;

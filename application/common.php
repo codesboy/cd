@@ -14,11 +14,29 @@
 
 /**
 * 生成唯一订单号
-* 
+*
 */
 function build_order_no(){
 	// return date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
 	$yCode = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
 	$orderSn = $yCode[intval(date('Y')) - 2011] . strtoupper(dechex(date('m'))) . date('d') . substr(time(), -5) . substr(microtime(), 2, 5) . sprintf('%02d', rand(0, 99));
 	return $orderSn;
+}
+
+
+/**
+ * @desc 根据生日获取年龄
+ * @param     string $birthday
+ * @return    integer
+ */
+function getAge($birthday) {
+    $birthday=getDate(strtotime($birthday));
+    $now=getDate();
+    $month=0;
+    if($now['month']>$birthday['month'])
+    $month=1;
+    if($now['month']==$birthday['month'])
+    if($now['mday']>=$birthday['mday'])
+    $month=1;
+    return $now['year']-$birthday['year']+$month;
 }
