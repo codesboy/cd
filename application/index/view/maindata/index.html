@@ -9,6 +9,7 @@
 <script src="__PUBLIC__static/easyui/js/jquery.min.js" type="text/javascript"></script>
 <script src="__PUBLIC__static/easyui/js/jquery.easyui.min.js" type="text/javascript"></script>
 <script src="__PUBLIC__static/easyui/js/easyui-lang-zh_CN.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://www.w3cschool.cc/try/jeasyui/datagrid-detailview.js"></script>
 <style>
     body{margin: 0;padding: 0;}
     .yes{color: green;}
@@ -63,7 +64,7 @@
                 loadMsg:'玩命加载数据中......',
                 // striped:true, //斑马线效果
                 singleSelect:true, //单选
-                method:'post'
+                method:'post',
                 // pagePosition:'both'
                 // SelectOnCheck:false
                 /*loadFilter: function(data){
@@ -71,6 +72,57 @@
                     return data;
 
                 }*/
+
+                // 子网络
+                view: detailview,
+                detailFormatter:function(index,row){
+                    return '<div style="padding:2px"><table class="ddv"></table></div>';
+                },
+                onExpandRow: function(index,row){
+                    var ddv = $(this).datagrid('getRowDetail',index).find('table.ddv');
+
+                    $.ajax({
+                        url: '{:url("Consumption/getcpdetail")}?uid='+row.id,
+                        type: 'GET',
+                        dataType: 'json',
+                    })
+                    .done(function(data) {
+                        console.log(data);
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    });
+
+
+
+                    ddv.datagrid({
+                        url:'{:url("Consumption/getcpdetail")}?uid='+row.id,
+                        fitColumns:true,
+                        singleSelect:true,
+                        rownumbers:true,
+                        loadMsg:'',
+                        height:'auto',
+                        columns:[[
+                            // {field:'id',title:'消费编号',width:100},
+                            {field:'wd',title:'网电咨询师',width:100},
+                            {field:'qt',title:'前台咨询师',width:100},
+                            {field:'doctor',title:'接诊医生',width:100},
+                            {field:'disease_name',title:'就诊病种',width:100},
+                            {field:'ill_desc',title:'病情描述',width:100},
+                            {field:'jz_time',title:'就诊时间',width:100}
+                        ]],
+                        onResize:function(){
+                            $('#dg').datagrid('fixDetailRowHeight',index);
+                        },
+                        onLoadSuccess:function(data){
+                            console.log(data);
+                            setTimeout(function(){
+                                $('#dg').datagrid('fixDetailRowHeight',index);
+                            },0);
+                        }
+                    });
+                    $('#dg').datagrid('fixDetailRowHeight',index);
+                }
 
             });
         });
