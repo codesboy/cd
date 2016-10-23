@@ -76,7 +76,7 @@
                 // 子网络
                 view: detailview,
                 detailFormatter:function(index,row){
-                    return '<div style="padding:2px"><table class="ddv"></table></div>';
+                    return '<div style="padding:2px"><table class="ddv" title="该客户消费详情列表"></table></div>';
                 },
                 onExpandRow: function(index,row){
                     var ddv = $(this).datagrid('getRowDetail',index).find('table.ddv');
@@ -103,7 +103,7 @@
                         loadMsg:'',
                         height:'auto',
                         columns:[[
-                            // {field:'id',title:'消费编号',width:100},
+                            {field:'money',title:'本次消费金额(元)',width:100},
                             {field:'wd',title:'网电咨询师',width:100},
                             {field:'qt',title:'前台咨询师',width:100},
                             {field:'doctor',title:'接诊医生',width:100},

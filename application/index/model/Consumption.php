@@ -5,7 +5,7 @@ use think\Model;
 
 class Consumption extends Model{
     protected $type       = [
-        'jz_time'    =>  'timestamp'
+        'jz_time'    =>  'timestamp:Y-m-d'
     ];
 
     // 开启自动写入时间戳protected $autoWriteTimestamp = true;

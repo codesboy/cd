@@ -12,7 +12,7 @@ use app\index\model\Consumption as cpmodel;
 class Consumption extends Base{
     // 获取消费详情
     public function getcpdetail(){
-        if(Request()->isGet()){
+        // if(Request()->isGet()){
             $uid=input('uid');
             $cp=cpmodel::where('uid',$uid)
             ->join('wangdian_zixun w','w.id=wdzx_id')
@@ -22,7 +22,7 @@ class Consumption extends Base{
             ->field('w.name wd,q.name qt,doctor,disease_name,money,ill_desc,jz_time')
             ->select();
             return json($cp);
-        }
+        // }
         // dump($cp);
     }
 }
