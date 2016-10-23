@@ -29,14 +29,28 @@ function build_order_no(){
  * @param     string $birthday
  * @return    integer
  */
-function getAge($birthday) {
-    $birthday=getDate(strtotime($birthday));
-    $now=getDate();
-    $month=0;
-    if($now['month']>$birthday['month'])
-    $month=1;
-    if($now['month']==$birthday['month'])
-    if($now['mday']>=$birthday['mday'])
-    $month=1;
-    return $now['year']-$birthday['year']+$month;
+// function getAge($birthday) {
+//     $birthday=getDate(strtotime($birthday));
+//     $now=getDate();
+//     $month=0;
+//     if($now['month']>$birthday['month'])
+//     $month=1;
+//     if($now['month']==$birthday['month'])
+//     if($now['mday']>=$birthday['mday'])
+//     $month=1;
+//     return $now['year']-$birthday['year']+$month;
+// }
+
+function getAge($birthday){
+ $age = strtotime($birthday);
+ if($age === false){
+  return false;
+ }
+ list($y1,$m1,$d1) = explode("-",date("Y-m-d",$age));
+ $now = strtotime("now");
+ list($y2,$m2,$d2) = explode("-",date("Y-m-d",$now));
+ $age = $y2 - $y1;
+ if((int)($m2.$d2) < (int)($m1.$d1))
+  $age -= 1;
+ return $age;
 }

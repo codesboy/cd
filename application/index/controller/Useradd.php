@@ -72,6 +72,7 @@ class Useradd extends Base{
 				'dev_id'=>input('dev_id'),
 				'from_id'=>input('from_id'),
 				'tool_id'=>input('tool_id'),
+				'age'=>getAge(input('birthday')),
 				'addtime'=>time(),
 				'usersn'=>$num
 			];
