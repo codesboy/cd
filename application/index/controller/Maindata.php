@@ -6,22 +6,12 @@ class Maindata extends Base
 {
 	public function index()
 	{
-
 		return $this->fetch();
-		// return 'aa';
-
 	}
 
 	public function returndata(){
 		if(Request()->isPost()){
-			// $data_model=new GetMainData;
-			// $data=$data_model->getinfo('users_info',input('page'),input('rows'));
-			// $data=$data_model->getinfo('users_info');
-			// return $data;
-			// dump($data);
 			$user1 = UsersInfo::all();
-
-
 			$user=new UsersInfo;
 			// dump($user);//array
 			$page=input('page');
@@ -30,10 +20,7 @@ class Maindata extends Base
 
 			$sort=input('sort')?input('sort'):'u.id';
 			$order=input('order')?input('order'):'desc';
-
-
 			$data=$user->alias('u')
-			// $data=Db::name('users_info u,client_consumption uc')
 			// $data=Db::name('users_info u')
 			->join('consumption con','con.uid=u.id')
 			->join('province p','p.province_id=u.province_id','LEFT')
