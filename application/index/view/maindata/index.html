@@ -20,18 +20,15 @@
 </head>
 <body>
     <!-- <div style="margin:20px 0;"></div> -->
-    
+
     <table id="dg" class="" title="客户消费情况表">
     </table>
     <div id="toolbar">
         <div style="margin-bottom:5px">
             <a href="" class="easyui-linkbutton" iconCls="icon-add" plain="true" title="添加客户">添加客户</a>
             <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" title="编辑客户">编辑客户</a>
-            <a href="{:url('')}" class="easyui-linkbutton" iconCls="icon-reload" plain="true" target="_blank" title="刷新数据">刷新数据</a>
-            <a href="{:url('')}" class="easyui-linkbutton" iconCls="icon-more" plain="true" target="_blank" title="全屏显示表格">全屏显示表格</a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
+            <a id="reload" class="easyui-linkbutton" iconCls="icon-reload" plain="true" target="_blank" title="刷新数据">刷新数据</a>
+            <a href="{:url('')}" class="easyui-linkbutton" iconCls="icon-more" plain="true" target="_blank" title="全屏显示表格">全屏显示</a>
         </div>
     </div>
     <script>
@@ -40,7 +37,7 @@
         $(function(){
             var money=0;
             $('#dg').datagrid({
-                iconCls:'icon-save',
+                iconCls:'icon-list',
                 autoRowHeight:false,
                 // nowrap: false,
                 url:'{:url('returndata')}',
@@ -135,8 +132,11 @@
                     });
                     $('#dg').datagrid('fixDetailRowHeight',index);
                 }
-
             });
+
+            $('#reload').on('click',function(){
+                $('#dg').datagrid('reload');
+            })
         });
 
 

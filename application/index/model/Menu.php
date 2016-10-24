@@ -6,16 +6,20 @@ use think\Db;
 class Menu extends Model{
 	public function getmenu(){
         // 查询数据
-        $data = Db::name('menu')
+        // $data = Db::name('menu')
+        $data =db('menu')
             ->order('id')
             // ->field('id,menuname,icon,url,pid')
             // ->where("pid = $pid")
             ->select();
         $menudata=array();
 
-        $arr['menus']=$this::_get_child($data);
-        $json=json_encode($arr);
-        return $json;
+        // $arr['menus']=$this::_get_child($data);
+        $arr=$this::_get_child($data);
+        // $json=json_encode($arr);
+        $json=json($arr);
+        // return $json;
+        return $arr;
 	}
     //分类级别
     static protected function _cate_level($data, $pid=0, $level=0){

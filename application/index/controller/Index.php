@@ -7,14 +7,14 @@ class Index extends Base
 {
 	public function index()
 	{
-		return $this->fetch();
-	}
-
-	public function menu(){
 		$menu=new Menu();
 		$json=$menu->getmenu();
+		// return $json;
 		// dump($json);
-		return $json;
+		$this->assign('json',$json);
+		// return $this->fetch('public/left2');
+		// return $this->fetch('index');
+		return $this->fetch();
 	}
 
 
