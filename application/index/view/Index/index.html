@@ -21,7 +21,7 @@
 
     {include file="Public/left" /}
     <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
-        <div id="tabs" class="easyui-tabs" fit="true" border="false">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false" style="overflow:hidden">
             <div title="欢迎使用" style="padding:20px;overflow:hidden; color:red; ">
                 <h1 style="font-size:24px;">您好，<?php echo session('user_name')?>，欢迎使用客户管理系统</h1>
                 <p>您当前的登录ip：{$Request.ip} </p>
