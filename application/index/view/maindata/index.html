@@ -26,15 +26,38 @@
     </table>
     <div id="toolbar">
         <div style="margin-bottom:5px">
-            <a href="" class="easyui-linkbutton" iconCls="icon-add" plain="true" title="添加客户">添加客户</a>
+            <a href="#" class="easyui-menubutton" menu="#mm1" iconCls="icon-add">添加</a>
+            <div id="mm1" style="width:150px;">
+                <div iconCls="icon-undo" onclick="$('#myModal').dialog('open')">新增客户</div>
+                <div class="menu-sep"></div>
+                <div iconCls="icon-redo">新增消费</div>
+            </div>
             <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" title="编辑客户">编辑客户</a>
             <a id="reload" class="easyui-linkbutton" iconCls="icon-reload" plain="true" target="_blank" title="刷新数据">刷新数据</a>
             <a href="{:url('')}" class="easyui-linkbutton" iconCls="icon-more" plain="true" target="_blank" title="全屏显示表格">全屏显示</a>
         </div>
+        <div>
+            姓名/手机号:<input class="easyui-textbox" type="text" style="width: 100px">
+            Date From:<input class="easyui-datebox" style="width:100px">
+            To: <input class="easyui-datebox" style="width:100px">
+            Language:
+            <select class="easyui-combobox" panelHeight="auto" style="width:100px">
+                <option value="java">Java</option>
+                <option value="c">C</option>
+                <option value="basic">Basic</option>
+                <option value="perl">Perl</option>
+                <option value="python">Python</option>
+            </select>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search">Search</a>
+        </div>
     </div>
+    <!-- 调用分层控制器 -->
+    {:action('Useradd/useradd', '', 'widget')}
+
     <script>
-
-
+        $('#myModal').dialog({
+            closed: true,
+        })
         $(function(){
             var money=0;
             $('#dg').datagrid({
