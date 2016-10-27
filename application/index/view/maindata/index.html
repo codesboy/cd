@@ -304,7 +304,7 @@ $('#dev').change(function() {
 
 $('#submit').on('click', function() {
     $.ajax({
-            url: '{:url("useradd")}',
+            url: '{:url("useradd/useradd")}',
             type: 'POST',
             dataType: 'html',
             data: $('#formdata').serialize()
