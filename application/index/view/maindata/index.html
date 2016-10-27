@@ -19,9 +19,11 @@
 <script src="__PUBLIC__static/bootstrap/js/bootstrap-datepicker.zh-CN.min.js"></script>
 <style>
     body{margin: 0;padding: 0;}
-    .yes{color: green;}
+    /* .yes{color: green;}
     .no{color: red;}
-    .status{width: 16px;height: 15px;display: inline-block;font-size: 0px;}
+    .status{width: 16px;height: 15px;display: inline-block;font-size: 0px;} */
+    .glyphicon-ok{color: #5cb85c;}
+    .glyphicon-remove{color: #f0ad4e;}
     .money{font-weight: bold;color: #f00;}
     td{text-align: center;}
     /* .datagrid-header{position: fixed;} */
@@ -34,6 +36,7 @@
     /* 冲突样式重置 */
     .panel-header{width: 100%!important;}
     .panel-body{width: 100%!important;}
+    .glyphicon{margin-right: 5px;}
     /*bootstrap兼容问题和easyui的bug*/
     /* .panel-header, .panel-body {
         border-width: 0px;
@@ -54,7 +57,7 @@
     </table>
     <div id="toolbar" style="display: none">
         <div style="margin-bottom:5px">
-            <a href="#" class="easyui-menubutton" menu="#mm1" iconCls="icon-add">添加</a>
+            <a href="#" class="easyui-menubutton" menu="#mm1"><span class="glyphicon glyphicon-plus"></span>添加</a>
             <div id="mm1" style="width:150px;">
                 <div iconCls="icon-undo" data-toggle="modal" data-target="#myModal">新增客户</div>
                 <!-- <div iconCls="icon-undo" onclick="$('#myModal').dialog('open')">新增客户</div> -->
@@ -62,9 +65,14 @@
                 <div class="menu-sep"></div>
                 <div iconCls="icon-redo">新增消费</div>
             </div>
-            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" title="编辑客户">编辑客户</a>
-            <a id="reload" class="easyui-linkbutton" iconCls="icon-reload" plain="true" target="_blank" title="刷新数据">刷新数据</a>
-            <a href="{:url('')}" class="easyui-linkbutton" iconCls="icon-more" plain="true" target="_blank" title="全屏显示表格">全屏显示</a>
+            <a href="#" class="easyui-linkbutton" plain="true" title="编辑客户">
+            <span class="glyphicon glyphicon-edit"></span>编辑客户</a>
+            <!-- <button type="button" class="btn btn-info btn-sm">
+                <span class="glyphicon glyphicon-edit"></span>编辑客户
+            </button> -->
+            <a id="reload" class="easyui-linkbutton" plain="true" target="_blank" title="刷新数据">
+            <span class="glyphicon glyphicon-refresh"></span>刷新数据</a>
+            <a href="{:url('')}" class="easyui-linkbutton" plain="true" target="_blank" title="全屏显示表格"><span class="glyphicon glyphicon-fullscreen"></span>全屏显示</a>
         </div>
         <div>
             姓名/手机号:<input class="easyui-textbox" type="text" style="width: 100px">
@@ -222,7 +230,7 @@ $(function() {
 });
 
 function statusformater(value, row, index) {
-    return row.summoney > 0 ? "<span class='status icon-ok'>dd</span>" : "<span class='status icon-cancel'>d</span>";
+    return row.summoney > 0 ? "<span class='glyphicon glyphicon-ok success'></span>" : "<span class='glyphicon glyphicon-remove'></span>";
 }
 
 // 表单部分js
