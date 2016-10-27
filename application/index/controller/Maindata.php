@@ -1,11 +1,35 @@
 <?php
 namespace app\index\controller;
+use app\index\model\AddForm;
 use app\index\model\UsersInfo;
 use think\Db;
 class Maindata extends Base
 {
 	public function index()
 	{
+		$addform=new AddForm;
+		$dev=$addform->getinfo('dev_from'); //开发渠道
+		// $from=$addform->getinfo('from'); //信息来源
+		$disease=$addform->getinfo('disease'); //病种
+		$zx_tools=$addform->getinfo('zx_tools'); //咨询工具
+		$doctors=$addform->getinfo('doctors'); //医生
+		$province=$addform->getinfo('province'); //省份列表
+		$wdzxs=$addform->getinfo('wangdian_zixun'); //网电咨询师
+		$qtzxs=$addform->getinfo('qiantai_zixun'); //前台咨询师
+
+		$this->assign([
+            'dev'  => $dev,
+            // 'from'  => $from,
+            'disease' => $disease,
+            'zx_tools' => $zx_tools,
+            'doctors' => $doctors,
+            'province' => $province,
+            'wdzxs' => $wdzxs,
+            'qtzxs' => $qtzxs,
+
+        ]);
+
+
 		return $this->fetch();
 	}
 

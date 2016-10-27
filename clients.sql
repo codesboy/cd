@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
+Source Server         : localhost_3306
 Source Server Version : 50547
 Source Host           : localhost:3306
 Source Database       : clients
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2016-10-23 21:16:49
+Date: 2016-10-27 18:17:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,8 +31,7 @@ CREATE TABLE `client_admin` (
 -- ----------------------------
 -- Records of client_admin
 -- ----------------------------
-INSERT INTO `client_admin` VALUES ('1', 'admin', '14e1b600b1fd579f47433b88e8d85291', '1', '1');
-INSERT INTO `client_admin` VALUES ('2', 'rehack', 'dfc4ae407ca619b8d4a03b9f14034277', '1', '1');
+INSERT INTO `client_admin` VALUES ('1', 'admin', 'c3284d0f94606de1fd2af172aba15bf3', '1', '1');
 
 -- ----------------------------
 -- Table structure for client_city
@@ -3698,6 +3697,25 @@ INSERT INTO `client_from` VALUES ('6', '朋友介绍', '1');
 INSERT INTO `client_from` VALUES ('7', '朋友介绍', '2');
 
 -- ----------------------------
+-- Table structure for client_jiuzhen
+-- ----------------------------
+DROP TABLE IF EXISTS `client_jiuzhen`;
+CREATE TABLE `client_jiuzhen` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `wangdian_zixun_id` tinyint(3) unsigned NOT NULL,
+  `qiantai_zixun_id` tinyint(3) unsigned NOT NULL,
+  `jiuzhen_doctor_id` tinyint(3) unsigned NOT NULL,
+  `jiuzhen_disease_id` tinyint(3) unsigned NOT NULL,
+  `money` decimal(10,0) unsigned NOT NULL,
+  `jiuzhen_time` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of client_jiuzhen
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for client_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `client_menu`;
@@ -3954,28 +3972,3 @@ CREATE TABLE `client_zx_tools` (
 INSERT INTO `client_zx_tools` VALUES ('1', '商务通');
 INSERT INTO `client_zx_tools` VALUES ('2', 'QQ');
 INSERT INTO `client_zx_tools` VALUES ('3', '微信');
-
--- ----------------------------
--- Table structure for ez_area
--- ----------------------------
-DROP TABLE IF EXISTS `ez_area`;
-CREATE TABLE `ez_area` (
-  `id` int(10) NOT NULL COMMENT 'ID',
-  `areaname` varchar(50) NOT NULL COMMENT '栏目名',
-  `parentid` int(10) NOT NULL COMMENT '父栏目',
-  `shortname` varchar(50) DEFAULT NULL,
-  `areacode` int(6) DEFAULT NULL,
-  `zipcode` int(10) DEFAULT NULL,
-  `pinyin` varchar(100) DEFAULT NULL,
-  `lng` varchar(20) DEFAULT NULL,
-  `lat` varchar(20) DEFAULT NULL,
-  `level` tinyint(1) NOT NULL,
-  `position` varchar(255) NOT NULL,
-  `sort` tinyint(3) unsigned DEFAULT '50' COMMENT '排序',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of ez_area
--- ----------------------------
-SET FOREIGN_KEY_CHECKS=1;
