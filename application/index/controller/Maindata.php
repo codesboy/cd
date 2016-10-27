@@ -33,6 +33,16 @@ class Maindata extends Base
 		return $this->fetch();
 	}
 
+	// 信息来源联动
+	public function link($id){
+		$addform=new AddForm;
+		// dump(input('post.'));
+		$from=$addform->linkage($id); //信息来源
+		return json($from);
+
+	}
+
+	// 返回全部用户数据
 	public function returndata(){
 		if(Request()->isPost()){
 			$user1 = UsersInfo::all();
