@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2016-10-27 18:17:57
+Date: 2016-10-28 18:22:39
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -411,7 +411,7 @@ CREATE TABLE `client_consumption` (
   `jz_time` int(11) unsigned NOT NULL,
   `ill_desc` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_consumption
@@ -445,6 +445,36 @@ INSERT INTO `client_consumption` VALUES ('27', '27', '1', '1', '1', '5', '0.00',
 INSERT INTO `client_consumption` VALUES ('28', '28', '2', '2', '2', '3', '0.00', '1477152000', '2');
 INSERT INTO `client_consumption` VALUES ('29', '29', '2', '2', '2', '3', '0.00', '1477152000', '2');
 INSERT INTO `client_consumption` VALUES ('30', '19', '3', '2', '1', '1', '114.00', '1477152000', 'haha');
+INSERT INTO `client_consumption` VALUES ('31', '30', '2', '2', '1', '6', '66.00', '1476374400', 'd');
+INSERT INTO `client_consumption` VALUES ('32', '31', '2', '1', '1', '6', '66.00', '1476374400', 'd');
+INSERT INTO `client_consumption` VALUES ('33', '32', '2', '2', '1', '6', '66.00', '1476374400', 'd');
+INSERT INTO `client_consumption` VALUES ('34', '23', '2', '2', '2', '2', '0.00', '1474992000', '8');
+INSERT INTO `client_consumption` VALUES ('35', '5', '2', '2', '2', '2', '90.00', '1474992000', '8');
+INSERT INTO `client_consumption` VALUES ('36', '23', '5', '2', '1', '6', '236.00', '1473350400', '哈哈の');
+INSERT INTO `client_consumption` VALUES ('37', '13', '5', '2', '1', '6', '236.00', '1473350400', '哈哈の');
+INSERT INTO `client_consumption` VALUES ('38', '13', '3', '1', '2', '5', '28.00', '1476806400', '66');
+INSERT INTO `client_consumption` VALUES ('39', '23', '4', '1', '1', '3', '995.30', '1475596800', '人');
+INSERT INTO `client_consumption` VALUES ('40', '22', '3', '1', '1', '2', '656.00', '1474819200', '省道');
+INSERT INTO `client_consumption` VALUES ('41', '23', '3', '1', '1', '2', '656.00', '1474819200', '省道');
+INSERT INTO `client_consumption` VALUES ('42', '22', '3', '1', '1', '2', '656.00', '1474819200', '省道');
+INSERT INTO `client_consumption` VALUES ('43', '23', '3', '1', '1', '2', '656.00', '1474819200', '省道');
+INSERT INTO `client_consumption` VALUES ('44', '23', '3', '2', '1', '2', '33.00', '1474905600', '月');
+INSERT INTO `client_consumption` VALUES ('45', '10', '3', '2', '1', '2', '33.00', '1474905600', '月');
+INSERT INTO `client_consumption` VALUES ('46', '25', '1', '2', '2', '2', '0.00', '1476201600', '的');
+INSERT INTO `client_consumption` VALUES ('47', '30', '1', '2', '2', '3', '5.00', '1478361600', 'v');
+INSERT INTO `client_consumption` VALUES ('48', '32', '2', '2', '1', '2', '4.00', '1475078400', '哈哈');
+INSERT INTO `client_consumption` VALUES ('49', '31', '2', '2', '1', '1', '0.00', '1475596800', 'vb');
+INSERT INTO `client_consumption` VALUES ('50', '31', '2', '2', '1', '1', '0.00', '1475596800', 'vb');
+INSERT INTO `client_consumption` VALUES ('51', '28', '2', '1', '1', '3', '7.00', '1475510400', '通过');
+INSERT INTO `client_consumption` VALUES ('52', '25', '2', '1', '2', '1', '6.00', '1475596800', '的');
+INSERT INTO `client_consumption` VALUES ('53', '19', '2', '1', '1', '1', '0.00', '1474819200', '的');
+INSERT INTO `client_consumption` VALUES ('54', '24', '2', '2', '2', '1', '0.00', '1474905600', 'u');
+INSERT INTO `client_consumption` VALUES ('55', '25', '2', '2', '1', '3', '2.00', '1475596800', '的');
+INSERT INTO `client_consumption` VALUES ('56', '26', '1', '1', '1', '2', '4.00', '1475683200', '的');
+INSERT INTO `client_consumption` VALUES ('57', '30', '3', '2', '1', '2', '0.00', '1475078400', '8');
+INSERT INTO `client_consumption` VALUES ('58', '24', '2', '2', '1', '2', '5.00', '1474992000', '4');
+INSERT INTO `client_consumption` VALUES ('59', '26', '3', '1', '2', '4', '9.00', '1476115200', '9');
+INSERT INTO `client_consumption` VALUES ('60', '18', '3', '2', '1', '4', '0.00', '1474992000', '9');
 
 -- ----------------------------
 -- Table structure for client_county
@@ -3697,25 +3727,6 @@ INSERT INTO `client_from` VALUES ('6', '朋友介绍', '1');
 INSERT INTO `client_from` VALUES ('7', '朋友介绍', '2');
 
 -- ----------------------------
--- Table structure for client_jiuzhen
--- ----------------------------
-DROP TABLE IF EXISTS `client_jiuzhen`;
-CREATE TABLE `client_jiuzhen` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `wangdian_zixun_id` tinyint(3) unsigned NOT NULL,
-  `qiantai_zixun_id` tinyint(3) unsigned NOT NULL,
-  `jiuzhen_doctor_id` tinyint(3) unsigned NOT NULL,
-  `jiuzhen_disease_id` tinyint(3) unsigned NOT NULL,
-  `money` decimal(10,0) unsigned NOT NULL,
-  `jiuzhen_time` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of client_jiuzhen
--- ----------------------------
-
--- ----------------------------
 -- Table structure for client_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `client_menu`;
@@ -3731,7 +3742,7 @@ CREATE TABLE `client_menu` (
 -- ----------------------------
 -- Records of client_menu
 -- ----------------------------
-INSERT INTO `client_menu` VALUES ('1', '诊疗管理', 'icon-sys', '', '0');
+INSERT INTO `client_menu` VALUES ('1', '客户管理', 'icon-sys', '', '0');
 INSERT INTO `client_menu` VALUES ('2', '客户查询', 'icon-tip', '/index/maindata/', '1');
 INSERT INTO `client_menu` VALUES ('3', '消费管理', 'icon-sys', '', '0');
 INSERT INTO `client_menu` VALUES ('4', '管理员设置', 'icon-sys', 'menu1/treegrid.html', '15');
@@ -3846,7 +3857,7 @@ CREATE TABLE `client_users_info` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `usersn` (`usersn`),
   UNIQUE KEY `tel` (`telephone`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_users_info
@@ -3877,6 +3888,9 @@ INSERT INTO `client_users_info` VALUES ('26', '鱼鱼', 'FA23888659129447', '2',
 INSERT INTO `client_users_info` VALUES ('27', '鱼鱼', 'FA23888835369423', '2', '-1552291200', '0', '13076607473', '510000', '510100', '510106', '3', '4', '1', '1477188883');
 INSERT INTO `client_users_info` VALUES ('28', '的', 'FA23943124324614', '2', '1477152000', '0', '14588889987', '510000', '510600', '510626', '2', '7', '3', '1477194312');
 INSERT INTO `client_users_info` VALUES ('29', '的', 'FA23946083493886', '2', '1319299200', '5', '14588589987', '510000', '510600', '510626', '2', '7', '3', '1477194608');
+INSERT INTO `client_users_info` VALUES ('30', 'po', 'FA28169981157365', '1', '593366400', '28', '13966665523', '350000', '350400', '350430', '1', '1', '1', '1477616998');
+INSERT INTO `client_users_info` VALUES ('31', 'faf', 'FA28170847074271', '1', '593366400', '28', '15966665523', '350000', '350400', '350430', '1', '1', '1', '1477617084');
+INSERT INTO `client_users_info` VALUES ('32', 'd', 'FA28171105105914', '1', '593366400', '28', '15566665523', '350000', '350400', '350430', '1', '1', '1', '1477617110');
 
 -- ----------------------------
 -- Table structure for client_users_yuyue

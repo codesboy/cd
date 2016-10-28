@@ -87,7 +87,7 @@ class Useradd extends Base{
 				'ill_desc'=>input('ill_desc')
 			];
 
-			// dump($info_data);
+			// dump($consumption_data);
 			// exit;
 
 

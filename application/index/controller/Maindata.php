@@ -69,7 +69,7 @@ class Maindata extends Base
 			->join('disease dis','dis.id=u.tool_id','LEFT')
 			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,c.city_name,co.county_name,d.dev,f.from,z.tool,w.name wdname,q.name qtname,doc.doctor,disease_name,sum(con.money) summoney,addtime')
 			->group('u.id')
-			->order([$sort=>$order])
+			->order([$sort=>$order,'q.name'=>'desc'])
 			->limit($offset,$rows)
 			// ->fetchSql(true)
 			->select();

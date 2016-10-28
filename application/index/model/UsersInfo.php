@@ -8,7 +8,7 @@ class UsersInfo extends Model
 {
     protected $pk    = 'id';
     protected $type = [
-        'addtime'    =>  'timestamp:Y-m-d',
+        'addtime'    =>  'timestamp',
         'birthday'    =>  'timestamp:Y-m-d'
 
     ];
