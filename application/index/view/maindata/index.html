@@ -455,9 +455,9 @@ $('#addCon').on('click',function(event) {
                 $('#addconmsg').html('提示信息：'+data);
                 if(data=='"该用户消费记录添加成功！"'){
                     $('#addconbtn').attr('disabled',true);
+                    $('#addconform').get(0).reset();
                     $('#addConModal').modal('hide');
                     $('#addConDialog').modal();
-                    $('#addconform').get(0).reset();
                 }
             })
             .fail(function() {
@@ -465,6 +465,14 @@ $('#addCon').on('click',function(event) {
             });
             return false;
         });
+        $('#secAddCon').on('click',function(){
+            $('#addConDialog').modal('hide');
+            $('#addConModal').modal();
+            $('#addconbtn').attr('disabled',false);
+            $('#addconmsg').html('');
+        })
+
+
     }else{
         alert('请选择用户');
     }
