@@ -176,7 +176,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button type="button" class="btn btn-primary" id="addconbtn">保存</button>
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -249,7 +249,7 @@ $(function() {
 
         // 子网络
         view: detailview,
-        
+
         onExpandRow: function(index, row) {
             var ddv = $(this).datagrid('getRowDetail', index).find('table.ddv');
 
@@ -275,41 +275,16 @@ $(function() {
                 loadMsg: '正在玩命加载详细列表......',
                 height: 'auto',
                 showFooter: true,
-                columns: [
-                    [{
-                        field: 'footer',
-                        title: '',
-                        width: 100
-                    }, {
-                        field: 'money',
-                        title: '本次消费金额(元)',
-                        width: 100
-                    }, {
-                        field: 'wd',
-                        title: '网电咨询师',
-                        width: 100
-                    }, {
-                        field: 'qt',
-                        title: '前台咨询师',
-                        width: 100
-                    }, {
-                        field: 'doctor',
-                        title: '接诊医生',
-                        width: 100
-                    }, {
-                        field: 'disease_name',
-                        title: '就诊病种',
-                        width: 100
-                    }, {
-                        field: 'ill_desc',
-                        title: '病情描述',
-                        width: 100
-                    }, {
-                        field: 'jz_time',
-                        title: '就诊时间',
-                        width: 100
-                    }]
-                ],
+                columns: [[
+                    {field: 'footer',title: '',width: 100},
+                    {field: 'money',title: '本次消费金额(元)',width: 100},
+                    {field: 'wd',title: '网电咨询师',width: 100},
+                    {field: 'qt',title: '前台咨询师',width: 100},
+                    {field: 'doctor',title: '接诊医生',width: 100},
+                    {field: 'disease_name',title: '就诊病种',width: 100},
+                    {field: 'ill_desc',title: '病情描述',width: 100},
+                    {field: 'jz_time',title: '就诊时间',width: 100}
+                ]],
                 onResize: function() {
                     $('#dg').datagrid('fixDetailRowHeight', index);
                 },
@@ -330,7 +305,7 @@ $(function() {
     $('#reload').on('click', function() {
         $('#dg').datagrid('reload');
     });
-    
+
 
 });
 
@@ -438,7 +413,7 @@ $('#submit').on('click', function() {
 $('#addCon').on('click',function(event) {
     var selected=$('#dg').datagrid('getSelected');
     // console.info(selected)
-    if(selected){        
+    if(selected){
         $('#addcontitle').html('为客户 '+selected.name+'('+selected.telephone+') 添加就诊/消费记录');
         $('#addConModal').modal();
         $('#addconbtn').on('click', function(event) {

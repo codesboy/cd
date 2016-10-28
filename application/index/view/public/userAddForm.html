@@ -8,7 +8,6 @@
       <div class="modal-body">
         <form action="{:url('useradd/useradd')}" method="post" class="form-inline" role="form" id="formdata">
             <div class="row">
-
                 <div class="col-md-4 form-group">
                     <label class="control-label" for="name">姓&emsp;&emsp;名</label>
                     <input class="form-control" id="name" type="text" name="name" placeholder="姓名" required1="required" />
@@ -36,7 +35,6 @@
                 <div class="col-md-4"></div>
             </div>
             <div class="row">
-
                 <div class="col-md-4 form-group">
                     <label class="control-label" for="userAttrArea">省&emsp;&emsp;份</label>
                     <select name="province_id" id="userAttrArea" required1="required" class="form-control">
@@ -145,19 +143,30 @@
                 </div>
             </div>
             <div class="row btns">
-                <button type="submit" id="submit" class="btn btn-lg btn-success">保存</button>
-                <button type="reset" class="btn btn-lg btn-warning">重置</button>
-            </div>
-            <div class="row">
-                <b id="msg"></b>
+
             </div>
         </form>
       </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> -->
+      <div class="modal-footer">
+        <b id="msg" class="pull-left"></b>
+        <button type="submit" id="submit" class="btn btn-success">保存</button>
+        <button type="reset" class="btn btn-warning">重置</button>
+        <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
     </div>
   </div>
 </div>
 
+<div class="modal fade" id="addUserDialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">新客户添加成功！</div>
+            <div class="modal-footer">
+                <span class="pull-left text-danger" id="addconmsg"></span>
+                <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+                <!-- <button type="button" class="btn btn-primary" id="secAddCon">继续添加</button> -->
+            </div>
+        </div>
+    </div>
+</div>
