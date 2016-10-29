@@ -194,265 +194,269 @@
     </div>
 
 <script>
-// $('#myModal').dialog({
-//     closed: true,
-// })
-//
-// datagrid部分js
-$(function() {
-    // 主要数据
-    $('#dg').datagrid({
-        iconCls: 'icon-list',
-        autoRowHeight: false,
-        // nowrap: false,
-        url: '{:url('returndata')}',
-        columns:[[
-            // {field:'id',title:'ID',width:1,width:'auto'},
-            {field:'checkbox',checkbox:true},
-            {field:'name',title:'姓名',width:80,halign:'center',align:'center'},
-            // {field:'usersn',title:'客户编号',width:100},
-            {field:'status',title:'成交',formatter:statusformater,align:'center',width:45},
-            {field:'telephone',title:'手机号码',width:80},
-            {field:'sex',title:'性别',formatter: function (value) {if(value==1){return '男'}else if (value==2) {return '女'}else{return '未知'}},width:45},
-            {field:'birthday',title:'出生日期',width:70},
-            {field:'age',title:'年龄',sortable:true,width:40},
-            {field:'province_name',title:'所在省份',width:70},
-            {field:'city_name',title:'所在市区',width:80},
-            {field:'county_name',title:'所在区县',width:100},
-            {field:'dev',title:'开发渠道',width:70},
-            {field:'from',title:'信息来源',width:70},
-            {field:'tool',title:'咨询工具',width:70},
-            {field:'wdname',title:'最近一次网电咨询师',width:100},
-            {field:'qtname',title:'最近一次前台咨询师',width:100},
-            {field:'doctor',title:'最近一次接诊医生',width:100},
-            {field:'disease_name',title:'最近一次就诊病种',width:100},
-            {field:'summoney',title:'消费总金额(元)',sortable:true,formatter:function(value){return '<span class="money">'+value+'</span>';},width:100},
-            {field:'addtime',title:'登记时间',width:110}
-        ]],
-        toolbar: "#toolbar",
-        fitColumns: true, //表格宽度自适应
-        rownumbers: true,
-        pagination: true, //分页组件
-        pageSize: 50, //初始化显示条数
-        pageList: [10, 50, 100, 200],
-        loadMsg: '玩命加载数据中......',
-        // striped:true, //斑马线效果
-        singleSelect: true, //单选
-        method: 'post',
-        // pagePosition:'both'
-        // SelectOnCheck:false
-        /*loadFilter: function(data){
-            console.info(data);
-            return data;
+    // datagrid部分js
+    $(function() {
+        // 主要数据
+        $('#dg').datagrid({
+            iconCls: 'icon-list',
+            autoRowHeight: false,
+            // nowrap: false,
+            url: '{:url('returndata')}',
+            columns:[[
+                // {field:'id',title:'ID',width:1,width:'auto'},
+                {field:'checkbox',checkbox:true},
+                {field:'name',title:'姓名',width:80,halign:'center',align:'center'},
+                // {field:'usersn',title:'客户编号',width:100},
+                {field:'status',title:'成交',formatter:statusformater,align:'center',width:45},
+                {field:'telephone',title:'手机号码',width:80},
+                {field:'sex',title:'性别',formatter: function (value) {if(value==1){return '男'}else if (value==2) {return '女'}else{return '未知'}},width:45},
+                {field:'birthday',title:'出生日期',width:70},
+                {field:'age',title:'年龄',sortable:true,width:40},
+                {field:'province_name',title:'所在省份',width:70},
+                {field:'city_name',title:'所在市区',width:80},
+                {field:'county_name',title:'所在区县',width:100},
+                {field:'dev',title:'开发渠道',width:70},
+                {field:'from',title:'信息来源',width:70},
+                {field:'tool',title:'咨询工具',width:70},
+                {field:'wdname',title:'最近一次网电咨询师',width:100},
+                {field:'qtname',title:'最近一次前台咨询师',width:100},
+                {field:'doctor',title:'最近一次接诊医生',width:100},
+                {field:'disease_name',title:'最近一次就诊病种',width:100},
+                {field:'summoney',title:'消费总金额(元)',sortable:true,formatter:function(value){return '<span class="money">'+value+'</span>';},width:100},
+                {field:'addtime',title:'登记时间',width:110}
+            ]],
+            toolbar: "#toolbar",
+            fitColumns: true, //表格宽度自适应
+            rownumbers: true,
+            pagination: true, //分页组件
+            pageSize: 50, //初始化显示条数
+            pageList: [10, 50, 100, 200],
+            loadMsg: '玩命加载数据中......',
+            // striped:true, //斑马线效果
+            singleSelect: true, //单选
+            method: 'post',
+            // pagePosition:'both'
+            // SelectOnCheck:false
+            /*loadFilter: function(data){
+                console.info(data);
+                return data;
 
-        }*/
+            }*/
 
-        // 子网络
-        view: detailview,
+            // 子网络
+            view: detailview,
 
-        onExpandRow: function(index, row) {
-            var ddv = $(this).datagrid('getRowDetail', index).find('table.ddv');
+            onExpandRow: function(index, row) {
+                var ddv = $(this).datagrid('getRowDetail', index).find('table.ddv');
 
-            /*$.ajax({
+                /*$.ajax({
+                        url: '{:url("Consumption/getcpdetail")}?uid=' + row.id,
+                        type: 'GET',
+                        dataType: 'json',
+                    })
+                    .done(function(data) {
+                        console.log(data);
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    });*/
+
+
+
+                ddv.datagrid({
                     url: '{:url("Consumption/getcpdetail")}?uid=' + row.id,
-                    type: 'GET',
-                    dataType: 'json',
-                })
-                .done(function(data) {
-                    console.log(data);
-                })
-                .fail(function() {
-                    console.log("error");
-                });*/
-
-
-
-            ddv.datagrid({
-                url: '{:url("Consumption/getcpdetail")}?uid=' + row.id,
-                fitColumns: true,
-                singleSelect: true,
-                rownumbers: true,
-                loadMsg: '正在玩命加载详细列表......',
-                height: 'auto',
-                showFooter: true,
-                columns: [[
-                    {field: 'footer',title: '',width: 100},
-                    {field: 'money',title: '本次消费金额(元)',width: 100},
-                    {field: 'wd',title: '网电咨询师',width: 100},
-                    {field: 'qt',title: '前台咨询师',width: 100},
-                    {field: 'doctor',title: '接诊医生',width: 100},
-                    {field: 'disease_name',title: '就诊病种',width: 100},
-                    {field: 'ill_desc',title: '病情描述',width: 100},
-                    {field: 'jz_time',title: '就诊时间',width: 100}
-                ]],
-                onResize: function() {
-                    $('#dg').datagrid('fixDetailRowHeight', index);
-                },
-                onLoadSuccess: function(data) {
-                    // console.log(data);
-                    setTimeout(function() {
+                    fitColumns: true,
+                    singleSelect: true,
+                    rownumbers: true,
+                    loadMsg: '正在玩命加载详细列表......',
+                    height: 'auto',
+                    showFooter: true,
+                    columns: [[
+                        {field: 'footer',title: '',width: 100},
+                        {field: 'money',title: '本次消费金额(元)',width: 100},
+                        {field: 'wd',title: '网电咨询师',width: 100},
+                        {field: 'qt',title: '前台咨询师',width: 100},
+                        {field: 'doctor',title: '接诊医生',width: 100},
+                        {field: 'disease_name',title: '就诊病种',width: 100},
+                        {field: 'ill_desc',title: '病情描述',width: 100},
+                        {field: 'jz_time',title: '就诊时间',width: 100}
+                    ]],
+                    onResize: function() {
                         $('#dg').datagrid('fixDetailRowHeight', index);
-                    }, 0);
-                }
-            });
-            $('#dg').datagrid('fixDetailRowHeight', index);
-        },
-        detailFormatter: function(index, row) {
-            return '<div style="padding:2px"><table class="ddv" title="该客户消费明细列表"></table></div>';
-        }
-    });
-    // 刷新数据
-    $('#reload').on('click', function() {
-        $('#dg').datagrid('reload');
-    });
-
-
-});
-
-function statusformater(value, row, index) {
-    return row.summoney > 0 ? "<span class='glyphicon glyphicon-ok success'></span>" : "<span class='glyphicon glyphicon-remove'></span>";
-}
-
-// 表单部分js
-$('#myModal').modal({
-    // backdrop: false,
-    show:false
-})
-$('.datetimepicker').datepicker({
-    language: 'zh-CN', //语言
-    format: 'yyyy-mm-dd',
-    autoclose: true,
-    todayHighlight: true,
-    todayBtn: "linked"
-});
-var link = function(nextdom, url, postdata, value, text) {
-    $.ajax({
-            url: url,
-            type: 'POST',
-            dataType: 'json',
-            data: postdata
-        })
-        .done(function(data) {
-            if (data) {
-                // console.log(data);
-                var html_temp = '';
-                $.each(data, function(index, val) {
-                    html_temp += "<option value='" + val[value] + "'>" + val[text] + "</option>";
+                    },
+                    onLoadSuccess: function(data) {
+                        // console.log(data);
+                        setTimeout(function() {
+                            $('#dg').datagrid('fixDetailRowHeight', index);
+                        }, 0);
+                    }
                 });
-                // console.info(html_temp);
-                nextdom.html("<option value=''>请选择</option>" + html_temp);
+                $('#dg').datagrid('fixDetailRowHeight', index);
+            },
+            detailFormatter: function(index, row) {
+                return '<div style="padding:2px"><table class="ddv" title="该客户消费明细列表"></table></div>';
             }
-        })
-        .fail(function() {
-            console.log("error");
         });
-};
-
-
-var initdata = function() {
-    var nextdom = $('#userAttrCity'),
-        url = "{:url('useradd/citylink')}"
-    pid = $("#userAttrArea").val(),
-        postdata = {
-            'province_id': pid
-        },
-        value = 'city_id',
-        text = 'city_name';
-    link(nextdom, url, postdata, value, text);
-}
-initdata();
-
-$('#userAttrArea').change(function() {
-    $('#userAttrCounty').html('');
-    initdata();
-});
-$('#userAttrCity').change(function() {
-    var nextdom = $('#userAttrCounty'),
-        url = "{:url('useradd/countylink')}"
-    pid = $(this).val(),
-        postdata = {
-            'city_id': pid
-        },
-        value = 'county_id',
-        text = 'county_name';
-    link(nextdom, url, postdata, value, text);
-});
-
-$('#dev').change(function() {
-    var nextdom = $('#from'),
-        url = "{:url('link')}"
-    pid = $(this).val(),
-        postdata = {
-            'id': pid
-        },
-        value = 'id',
-        text = 'from',
-        link(nextdom, url, postdata, value, text);
-});
-// 添加用户
-$('#submit').on('click', function() {
-    $.ajax({
-            url: '{:url("useradd/useradd")}',
-            type: 'POST',
-            dataType: 'html',
-            data: $('#formdata').serialize()
-        })
-        .done(function(data) {
-            // console.log(data);
-            $('#msg').html('提示信息：' + data);
-        })
-        .fail(function() {
-            console.log("error");
+        // 刷新数据
+        $('#reload').on('click', function() {
+            $('#dg').datagrid('reload');
         });
 
-    return false;
 
-});
+    });
 
-// 添加就诊/消费记录
-$('#addCon').on('click',function(event) {
-    var selected=$('#dg').datagrid('getSelected');
-    // console.info(selected)
-    if(selected){
-        $('#addcontitle').html('为客户 '+selected.name+'('+selected.telephone+') 添加就诊/消费记录');
-        $('#addConModal').modal();
-        $('#addconbtn').on('click', function(event) {
-            var addcondata=$('#addconform').serialize();
-            addcondata=addcondata+'&uid='+selected.id;
+    function statusformater(value, row, index) {
+        return row.summoney > 0 ? "<span class='glyphicon glyphicon-ok success'></span>" : "<span class='glyphicon glyphicon-remove'></span>";
+    }
 
-            $.ajax({
-                url: '{:url('Consumption/addcon')}',
+    // 表单部分js
+    $('#myModal').modal({
+        // backdrop: false,
+        show:false
+    })
+    $('.datetimepicker').datepicker({
+        language: 'zh-CN', //语言
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayHighlight: true,
+        todayBtn: "linked"
+    });
+    var link = function(nextdom, url, postdata, value, text) {
+        $.ajax({
+                url: url,
                 type: 'POST',
-                dataType: 'html',
-                data: addcondata
+                dataType: 'json',
+                data: postdata
             })
             .done(function(data) {
-                $('#addconmsg').html('提示信息：'+data);
-                if(data=='"该用户消费记录添加成功！"'){
-                    $('#addconbtn').attr('disabled',true);
-                    $('#addconform').get(0).reset();
-                    $('#addConModal').modal('hide');
-                    $('#addConDialog').modal();
+                if (data) {
+                    // console.log(data);
+                    var html_temp = '';
+                    $.each(data, function(index, val) {
+                        html_temp += "<option value='" + val[value] + "'>" + val[text] + "</option>";
+                    });
+                    // console.info(html_temp);
+                    nextdom.html("<option value=''>请选择</option>" + html_temp);
                 }
             })
             .fail(function() {
                 console.log("error");
             });
-            return false;
-        });
-        $('#secAddCon').on('click',function(){
-            $('#addConDialog').modal('hide');
-            $('#addConModal').modal();
-            $('#addconbtn').attr('disabled',false);
-            $('#addconmsg').html('');
-        })
+    };
 
 
-    }else{
-        alert('请选择用户');
+    var initdata = function() {
+        var nextdom = $('#userAttrCity'),
+            url = "{:url('useradd/citylink')}"
+        pid = $("#userAttrArea").val(),
+            postdata = {
+                'province_id': pid
+            },
+            value = 'city_id',
+            text = 'city_name';
+        link(nextdom, url, postdata, value, text);
     }
+    initdata();
 
-});
+    $('#userAttrArea').change(function() {
+        $('#userAttrCounty').html('');
+        initdata();
+    });
+    $('#userAttrCity').change(function() {
+        var nextdom = $('#userAttrCounty'),
+            url = "{:url('useradd/countylink')}"
+        pid = $(this).val(),
+            postdata = {
+                'city_id': pid
+            },
+            value = 'county_id',
+            text = 'county_name';
+        link(nextdom, url, postdata, value, text);
+    });
+
+    $('#dev').change(function() {
+        var nextdom = $('#from'),
+            url = "{:url('link')}"
+        pid = $(this).val(),
+            postdata = {
+                'id': pid
+            },
+            value = 'id',
+            text = 'from',
+            link(nextdom, url, postdata, value, text);
+    });
+    // 添加用户
+    $('#submit').on('click', function() {
+        $.ajax({
+                url: '{:url("useradd/useradd")}',
+                type: 'POST',
+                dataType: 'html',
+                data: $('#formdata').serialize()
+            })
+            .done(function(data) {
+                // console.log(data);
+                $('#msg').html('提示信息：' + data);
+                if (data == '"客户添加成功!"') {
+                    $('#submit').attr('disabled', true);
+                    $('#formdata').get(0).reset();
+                    $('#msg').html('');
+                    // $('#myModal').modal('hide');
+                    $('#addUserDialog').modal();
+                    $('#submit').attr('disabled', false);
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            });
+
+        return false;
+
+    });
+
+    // 添加就诊/消费记录
+    $('#addCon').on('click',function(event) {
+        var selected=$('#dg').datagrid('getSelected');
+        // console.info(selected)
+        if(selected){
+            $('#addcontitle').html('为客户 '+selected.name+'('+selected.telephone+') 添加就诊/消费记录');
+            $('#addConModal').modal();
+            $('#addconbtn').on('click', function(event) {
+                var addcondata=$('#addconform').serialize();
+                addcondata=addcondata+'&uid='+selected.id;
+
+                $.ajax({
+                    url: '{:url('Consumption/addcon')}',
+                    type: 'POST',
+                    dataType: 'html',
+                    data: addcondata
+                })
+                .done(function(data) {
+                    $('#addconmsg').html('提示信息：'+data);
+                    if(data=='"该用户消费记录添加成功！"'){
+                        $('#addconbtn').attr('disabled',true);
+                        $('#addconform').get(0).reset();
+                        $('#addConModal').modal('hide');
+                        $('#addConDialog').modal();
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                });
+                return false;
+            });
+            $('#secAddCon').on('click',function(){
+                $('#addConDialog').modal('hide');
+                $('#addConModal').modal();
+                $('#addconbtn').attr('disabled',false);
+                $('#addconmsg').html('');
+            })
+
+
+        }else{
+            alert('请选择用户');
+        }
+
+    });
 
 </script>
 

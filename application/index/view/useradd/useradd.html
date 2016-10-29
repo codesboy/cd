@@ -27,101 +27,108 @@
     {include file="Public/userAddForm"}
 
     <script>
-       $(function(){
-            $('#myModal').modal({
-                backdrop:false,
-            })
-            $('.datetimepicker').datepicker({
-               language:  'zh-CN', //语言
-               format: 'yyyy-mm-dd',
-               autoclose: true,
-               todayHighlight: true,
-               todayBtn: "linked"
-           });
-            var link=function(nextdom,url,postdata,value,text){
-                $.ajax({
-                   url: url,
-                   type: 'POST',
-                   dataType: 'json',
-                   data: postdata
-                })
-                .done(function(data) {
-                   if(data){
-                       // console.log(data);
-                       var html_temp='';
-                       $.each(data, function(index, val) {
-                           html_temp+="<option value='"+val[value]+"'>"+val[text]+"</option>";
-                       });
-                       // console.info(html_temp);
-                       nextdom.html("<option value=''>请选择</option>"+html_temp);
-                   }
-               })
-               .fail(function() {
-                   console.log("error");
-               });
-           };
-           var initdata=function(){
-               var nextdom=$('#userAttrCity'),
-                   url="{:url('citylink')}"
-                   pid=$("#userAttrArea").val(),
-                   postdata={'province_id': pid},
-                   value='city_id',
-                   text='city_name';
-               link(nextdom,url,postdata,value,text);
-           }
-           initdata();
+		$(function() {
+		    $('#myModal').modal({
+		        backdrop: false,
+		    })
+		    $('.datetimepicker').datepicker({
+		        language: 'zh-CN', //语言
+		        format: 'yyyy-mm-dd',
+		        autoclose: true,
+		        todayHighlight: true,
+		        todayBtn: "linked"
+		    });
+		    var link = function(nextdom, url, postdata, value, text) {
+		        $.ajax({
+		                url: url,
+		                type: 'POST',
+		                dataType: 'json',
+		                data: postdata
+		            })
+		            .done(function(data) {
+		                if (data) {
+		                    // console.log(data);
+		                    var html_temp = '';
+		                    $.each(data, function(index, val) {
+		                        html_temp += "<option value='" + val[value] + "'>" + val[text] + "</option>";
+		                    });
+		                    // console.info(html_temp);
+		                    nextdom.html("<option value=''>请选择</option>" + html_temp);
+		                }
+		            })
+		            .fail(function() {
+		                console.log("error");
+		            });
+		    };
+		    var initdata = function() {
+		        var nextdom = $('#userAttrCity'),
+		            url = "{:url('citylink')}"
+		        pid = $("#userAttrArea").val(),
+		            postdata = {
+		                'province_id': pid
+		            },
+		            value = 'city_id',
+		            text = 'city_name';
+		        link(nextdom, url, postdata, value, text);
+		    }
+		    initdata();
 
-            $('#userAttrArea').change(function() {
-               $('#userAttrCounty').html('');
-               initdata();
-            });
-            $('#userAttrCity').change(function() {
-                var nextdom=$('#userAttrCounty'),
-                url="{:url('countylink')}"
-                pid=$(this).val(),
-                postdata={'city_id': pid},
-                value='county_id',
-                text='county_name';
-                link(nextdom,url,postdata,value,text);
-            });
+		    $('#userAttrArea').change(function() {
+		        $('#userAttrCounty').html('');
+		        initdata();
+		    });
+		    $('#userAttrCity').change(function() {
+		        var nextdom = $('#userAttrCounty'),
+		            url = "{:url('countylink')}"
+		        pid = $(this).val(),
+		            postdata = {
+		                'city_id': pid
+		            },
+		            value = 'county_id',
+		            text = 'county_name';
+		        link(nextdom, url, postdata, value, text);
+		    });
 
-            $('#dev').change(function() {
-               var nextdom=$('#from'),
-                   url="{:url('link')}"
-                   pid=$(this).val(),
-                   postdata={'id': pid},
-                   value='id',
-                   text='from',
-               link(nextdom,url,postdata,value,text);
-            });
-            $('#submit').on('click',function(){
-                $.ajax({
-                    url: '{:url("useradd")}',
-                    type: 'POST',
-                    dataType: 'html',
-                    data: $('#formdata').serialize()
-                })
-                .done(function(data) {
-                   // console.log(data);
-                    $('#msg').html('提示信息：'+data);
-                    if(data=='"客户添加成功!"'){
-                        $('#submit').attr('disabled',true);
-                        $('#formdata').get(0).reset();
-                        $('#msg').html('');
-                        // $('#myModal').modal('hide');
-                        $('#addUserDialog').modal();
-                        $('#submit').attr('disabled',false);
-                    }
-                })
-                .fail(function() {
-                    console.log("error");
-                });
+		    $('#dev').change(function() {
+		        var nextdom = $('#from'),
+		            url = "{:url('link')}"
+		        pid = $(this).val(),
+		            postdata = {
+		                'id': pid
+		            },
+		            value = 'id',
+		            text = 'from',
+		            link(nextdom, url, postdata, value, text);
+		    });
+		    $('#submit').on('click', function() {
+		        $.ajax({
+		                url: '{:url("useradd")}',
+		                type: 'POST',
+		                dataType: 'html',
+		                data: $('#formdata').serialize()
+		            })
+		            .done(function(data) {
+		                // console.log(data);
+		                $('#msg').html('提示信息：' + data);
+		                if (data == '"客户添加成功!"') {
+		                    $('#submit').attr('disabled', true);
+		                    $('#formdata').get(0).reset();
+		                    $('#msg').html('');
+		                    // $('#myModal').modal('hide');
+		                    $('#addUserDialog').modal();
+		                    $('#submit').attr('disabled', false);
+		                }
+		            })
+		            .fail(function() {
+		                console.log("error");
+		            });
 
-                return false;
+		        return false;
 
-           })
-       })
-   </script>
+		    })
+		})
+	</script>
+
 </body>
 
 </html>

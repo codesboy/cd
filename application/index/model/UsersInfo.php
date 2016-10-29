@@ -6,6 +6,7 @@ use think\Model;
 // 用户信息模型
 class UsersInfo extends Model
 {
+    // 设置数据表主键,默认主键自动识别
     protected $pk    = 'id';
     protected $type = [
         'addtime'    =>  'timestamp',
