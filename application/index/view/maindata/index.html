@@ -173,7 +173,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <span class="pull-left text-danger" id="addconmsg"></span>
+                    <span class="pull-left text-danger" class="addconmsg"></span>
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button type="button" class="btn btn-primary" id="addconbtn">保存</button>
                 </div>
@@ -186,7 +186,6 @@
             <div class="modal-content">
                 <div class="modal-body">消费记录添加成功！</div>
                 <div class="modal-footer">
-                    <span class="pull-left text-danger" id="addconmsg"></span>
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button type="button" class="btn btn-primary" id="secAddCon">继续添加</button>
                 </div>
@@ -424,6 +423,7 @@
             $('#addcontitle').html('为客户 '+selected.name+'('+selected.telephone+') 添加就诊/消费记录');
             $('#addConModal').modal();
             $('#addconbtn').on('click', function(event) {
+
                 var addcondata=$('#addconform').serialize();
                 addcondata=addcondata+'&uid='+selected.id;
 
@@ -433,14 +433,19 @@
                     dataType: 'html',
                     data: addcondata
                 })
-                .done(function(data) {
-                    $('#addconmsg').html('提示信息：'+data);
-                    if(data=='"该用户消费记录添加成功！"'){
+                .done(function(conaddresult) {
+
+                    console.log(conaddresult)
+                    if(conaddresult=='"该用户消费记录添加成功！"'){
                         $('#addconbtn').attr('disabled',true);
                         $('#addconform').get(0).reset();
                         $('#addConModal').modal('hide');
                         $('#addConDialog').modal();
+                    }else{
+                        $('.addconmsg').html(conaddresult);
                     }
+
+                    alert($('#addconmsg').html())
                 })
                 .fail(function() {
                     console.log("error");
@@ -451,7 +456,7 @@
                 $('#addConDialog').modal('hide');
                 $('#addConModal').modal();
                 $('#addconbtn').attr('disabled',false);
-                $('#addconmsg').html('');
+                // $('.addconmsg').html('');
             })
 
 
