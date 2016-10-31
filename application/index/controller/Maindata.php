@@ -57,12 +57,19 @@ class Maindata extends Base
 			// $user1 = UsersInfo::all();
 			$user=new UsersInfo;
 			// dump($user);//array
+			// 分页条件
 			$page=input('page');
 			$rows=input('rows');
 			$offset=($page-1)*$rows;
 
+			// 排序条件
 			$sort=input('sort')?input('sort'):'u.id';
 			$order=input('order')?input('order'):'desc';
+
+			// 筛选条件
+			$name=input('name');
+			$startmoney=input('startmoney')?input('startmoney'):0;
+			$endmoney=input('endmoney')?input('endmoney'):9000;
 
 			$data=$user->alias('u')
 			// ->join('consumption con','con.uid=u.id')
@@ -79,12 +86,14 @@ class Maindata extends Base
 			->join('disease dis','dis.id=disease_id','LEFT')
 			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,c.city_name,co.county_name,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,addtime')
 			// ->group('u.id')
+			->where('name|telephone','like',"%$name%")
+			->where('summoney','between',[$startmoney,$endmoney])
 			->order([$sort=>$order])
 			->limit($offset,$rows)
 			->select();
 
-			/*dump($data);
-			exit;*/
+			// dump($data);
+			// exit;
 
 			$data1=$user->view('UsersInfo','id,name,sex,birthday,age,telephone,addtime')
 				->view('Province','province_name','Province.province_id=UsersInfo.province_id')
@@ -123,11 +132,13 @@ class Maindata extends Base
 	}
 
 	// 读取用户数据
-	public function read($id=''){
+	/*public function read($id=''){
 	    $user = GetMainData::all();
 	    dump($user);//array
+	}*/
+
+	public function search(){
+
 	}
-
-
 
 }

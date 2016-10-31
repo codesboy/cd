@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50547
 File Encoding         : 65001
 
-Date: 2016-10-28 18:22:39
+Date: 2016-10-31 20:54:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -402,16 +402,16 @@ INSERT INTO `client_city` VALUES ('659000', '省直辖行政单位', '650000', '
 DROP TABLE IF EXISTS `client_consumption`;
 CREATE TABLE `client_consumption` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned NOT NULL,
-  `wdzx_id` tinyint(3) unsigned NOT NULL,
-  `qtzx_id` tinyint(3) unsigned NOT NULL,
-  `doctor_id` tinyint(3) unsigned NOT NULL,
-  `disease_id` tinyint(3) unsigned NOT NULL,
-  `money` decimal(10,2) unsigned NOT NULL,
-  `jz_time` int(11) unsigned NOT NULL,
-  `ill_desc` varchar(255) NOT NULL,
+  `uid` int(10) unsigned NOT NULL COMMENT '客户id',
+  `wdzx_id` tinyint(3) unsigned NOT NULL COMMENT '网电咨询师id',
+  `qtzx_id` tinyint(3) unsigned NOT NULL COMMENT '前台咨询师id',
+  `doctor_id` tinyint(3) unsigned NOT NULL COMMENT '接诊医生id',
+  `disease_id` tinyint(3) unsigned NOT NULL COMMENT '就诊病种id',
+  `money` decimal(10,2) unsigned NOT NULL COMMENT '消费金额',
+  `jz_time` int(11) unsigned NOT NULL COMMENT '就诊时间',
+  `ill_desc` varchar(255) NOT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_consumption
@@ -460,7 +460,7 @@ INSERT INTO `client_consumption` VALUES ('42', '22', '3', '1', '1', '2', '656.00
 INSERT INTO `client_consumption` VALUES ('43', '23', '3', '1', '1', '2', '656.00', '1474819200', '省道');
 INSERT INTO `client_consumption` VALUES ('44', '23', '3', '2', '1', '2', '33.00', '1474905600', '月');
 INSERT INTO `client_consumption` VALUES ('45', '10', '3', '2', '1', '2', '33.00', '1474905600', '月');
-INSERT INTO `client_consumption` VALUES ('46', '25', '1', '2', '2', '2', '0.00', '1476201600', '的');
+INSERT INTO `client_consumption` VALUES ('46', '25', '1', '2', '2', '2', '63.00', '1476201600', '的');
 INSERT INTO `client_consumption` VALUES ('47', '30', '1', '2', '2', '3', '5.00', '1478361600', 'v');
 INSERT INTO `client_consumption` VALUES ('48', '32', '2', '2', '1', '2', '4.00', '1475078400', '哈哈');
 INSERT INTO `client_consumption` VALUES ('49', '31', '2', '2', '1', '1', '0.00', '1475596800', 'vb');
@@ -475,6 +475,15 @@ INSERT INTO `client_consumption` VALUES ('57', '30', '3', '2', '1', '2', '0.00',
 INSERT INTO `client_consumption` VALUES ('58', '24', '2', '2', '1', '2', '5.00', '1474992000', '4');
 INSERT INTO `client_consumption` VALUES ('59', '26', '3', '1', '2', '4', '9.00', '1476115200', '9');
 INSERT INTO `client_consumption` VALUES ('60', '18', '3', '2', '1', '4', '0.00', '1474992000', '9');
+INSERT INTO `client_consumption` VALUES ('61', '25', '3', '2', '1', '2', '9.00', '1474992000', 'd');
+INSERT INTO `client_consumption` VALUES ('62', '10', '2', '1', '2', '2', '233.00', '1475596800', 'd');
+INSERT INTO `client_consumption` VALUES ('63', '10', '3', '2', '2', '3', '0.00', '1475164800', '0');
+INSERT INTO `client_consumption` VALUES ('64', '33', '2', '2', '2', '4', '23.00', '1475596800', 'd');
+INSERT INTO `client_consumption` VALUES ('65', '34', '2', '1', '1', '1', '23.00', '1474905600', '2');
+INSERT INTO `client_consumption` VALUES ('66', '35', '2', '2', '1', '2', '3.00', '1476892800', '3');
+INSERT INTO `client_consumption` VALUES ('67', '35', '1', '1', '2', '5', '0.00', '1477843200', '他');
+INSERT INTO `client_consumption` VALUES ('68', '35', '1', '1', '2', '5', '0.00', '1477843200', '他');
+INSERT INTO `client_consumption` VALUES ('69', '34', '3', '1', '1', '3', '66.00', '1477756800', '解决');
 
 -- ----------------------------
 -- Table structure for client_county
@@ -3705,28 +3714,6 @@ INSERT INTO `client_doctors` VALUES ('1', '曾杨');
 INSERT INTO `client_doctors` VALUES ('2', '冯洁');
 
 -- ----------------------------
--- Table structure for client_from
--- ----------------------------
-DROP TABLE IF EXISTS `client_from`;
-CREATE TABLE `client_from` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `from` varchar(255) NOT NULL,
-  `pid` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of client_from
--- ----------------------------
-INSERT INTO `client_from` VALUES ('1', '道闸广告', '1');
-INSERT INTO `client_from` VALUES ('2', '电梯广告', '1');
-INSERT INTO `client_from` VALUES ('3', '搜狗pc', '2');
-INSERT INTO `client_from` VALUES ('4', '微博', '3');
-INSERT INTO `client_from` VALUES ('5', '微信', '3');
-INSERT INTO `client_from` VALUES ('6', '朋友介绍', '1');
-INSERT INTO `client_from` VALUES ('7', '朋友介绍', '2');
-
--- ----------------------------
 -- Table structure for client_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `client_menu`;
@@ -3808,7 +3795,7 @@ INSERT INTO `client_province` VALUES ('820000', '澳门特别行政区');
 DROP TABLE IF EXISTS `client_qiantai_zixun`;
 CREATE TABLE `client_qiantai_zixun` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
+  `qt_name` varchar(20) NOT NULL COMMENT '前台咨询师姓名',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -3836,28 +3823,50 @@ CREATE TABLE `client_role` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for client_source
+-- ----------------------------
+DROP TABLE IF EXISTS `client_source`;
+CREATE TABLE `client_source` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `source_name` varchar(255) NOT NULL,
+  `pid` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of client_source
+-- ----------------------------
+INSERT INTO `client_source` VALUES ('1', '道闸广告', '1');
+INSERT INTO `client_source` VALUES ('2', '电梯广告', '1');
+INSERT INTO `client_source` VALUES ('3', '搜狗pc', '2');
+INSERT INTO `client_source` VALUES ('4', '微博', '3');
+INSERT INTO `client_source` VALUES ('5', '微信', '3');
+INSERT INTO `client_source` VALUES ('6', '朋友介绍', '1');
+INSERT INTO `client_source` VALUES ('7', '朋友介绍', '2');
+
+-- ----------------------------
 -- Table structure for client_users_info
 -- ----------------------------
 DROP TABLE IF EXISTS `client_users_info`;
 CREATE TABLE `client_users_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(20) NOT NULL,
-  `usersn` char(20) NOT NULL,
-  `sex` tinyint(1) unsigned NOT NULL,
-  `birthday` int(11) NOT NULL,
-  `age` tinyint(3) unsigned NOT NULL,
-  `telephone` char(11) NOT NULL,
-  `province_id` mediumint(8) unsigned NOT NULL,
-  `city_id` mediumint(8) unsigned NOT NULL,
-  `county_id` mediumint(8) unsigned NOT NULL,
-  `dev_id` tinyint(3) unsigned NOT NULL,
-  `from_id` tinyint(3) unsigned NOT NULL,
-  `tool_id` tinyint(3) unsigned NOT NULL,
-  `addtime` int(10) unsigned NOT NULL,
+  `name` char(20) NOT NULL COMMENT '客户姓名',
+  `usersn` char(20) NOT NULL COMMENT '客户编码',
+  `sex` tinyint(1) unsigned NOT NULL COMMENT '性别',
+  `birthday` int(11) NOT NULL COMMENT '生日',
+  `age` tinyint(3) unsigned NOT NULL COMMENT '年龄',
+  `telephone` char(11) NOT NULL COMMENT '手机号',
+  `province_id` mediumint(8) unsigned NOT NULL COMMENT '省份id',
+  `city_id` mediumint(8) unsigned NOT NULL COMMENT '市级id',
+  `county_id` mediumint(8) unsigned NOT NULL COMMENT '区县id',
+  `dev_id` tinyint(3) unsigned NOT NULL COMMENT '开发渠道id',
+  `from_id` tinyint(3) unsigned NOT NULL COMMENT '信息来源id',
+  `tool_id` tinyint(3) unsigned NOT NULL COMMENT '咨询工具id',
+  `addtime` int(10) unsigned NOT NULL COMMENT '登记时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `usersn` (`usersn`),
   UNIQUE KEY `tel` (`telephone`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_users_info
@@ -3891,6 +3900,9 @@ INSERT INTO `client_users_info` VALUES ('29', '的', 'FA23946083493886', '2', '1
 INSERT INTO `client_users_info` VALUES ('30', 'po', 'FA28169981157365', '1', '593366400', '28', '13966665523', '350000', '350400', '350430', '1', '1', '1', '1477616998');
 INSERT INTO `client_users_info` VALUES ('31', 'faf', 'FA28170847074271', '1', '593366400', '28', '15966665523', '350000', '350400', '350430', '1', '1', '1', '1477617084');
 INSERT INTO `client_users_info` VALUES ('32', 'd', 'FA28171105105914', '1', '593366400', '28', '15566665523', '350000', '350400', '350430', '1', '1', '1', '1477617110');
+INSERT INTO `client_users_info` VALUES ('33', 'yy', 'FA29038485879789', '2', '245347200', '39', '13312145412', '220000', '220600', '220602', '2', '3', '2', '1477703848');
+INSERT INTO `client_users_info` VALUES ('34', 'y', 'FA29038932929457', '2', '1476806400', '0', '13655555555', '510000', '510100', '510106', '1', '2', '2', '1477703893');
+INSERT INTO `client_users_info` VALUES ('35', 'VF', 'FA29046655841988', '1', '1452700800', '0', '13699999654', '510000', '510500', '510502', '2', '7', '2', '1477704665');
 
 -- ----------------------------
 -- Table structure for client_users_yuyue
@@ -3957,7 +3969,7 @@ INSERT INTO `client_users_zixun` VALUES ('12', '12', '2', '2', '1476878468', '�
 DROP TABLE IF EXISTS `client_wangdian_zixun`;
 CREATE TABLE `client_wangdian_zixun` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
+  `wd_name` varchar(20) NOT NULL COMMENT '网电咨询师姓名',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 

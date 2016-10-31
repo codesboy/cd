@@ -82,18 +82,19 @@
             </div>
         </div>
         <div style="margin-bottom: 8px;">
-            姓名/手机号：<input class="easyui-textbox" type="text" style="width: 100px">
-            Date From：<input class="easyui-datebox" style="width:100px">
-            To：<input class="easyui-datebox" style="width:100px">
-            Language：
+            模糊查询（姓名/手机号）：<input id="mohu" class="easyui-textbox" type="text" style="width: 100px">
+            Money From：<input id="startmoney" class="easyui-textbox" style="width:100px">
+            To：<input id="endmoney" class="easyui-textbox" style="width:100px">
+            <!-- To：<input id="endmoney" class="easyui-datebox" style="width:100px"> -->
+            <!-- Language：
             <select class="easyui-combobox" panelHeight="auto" style="width:100px">
                 <option value="java">Java</option>
                 <option value="c">C</option>
                 <option value="basic">Basic</option>
                 <option value="perl">Perl</option>
                 <option value="python">Python</option>
-            </select>
-            <a href="javascript:;" class="easyui-linkbutton"><span class="glyphicon glyphicon-search"></span>Search</a>
+            </select> -->
+            <a href="javascript:;" id="search" class="easyui-linkbutton"><span class="glyphicon glyphicon-search"></span>Search</a>
         </div>
     </div>
 
@@ -308,6 +309,7 @@
 
     function statusformater(value, row, index) {
         return row.summoney > 0 ? "<span class='glyphicon glyphicon-ok success'></span>" : "<span class='glyphicon glyphicon-remove'></span>";
+
     }
 
     // 表单部分js
@@ -459,6 +461,14 @@
 
     });
 
+    // 搜索功能
+    $('#search').on('click',function(){
+        $('#dg').datagrid('load',{
+            name: $('#mohu').val(),
+            startmoney: $('#startmoney').val(),
+            endmoney: $('#endmoney').val(),
+        });
+    })
 </script>
 
 
