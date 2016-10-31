@@ -119,7 +119,7 @@
                                 <select name="wdzx_id" required1="required" class="form-control">
                                     <option value="">请选择</option>
                                     {volist name="wdzxs" id="wd" }
-                                    <option value="{$wd.id}">{$wd.name}</option>
+                                    <option value="{$wd.id}">{$wd.wd_name}</option>
                                     {/volist}
                                 </select>
                             </div>
@@ -128,7 +128,7 @@
                                 <select name="qtzx_id" required1="required" class="form-control">
                                     <option value="">请选择</option>
                                     {volist name="qtzxs" id="qt" }
-                                    <option value="{$qt.id}">{$qt.name}</option>
+                                    <option value="{$qt.id}">{$qt.qt_name}</option>
                                     {/volist}
                                 </select>
                             </div>
@@ -216,12 +216,13 @@
                 {field:'city_name',title:'所在市区',width:80},
                 {field:'county_name',title:'所在区县',width:100},
                 {field:'dev',title:'开发渠道',width:70},
-                {field:'from',title:'信息来源',width:70},
+                {field:'source_name',title:'信息来源',width:70},
                 {field:'tool',title:'咨询工具',width:70},
                 {field:'wdname',title:'最近一次网电咨询师',width:100},
                 {field:'qtname',title:'最近一次前台咨询师',width:100},
                 {field:'doctor',title:'最近一次接诊医生',width:100},
                 {field:'disease_name',title:'最近一次就诊病种',width:100},
+                {field:'jz_time',title:'最近一次就诊时间',width:100},
                 {field:'summoney',title:'消费总金额(元)',sortable:true,formatter:function(value){return '<span class="money">'+value+'</span>';},width:100},
                 {field:'addtime',title:'登记时间',width:110}
             ]],
@@ -382,7 +383,7 @@
                 'id': pid
             },
             value = 'id',
-            text = 'from',
+            text = 'source_name',
             link(nextdom, url, postdata, value, text);
     });
     // 添加用户

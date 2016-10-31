@@ -9,8 +9,9 @@ class UsersInfo extends Model
     // 设置数据表主键,默认主键自动识别
     protected $pk    = 'id';
     protected $type = [
+        'birthday'    =>  'timestamp:Y-m-d',
         'addtime'    =>  'timestamp',
-        'birthday'    =>  'timestamp:Y-m-d'
+        'jz_time'    =>  'timestamp:Y-m-d'
 
     ];
 

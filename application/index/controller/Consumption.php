@@ -20,7 +20,8 @@ class Consumption extends Base{
             ->join('qiantai_zixun q','q.id=qtzx_id')
             ->join('doctors d','d.id=doctor_id')
             ->join('disease dis','dis.id=disease_id')
-            ->field('w.name wd,q.name qt,doctor,disease_name,money,ill_desc,jz_time')
+            ->field('w.wd_name wd,q.qt_name qt,doctor,disease_name,money,ill_desc,jz_time')
+            ->order('jz_time','desc')
             ->select();
 
             $total=cpmodel::where('uid',$uid)->count('id');

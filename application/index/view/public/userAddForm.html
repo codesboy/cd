@@ -92,7 +92,7 @@
                     <select name="wdzx_id" required1="required" class="form-control">
                         <option value="">请选择</option>
                         {volist name="wdzxs" id="wd" }
-                        <option value="{$wd.id}">{$wd.name}</option>
+                        <option value="{$wd.id}">{$wd.wd_name}</option>
                         {/volist}
                     </select>
                 </div>
@@ -101,7 +101,7 @@
                     <select name="qtzx_id" required1="required" class="form-control">
                         <option value="">请选择</option>
                         {volist name="qtzxs" id="qt" }
-                        <option value="{$qt.id}">{$qt.name}</option>
+                        <option value="{$qt.id}">{$qt.qt_name}</option>
                         {/volist}
                     </select>
                 </div>
