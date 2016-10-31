@@ -68,8 +68,11 @@ class Maindata extends Base
 
 			// 筛选条件
 			$name=input('name');
+			// $startmoney=input('startmoney')?input('startmoney'):0;
+			// $money_where=input('startmoney');
 			$startmoney=input('startmoney')?input('startmoney'):0;
-			$endmoney=input('endmoney')?input('endmoney'):9000;
+			$endmoney=input('endmoney')?input('endmoney'):10000;
+			$arr=[];
 
 			$data=$user->alias('u')
 			// ->join('consumption con','con.uid=u.id')

@@ -173,7 +173,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <span class="pull-left text-danger" class="addconmsg"></span>
+                    <span class="pull-left text-danger addconmsg"></span>
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                     <button type="button" class="btn btn-primary" id="addconbtn">保存</button>
                 </div>
@@ -442,10 +442,9 @@
                         $('#addConModal').modal('hide');
                         $('#addConDialog').modal();
                     }else{
-                        $('.addconmsg').html(conaddresult);
+                        $('.addconmsg').html('提示信息：'+conaddresult);
                     }
 
-                    alert($('#addconmsg').html())
                 })
                 .fail(function() {
                     console.log("error");
@@ -456,7 +455,7 @@
                 $('#addConDialog').modal('hide');
                 $('#addConModal').modal();
                 $('#addconbtn').attr('disabled',false);
-                // $('.addconmsg').html('');
+                $('.addconmsg').html('');
             })
 
 
