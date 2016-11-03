@@ -41,7 +41,7 @@
 
 </head>
 <body>
-    <table id="dg" class="" title="客户消费情况表">
+    <table id="dg" class="" title="客户积分情况表">
     </table>
     <div id="toolbar" style="display: none">
         <div style="margin-bottom:5px">
@@ -50,7 +50,7 @@
                 <div id="mm1" style="width:150px;">
                     <div iconCls="icon-undo" data-toggle="modal" id="addChildFormBtn">新增下线</div>
                     <div class="menu-sep"></div>
-                    <div iconCls="icon-redo" id="addCon">新增消费</div>
+                    <div iconCls="icon-redo" id="addCon">积分使用</div>
                 </div>
                 <a href="javascript:;" class="easyui-linkbutton" plain="true" title="编辑客户"><span class="glyphicon glyphicon-edit"></span>编辑客户</a>
                 <a id="reload" class="easyui-linkbutton" plain="true" target="_blank" title="刷新数据"><span class="glyphicon glyphicon-refresh"></span>刷新数据</a>
@@ -85,7 +85,6 @@
                 </div>
                 <form method="post" class="form-inline" role="form" id="addChildForm">
                     <div class="modal-body">
-                        <!-- <form action="{:url('useradd/useradd')}" method="post" class="form-inline" role="form" id="formdata"> -->
                             <div class="row">
                                 <div class="col-md-6 form-group">
                                     <label class="control-label" for="name">姓&emsp;&emsp;名</label>
@@ -249,10 +248,10 @@
     }
 
     // 表单部分js
-    $('#myModal').modal({
+    /*$('#myModal').modal({
         // backdrop: false,
         show:false
-    })
+    })*/
     $('.datetimepicker').datepicker({
         language: 'zh-CN', //语言
         format: 'yyyy-mm-dd',
@@ -265,76 +264,18 @@
 
 
 
-    // 添加下线
-    $('#submit').on('click', function() {
-        $.ajax({
-                url: '{:url("useradd/useradd")}',
-                type: 'POST',
-                dataType: 'html',
-                data: $('#formdata').serialize()
-            })
-            .done(function(data) {
-                // console.log(data);
-                $('#msg').html('提示信息：' + data);
-                if (data == '"客户添加成功!"') {
-                    $('#submit').attr('disabled', true);
-                    $('#formdata').get(0).reset();
-                    $('#msg').html('');
-                    // $('#myModal').modal('hide');
-                    $('#addUserDialog').modal();
-                    $('#submit').attr('disabled', false);
-                }
-            })
-            .fail(function() {
-                console.log("error");
-            });
+    // 积分使用
 
-        return false;
-
-    });
 
     // 添加下线
     $('#addChildFormBtn').on('click',function() {
+        // 能否嵌套事件 unbind
         var selected=$('#dg').datagrid('getSelected');
         // console.info(selected)
         if(selected){
             $('#addChildFormTit').html(selected.name+'('+selected.telephone+')');
             $('#addChildFormModel').modal();
-            $('#addChildBtn').on('click', function() {
 
-                var formData=$('#addChildForm').serialize();
-                formData+='&pid='+selected.id;
-
-                $.ajax({
-                    url: '{:url('addChild')}',
-                    type: 'POST',
-                    dataType: 'html',
-                    data: formData
-                })
-                .done(function(data) {
-
-                    console.log(data)
-                    if(data=='"该用户消费记录添加成功！"'){
-                        $('#addconbtn').attr('disabled',true);
-                        $('#addconform').get(0).reset();
-                        $('#addConModal').modal('hide');
-                        $('#addConDialog').modal();
-                    }else{
-                        $('#msg').html('提示信息：'+data);
-                    }
-
-                })
-                .fail(function() {
-                    console.log("error");
-                });
-                return false;
-            });
-            $('#secAddCon').on('click',function(){
-                $('#addConDialog').modal('hide');
-                $('#addConModal').modal();
-                $('#addconbtn').attr('disabled',false);
-                $('#msg').html('');
-            })
 
 
         }else{
@@ -342,6 +283,51 @@
         }
 
     });
+    $('#addChildBtn').on('click', function() {
+        var selected=$('#dg').datagrid('getSelected');
+        var formData=$('#addChildForm').serialize();
+        formData+='&pid='+selected.id;
+
+        $.ajax({
+            url: '{:url('addChild')}?'+Math.random(),
+            type: 'POST',
+            dataType: 'html',
+            data: formData
+        })
+        .done(function(data) {
+
+            console.log(data)
+            if(data=='"该用户消费记录添加成功！"'){
+                $('#addconbtn').attr('disabled',true);
+                $('#addconform').get(0).reset();
+                $('#addConModal').modal('hide');
+                $('#addConDialog').modal();
+            }else{
+                $('#msg').html('提示信息：'+data);
+            }
+
+        })
+        .fail(function() {
+            console.log("error");
+        });
+        return false;
+    });
+
+    $('#addChildFormModel').on('hidden.bs.modal', function (e) {
+        // console.log(e)
+        $('#addChildForm')[0].reset();
+        $(this).removeData("bs.modal");
+        // $(this).html('');
+    });
+
+
+    // 二次
+    $('#secAddCon').on('click',function(){
+        $('#addConDialog').modal('hide');
+        $('#addConModal').modal();
+        $('#addconbtn').attr('disabled',false);
+        $('#msg').html('');
+    })
 
     // 搜索功能
     $('#search').on('click',function(){

@@ -27,8 +27,8 @@ class Creditdata extends Base{
 
     public function addChild(){
         if(Request()->isPost()){
-            dump(input('post.'));
-
+            // dump(input('post.'));
+            exit;
             // 下线本次消费金额
             $pay=input('money');
 
@@ -69,19 +69,23 @@ class Creditdata extends Base{
             $creditconsumptiondata=[
                 [
                     'uid'=>$getid,
-                    'pay'=>input('money'),
                     'disease_id'=>input('disease_id'),
                     'pay_time'=>input('pay_time'),
-                    'credit'=>$s_credit,
+                    'account_payable'=>$pay,
+                    'used_credit'=>0,
+                    'real_pay'=>$pay,
+                    'get_credit'=>$s_credit,
                     'comment'=>input('comment')
                 ],
                 [
                     'uid'=>input('pid'),
-                    'pay'=>0,
                     'disease_id'=>0,
                     'pay_time'=>input('pay_time'),
-                    'credit'=>$p_credit,
-                    'comment'=>input('comment')
+                    'account_payable'=>0,
+                    'used_credit'=>0,
+                    'real_pay'=>0,
+                    'get_credit'=>$p_credit,
+                    'comment'=>'积分来自'.input('name').'的消费！'
                 ]
 
             ];
