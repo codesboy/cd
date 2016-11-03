@@ -3,7 +3,7 @@ namespace app\credit\model;
 
 use think\Model;
 
-class CreditUsers extends Model
+class CreditConsumption extends Model
 {
     protected $autoWriteTimestamp = true;
     protected $type = [
@@ -14,7 +14,7 @@ class CreditUsers extends Model
     // 定义关联 一个客户下有多条积分记录
     public function creditConsumptions()
     {
-        return $this->hasMany('CreditConsumption','uid');
+        return $this->belongsTo('CreditUsers');
     }
 
 }

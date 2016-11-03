@@ -58,8 +58,8 @@
                                     <label class="control-label">就诊病种</label>
                                     <select name="disease_id" required1="required" class="form-control">
                                         <option value="">请选择</option>
-                                        {volist name="disease" id="c" }
-                                        <option value="{$c.id}">{$c.disease_name}</option>
+                                        {//volist name="disease" id="c" }
+                                        <option value="{//$c.id}">{//$c.disease_name}</option>
                                         {/volist}
                                     </select>
                                 </div>

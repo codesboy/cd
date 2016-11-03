@@ -37,18 +37,6 @@
     .panel-header{width: 100%!important;}
     .panel-body{width: 100%!important;}
     .glyphicon{margin-right: 5px;}
-    /*bootstrap兼容问题和easyui的bug*/
-    /* .panel-header, .panel-body {
-        border-width: 0px;
-    }
-    .datagrid,.combo-p{
-        border:solid 1px #D4D4D4;
-    }
-    .datagrid *{
-        -webkit-box-sizing: content-box;
-        -moz-box-sizing: content-box;
-        box-sizing: content-box;
-    } */
 </style>
 
 </head>
@@ -60,9 +48,7 @@
             <div style="margin-bottom: 8px;">
                 <a href="javascript:;" class="easyui-menubutton" menu="#mm1"><span class="glyphicon glyphicon-plus-sign"></span>添加</a>
                 <div id="mm1" style="width:150px;">
-                    <div iconCls="icon-undo" data-toggle="modal" data-target="#myModal">新增客户</div>
-                    <!-- <div iconCls="icon-undo" onclick="$('#myModal').dialog('open')">新增客户</div> -->
-                    <!-- <div iconCls="icon-undo" onclick="addTab('新增客户','/index/useradd/');">新增客户</div> -->
+                    <div iconCls="icon-undo" data-toggle="modal" id="addChildFormBtn">新增下线</div>
                     <div class="menu-sep"></div>
                     <div iconCls="icon-redo" id="addCon">新增消费</div>
                 </div>
@@ -86,6 +72,88 @@
             Money From：<input id="startmoney" class="easyui-textbox" style="width:100px">
             To：<input id="endmoney" class="easyui-textbox" style="width:100px">
             <a href="javascript:;" id="search" class="easyui-linkbutton"><span class="glyphicon glyphicon-search"></span>Search</a>
+        </div>
+    </div>
+
+    <!-- 新增下线表单 -->
+    <div class="modal fade" id="addChildFormModel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"></span>为客户 <span id="addChildFormTit" class="text-primary"></span> 添加下线客户</h4>
+                </div>
+                <form method="post" class="form-inline" role="form" id="addChildForm">
+                    <div class="modal-body">
+                        <!-- <form action="{:url('useradd/useradd')}" method="post" class="form-inline" role="form" id="formdata"> -->
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="name">姓&emsp;&emsp;名</label>
+                                    <input class="form-control" id="name" type="text" name="name" placeholder="姓名" required1="required" />
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="sex">性&emsp;&emsp;别</label>
+                                    <select class="form-control" id="sex" name="sex">
+                                        <option value="">未知</option>
+                                        <option value="1">男</option>
+                                        <option value="2">女</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="age">年&emsp;&emsp;龄</label>
+                                    <input class="form-control" id="age" name="age" type="text" placeholder="年龄" required1="required" />
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="telephone">手&ensp;机&ensp;号</label>
+                                    <input class="form-control" id="telephone" type="tel" placeholder="手机号" required1="required" name="telephone" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label">消费项目</label>
+                                    <select name="disease_id" required1="required" class="form-control">
+                                        <option value="">请选择</option>
+                                        {volist name="disease" id="c" }
+                                        <option value="{$c.id}">{$c.disease_name}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="money">消费金额</label>
+                                    <input class="form-control" id="money" name="money" type="text" placeholder="金额" required1="required" />
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="pay_time">消费日期</label>
+                                    <input class="form-control datetimepicker" id="pay_time" name="pay_time" type="text" placeholder="选择日期" required1="required" />
+                                    <span class="add-on"><i class="icon-remove"></i></span>
+                                    <span class="add-on"><i class="icon-calendar"></i></span>
+                                </div>
+                                <div class="col-md-6 form-group"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="comment">备&emsp;&emsp;注</label>
+                                    <textarea id="comment" class="form-control" name="comment" rows="3" required1="required"></textarea>
+                                </div>
+                                <!-- <div class="col-md-6 form-group">
+                                    <label class="control-label" for="money">消费金额</label>
+                                    <input class="form-control" id="money" type="text" name="money" value="0" placeholder="消费金额,无消费填0" required1="required" />
+                                </div> -->
+                            </div>
+                        <!-- </form> -->
+                    </div>
+                    <div class="modal-footer">
+                        <b id="msg" class="pull-left text-danger"></b>
+                        <button type="button" class="btn btn-success" id="addChildBtn">保存</button>
+                        <button type="reset" class="btn btn-warning">重置</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -113,7 +181,8 @@
                 {field:'city_name',title:'总使用积分',width:100},
                 {field:'city_name',title:'实际总消费金额',width:100},
                 {field:'city_name',title:'剩余积分',width:100},
-                {field:'city_name',title:'推荐者',width:120}
+                {field:'city_name',title:'推荐者',width:120},
+                {field:'create_time',title:'登记时间',width:120}
             ]],
             toolbar: "#toolbar",
             fitColumns: true, //表格宽度自适应
@@ -196,18 +265,7 @@
 
 
 
-    $('#dev').change(function() {
-        var nextdom = $('#from'),
-            url = "{:url('link')}"
-        pid = $(this).val(),
-            postdata = {
-                'id': pid
-            },
-            value = 'id',
-            text = 'source_name',
-            link(nextdom, url, postdata, value, text);
-    });
-    // 添加用户
+    // 添加下线
     $('#submit').on('click', function() {
         $.ajax({
                 url: '{:url("useradd/useradd")}',
@@ -235,34 +293,34 @@
 
     });
 
-    // 添加就诊/消费记录
-    $('#addCon').on('click',function(event) {
+    // 添加下线
+    $('#addChildFormBtn').on('click',function() {
         var selected=$('#dg').datagrid('getSelected');
         // console.info(selected)
         if(selected){
-            $('#addcontitle').html('为客户 '+selected.name+'('+selected.telephone+') 添加就诊/消费记录');
-            $('#addConModal').modal();
-            $('#addconbtn').on('click', function(event) {
+            $('#addChildFormTit').html(selected.name+'('+selected.telephone+')');
+            $('#addChildFormModel').modal();
+            $('#addChildBtn').on('click', function() {
 
-                var addcondata=$('#addconform').serialize();
-                addcondata=addcondata+'&uid='+selected.id;
+                var formData=$('#addChildForm').serialize();
+                formData+='&pid='+selected.id;
 
                 $.ajax({
-                    url: '{:url('Consumption/addcon')}',
+                    url: '{:url('addChild')}',
                     type: 'POST',
                     dataType: 'html',
-                    data: addcondata
+                    data: formData
                 })
-                .done(function(conaddresult) {
+                .done(function(data) {
 
-                    console.log(conaddresult)
-                    if(conaddresult=='"该用户消费记录添加成功！"'){
+                    console.log(data)
+                    if(data=='"该用户消费记录添加成功！"'){
                         $('#addconbtn').attr('disabled',true);
                         $('#addconform').get(0).reset();
                         $('#addConModal').modal('hide');
                         $('#addConDialog').modal();
                     }else{
-                        $('.addconmsg').html('提示信息：'+conaddresult);
+                        $('#msg').html('提示信息：'+data);
                     }
 
                 })
@@ -275,7 +333,7 @@
                 $('#addConDialog').modal('hide');
                 $('#addConModal').modal();
                 $('#addconbtn').attr('disabled',false);
-                $('.addconmsg').html('');
+                $('#msg').html('');
             })
 
 
