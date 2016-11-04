@@ -89,6 +89,7 @@
                                 <div class="col-md-6 form-group">
                                     <label class="control-label" for="name">姓&emsp;&emsp;名</label>
                                     <input class="form-control" id="name" type="text" name="name" placeholder="姓名" required1="required" />
+                                    <span style="color: #f00;">*</span>
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label class="control-label" for="sex">性&emsp;&emsp;别</label>
@@ -107,12 +108,13 @@
                                 <div class="col-md-6 form-group">
                                     <label class="control-label" for="telephone">手&ensp;机&ensp;号</label>
                                     <input class="form-control" id="telephone" type="tel" placeholder="手机号" required1="required" name="telephone" />
+                                    <span style="color: #f00;">*</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 form-group">
-                                    <label class="control-label">消费项目</label>
-                                    <select name="disease_id" required1="required" class="form-control">
+                                    <label class="control-label" for="disease_id">消费项目</label>
+                                    <select name="disease_id" required1="required" class="form-control" id="disease_id">
                                         <option value="">请选择</option>
                                         {volist name="disease" id="c" }
                                         <option value="{$c.id}">{$c.disease_name}</option>
@@ -121,7 +123,7 @@
                                 </div>
                                 <div class="col-md-6 form-group">
                                     <label class="control-label" for="money">消费金额</label>
-                                    <input class="form-control" id="money" name="money" type="text" placeholder="金额" required1="required" />
+                                    <input class="form-control" id="money" name="money" type="text" placeholder="金额" required1="required" value="0" />
                                 </div>
                             </div>
                             <div class="row">
@@ -147,7 +149,7 @@
                         <!-- </form> -->
                     </div>
                     <div class="modal-footer">
-                        <b id="msg" class="pull-left text-danger"></b>
+                        <label id="msg" class="pull-left text-danger"></label>
                         <button type="button" class="btn btn-success" id="addChildBtn">保存</button>
                         <button type="reset" class="btn btn-warning">重置</button>
                     </div>
@@ -175,7 +177,7 @@
                 {field:'telephone',title:'手机号码',width:80},
                 {field:'sex',title:'性别',formatter: function (value) {if(value==1){return '男'}else if (value==2) {return '女'}else{return '未知'}},width:45},
                 // {field:'birthday',title:'出生日期',width:70},
-                {field:'age',title:'年龄',sortable:true,width:40},
+                {field:'age',title:'年龄',sortable:true,formatter: function (value) {if(value==0){return '未知'}else{return value}},width:40},
                 {field:'province_name',title:'应付总消费金额',width:70},
                 {field:'city_name',title:'总使用积分',width:100},
                 {field:'city_name',title:'实际总消费金额',width:100},
@@ -277,7 +279,6 @@
             $('#addChildFormModel').modal();
 
 
-
         }else{
             alert('请选择用户');
         }
@@ -289,7 +290,7 @@
         formData+='&pid='+selected.id;
 
         $.ajax({
-            url: '{:url('addChild')}?'+Math.random(),
+            url: '{:url('addChild')}?r='+Math.random(),
             type: 'POST',
             dataType: 'html',
             data: formData
@@ -316,7 +317,7 @@
     $('#addChildFormModel').on('hidden.bs.modal', function (e) {
         // console.log(e)
         $('#addChildForm')[0].reset();
-        $(this).removeData("bs.modal");
+        $('#msg').html('');
         // $(this).html('');
     });
 

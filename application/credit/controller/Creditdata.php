@@ -2,6 +2,7 @@
 namespace app\credit\controller;
 use app\index\controller\Base;
 use app\index\model\AddForm;
+use think\Validate;
 use app\credit\model\CreditUsers;
 use app\credit\model\CreditConsumption;
 class Creditdata extends Base{
@@ -20,17 +21,31 @@ class Creditdata extends Base{
         //     'total'=>12,
         //     'rows'=>[]
         // ];
-        $arr=CreditUsers::all();
+        $credit_users=CreditUsers::all();
+        // dump($credit_users);
+        // exit;
+        // 获取客户的所有积分记录
+        foreach($credit_users as $key=>$user){
+            // echo $key."<br>";
+            $credit = CreditUsers::get($user['id']);
+            // dump($credit."---------------------------");
+            // dump($credit->creditConsumptions);
+            // exit;
+            $detail[]=$credit->creditConsumptions;
+        }
+        // exit;
+        // dump($detail);
 
-        return json($arr);
+        // exit;
+        return json($detail);
     }
 
     public function addChild(){
         if(Request()->isPost()){
-            // dump(input('post.'));
-            exit;
+
             // 下线本次消费金额
-            $pay=input('money');
+
+            $pay=(float)input('money');
 
             // 推荐人积分率5%
             $p_rate=0.05;
@@ -44,6 +59,8 @@ class Creditdata extends Base{
             // 本人得到的积分 消费金额的1%
             $s_credit=round($pay*$s_rate);
 
+
+
             // 下线基本资料
             $credituserdata=[
                 'name'=>input('name'),
@@ -54,17 +71,7 @@ class Creditdata extends Base{
                 'comment'=>input('comment')
             ];
 
-            // 下线客户资料写入数据库
-            $credit_user=new CreditUsers;
-
-            $credit_user->save($credituserdata);
-
-            // 获取自增ID
-            $getid=$credit_user->id;
-
-            /*return $getid;
-            exit;*/
-
+            $getid=0;
 
             $creditconsumptiondata=[
                 [
@@ -90,10 +97,37 @@ class Creditdata extends Base{
 
             ];
 
-            // 推荐者和被推荐者积分记录写入数据库
-            $credit_re=new CreditConsumption;
-            // $credit_user->creditConsumptions()->saveAll($creditconsumptiondata);
-            $credit_re->saveAll($creditconsumptiondata);
+            // 验证器
+            $validate = validate('Credit');
+            // 下线客户资料写入数据库
+
+            if($validate->scene('addparent')->check($credituserdata) && $validate->scene('addchild')->check($creditconsumptiondata)){
+                // return '1';
+                // exit;
+                $credit_user=new CreditUsers;
+                $credit_user->save($credituserdata);
+                // 获取自增ID
+                $getid=$credit_user->id;
+                $creditconsumptiondata[0]['uid']=$getid;
+                if($creditconsumptiondata[1]['get_credit']==0){
+                    $creditconsumptiondata[1]['comment']='下线未消费';
+                }
+                if($getid){
+                    // 推荐者和被推荐者积分记录写入数据库
+                    $credit_re=new CreditConsumption;
+                    if($credit_re->saveAll($creditconsumptiondata)){
+                        return '添加成功!';
+                    }else{
+                        return '添加失败,请及时联系管理员!';
+                    }
+                }else{
+                    return '添加失败,请及时联系管理员!';
+                }
+            }else{
+                return $validate->getError();
+            }
+
+
 
 
         }else{
