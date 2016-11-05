@@ -11,7 +11,10 @@ class Credit extends Validate{
         'disease_id' => 'number',
         'money' => 'number',
         'pay_time' => 'date',
-        'pid'=>'number|gt:0'
+        'pid'=>'require|number|gt:0',
+        'uid'=>'require|number',
+        'account_payable'=>'number|egt:0',
+        'used_credit'=>'number|egt:0'
 
     ];
 
@@ -33,7 +36,8 @@ class Credit extends Validate{
 
     protected $scene = [
         'addparent'  =>  ['name','telephone','age','pid'],
-        'addchild'  =>  ['disease_id','money','pay_time','pid']
+        'addchild'  =>  ['disease_id','money','pay_time','pid'],
+        'addpoints'=>['uid','disease_id','pay_time','account_payable','used_credit']
     ];
 
 

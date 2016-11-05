@@ -16,30 +16,61 @@ class Creditdata extends Base{
         return $this->fetch();
     }
 
+    // 返回主数据
     public function returnCreditData(){
-        // $arr=[
-        //     'total'=>12,
-        //     'rows'=>[]
-        // ];
-        $credit_users=CreditUsers::all();
-        // dump($credit_users);
-        // exit;
-        // 获取客户的所有积分记录
-        foreach($credit_users as $key=>$user){
-            // echo $key."<br>";
-            $credit = CreditUsers::get($user['id']);
-            // dump($credit."---------------------------");
-            // dump($credit->creditConsumptions);
-            // exit;
-            $detail[]=$credit->creditConsumptions;
-        }
-        // exit;
-        // dump($detail);
+        if(Request()->isPost()){
+            // 分页条件
+            $page=input('page');
+            $rows=input('rows');
+            $offset=($page-1)*$rows;
 
-        // exit;
-        return json($detail);
+            // 排序条件
+            $sort=input('sort')?input('sort'):'id';
+            $order=input('order')?input('order'):'desc';
+
+            $credit_users=CreditUsers::limit($offset,$rows)->order([$sort=>$order])->select();
+            // $credit_users=CreditUsers::select();
+            // $credit_users=CreditUsers::paginate(3);
+            // dump($credit_users->creditConsumptions);
+            // exit;
+            // 获取客户的所有积分记录
+            foreach($credit_users as $key=>$user){
+                // echo $key."<br>";
+                $credit = CreditUsers::find($user['id']);//一个客户 obj
+                // dump($credit);
+                // dump($credit->creditConsumptions);
+                // exit;
+                $detail=$credit->creditConsumptions()->field('sum(account_payable) suma,sum(used_credit) sumu,sum(real_pay) sumr,sum(get_credit)-sum(used_credit) sumg')->select();//一个客户的积分列表 array
+                // dump($detail);
+                // dump($detail[0]['suma']);
+                $credit->tjr=CreditUsers::where('id',$credit['pid'])->value('name,id','id');
+                // $credit->tjr=CreditUsers::where('id',$credit['pid'])->value('name');
+                $credit->suma=$detail[0]['suma'];
+                $credit->sumu=$detail[0]['sumu'];
+                $credit->sumr=$detail[0]['sumr'];
+                $credit->sumg=$detail[0]['sumg'];
+                $result[]=$credit->toArray();
+                // $credit->append(['update_time'])->toArray();
+                // $result=array_merge($credit,$detail);
+            }
+            // exit;
+            // dump($credit);
+            $total=CreditUsers::count('id');
+            $allCreditData=[
+                'total'=>$total,
+                'rows'=>$result
+            ];
+            // exit;
+            return json($allCreditData);
+            // return $credit;
+
+        }else{
+            return 'Hello World!';
+        }
+
     }
 
+    // 新增下线
     public function addChild(){
         if(Request()->isPost()){
 
@@ -126,13 +157,119 @@ class Creditdata extends Base{
             }else{
                 return $validate->getError();
             }
-
-
-
-
         }else{
             return 'Hello World!';
             exit;
+        }
+    }
+
+    // 积分管理
+    public function manPoints(){
+        if(Request()->isPost()){
+            $disease_id=input('disease_id');//本次消费项目
+            $account_payable=input('money');//本次消费金额，即本次应付金额
+            $pay_time=input('pay_time');//本次消费时间
+            $usePointsNum=input('usePointsNum');//本次所使用积分
+            $alblePoints=input('alblePoints');// 剩余积分
+            $isAddParC=input('isAddParC');//是否为该客户的介绍人累积积分 0否 1是
+            $pid=input('pid');//该客户的推荐人的id号
+            $sid=input('sid');//自己的id号
+            $name=input('name');//姓名
+            $tel=input('tel');//手机号
+            $comment=input('comment');//备注
+
+            $tjrRate=0.05;//推荐人积分率
+            $selfRate=0.01;//自身积分率
+            $creditRate=1;//积分抵扣率 1积分可低一元钱
+
+
+
+            // 计算推荐人所得到的积分=本次应付金额*推荐人积分率
+            if($isAddParC==1){
+                $tjrGetPoints=round($account_payable*$tjrRate);
+            }else{
+                $tjrGetPoints=0;
+            }
+
+
+            // 计算自己得到的积分和实际支付金额
+            if($usePointsNum>$alblePoints){ //本次使用积分超出所剩余积分
+                return '非法操作！本次使用积分已经超出所剩余积分!';
+                exit;
+            }else{
+                $real_pay=$account_payable-$usePointsNum*$creditRate;//本次实付金额=本次应付金额-积分抵扣金额
+
+                if($real_pay>0){
+                    $get_credit=round($real_pay*$selfRate);//本次自己得到的积分=本次实付金额*自身积分率
+                }else{
+                    $get_credit=0;
+                    $real_pay=0;//避免实际支付金额为负数 倒贴钱
+                }
+            }
+
+            // 其推荐人存在并且为其累积积分 插入两条记录
+            // 验证器
+            $validate = validate('Credit');
+            $points=new CreditConsumption;
+            if($pid>0 && $tjrGetPoints>0){
+                $twoData=[
+                    [
+                        // 'uid'=>$sid,
+                        'uid'=>33,
+                        'disease_id'=>$disease_id,
+                        'pay_time'=>$pay_time,
+                        'account_payable'=>$account_payable,
+                        'used_credit'=>$usePointsNum,
+                        'real_pay'=>$real_pay,
+                        'get_credit'=>$get_credit,
+                        'comment'=>$comment
+                    ],
+                    [
+                        // 'uid'=>$pid,
+                        'uid'=>55,
+                        'disease_id'=>0,
+                        'pay_time'=>0,
+                        'account_payable'=>0,
+                        'used_credit'=>0,
+                        'real_pay'=>0,
+                        'get_credit'=>$tjrGetPoints,
+                        'comment'=>'积分来自'.$name.'('.$tel.')的消费！'
+                    ]
+                ];
+                if($validate->scene('addpoints')->batch()->check($twoData)){
+                // if($validate->scene('addpoints')->check($twoData)){
+                    // 推荐者和被推荐者积分记录写入数据库
+                    if($points->saveAll($twoData)){
+                        return '添加成功!';
+                    }else{
+                        return '添加失败,请及时联系管理员!';
+                    }
+                }else{
+                    return $validate->getError();
+                }
+            }else{ //否则只为自己插入一条积分记录
+                $singleData=[
+                    'uid'=>$sid,
+                    'disease_id'=>$disease_id,
+                    'pay_time'=>$pay_time,
+                    'account_payable'=>$account_payable,
+                    'used_credit'=>$usePointsNum,
+                    'real_pay'=>$real_pay,
+                    'get_credit'=>$get_credit,
+                    'comment'=>$comment
+                ];
+                if($validate->scene('addpoints')->check($singleData)){
+                    // 推荐者和被推荐者积分记录写入数据库
+
+                    if($points->save($singleData)){
+                        return '添加成功!';
+                    }else{
+                        return '添加失败,请及时联系管理员!';
+                    }
+                }else{
+                    return $validate->getError();
+                }
+            }
         }
     }
 }

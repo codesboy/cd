@@ -33,6 +33,7 @@
     .line{border-bottom: 1px dashed #ccc;text-align: center;color: #888;margin-bottom: 20px;}
     .btns{text-align: center;}
     #msg{color: #f00;}
+    .alblePoints{color: #f00;}
     /* 冲突样式重置 */
     .panel-header{width: 100%!important;}
     .panel-body{width: 100%!important;}
@@ -50,7 +51,9 @@
                 <div id="mm1" style="width:150px;">
                     <div iconCls="icon-undo" data-toggle="modal" id="addChildFormBtn">新增下线</div>
                     <div class="menu-sep"></div>
-                    <div iconCls="icon-redo" id="addCon">积分使用</div>
+                    <div iconCls="icon-redo" id="startManPoints">积分管理</div>
+                    <!-- <div class="menu-sep"></div>
+                    <div iconCls="icon-redo" id="usePoints">积分使用</div> -->
                 </div>
                 <a href="javascript:;" class="easyui-linkbutton" plain="true" title="编辑客户"><span class="glyphicon glyphicon-edit"></span>编辑客户</a>
                 <a id="reload" class="easyui-linkbutton" plain="true" target="_blank" title="刷新数据"><span class="glyphicon glyphicon-refresh"></span>刷新数据</a>
@@ -131,8 +134,8 @@
                                 <div class="col-md-6 form-group">
                                     <label class="control-label" for="pay_time">消费日期</label>
                                     <input class="form-control datetimepicker" id="pay_time" name="pay_time" type="text" placeholder="选择日期" required1="required" />
-                                    <span class="add-on"><i class="icon-remove"></i></span>
-                                    <span class="add-on"><i class="icon-calendar"></i></span>
+                                    <!-- <span class="add-on"><i class="icon-remove"></i></span>
+                                    <span class="add-on"><i class="icon-calendar"></i></span> -->
                                 </div>
                                 <div class="col-md-6 form-group"></div>
                             </div>
@@ -151,6 +154,75 @@
                     <div class="modal-footer">
                         <label id="msg" class="pull-left text-danger"></label>
                         <button type="button" class="btn btn-success" id="addChildBtn">保存</button>
+                        <button type="reset" class="btn btn-warning">重置</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 积分管理表单 -->
+    <div class="modal fade" id="manPointsFormModel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"></span>客户 <span id="manPointsFormTit" class="text-primary"></span> 的积分管理(增加/使用)</h4>
+                </div>
+                <form method="post" class="form-inline" role="form" id="manPointsForm">
+                    <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    该客户当前剩余积分：<b class="alblePoints"></b>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="disease_id">消费项目</label>
+                                    <select name="disease_id" required1="required" class="form-control" id="disease_id">
+                                        <option value="">请选择</option>
+                                        {volist name="disease" id="c" }
+                                        <option value="{$c.id}">{$c.disease_name}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="money">消费金额(应付)</label>
+                                    <input class="form-control" id="money" name="money" type="text" placeholder="金额" required1="required" value="0" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="pay_time">消费日期</label>
+                                    <input class="form-control datetimepicker" id="pay_time" name="pay_time" type="text" placeholder="选择日期" required1="required" />
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="usePointsNum">使用积分</label>
+                                    <input class="form-control" id="usePointsNum" name="usePointsNum" type="text" placeholder="使用/抵扣/兑换的积分" required1="required" value="0" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 form-group">
+                                    <label for="">是否为该客户的介绍人累积积分</label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="isAddParC" id="yes" value="1"> 是
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="isAddParC" id="no" value="0" checked="checked"> 否
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="comment">备&emsp;&emsp;注</label>
+                                    <textarea id="comment" class="form-control" name="comment" rows="3" required1="required"></textarea>
+                                </div>
+                            </div>
+                        <!-- </form> -->
+                    </div>
+                    <div class="modal-footer">
+                        <label id="manPointsMsg" class="pull-left text-danger"></label>
+                        <button type="button" class="btn btn-success" id="manPointsSubmit">保存</button>
                         <button type="reset" class="btn btn-warning">重置</button>
                     </div>
                 </form>
@@ -178,11 +250,11 @@
                 {field:'sex',title:'性别',formatter: function (value) {if(value==1){return '男'}else if (value==2) {return '女'}else{return '未知'}},width:45},
                 // {field:'birthday',title:'出生日期',width:70},
                 {field:'age',title:'年龄',sortable:true,formatter: function (value) {if(value==0){return '未知'}else{return value}},width:40},
-                {field:'province_name',title:'应付总消费金额',width:70},
-                {field:'city_name',title:'总使用积分',width:100},
-                {field:'city_name',title:'实际总消费金额',width:100},
-                {field:'city_name',title:'剩余积分',width:100},
-                {field:'city_name',title:'推荐者',width:120},
+                {field:'suma',title:'应付总消费金额',sortable:true,width:70},
+                {field:'sumu',title:'总使用积分',width:100},
+                {field:'sumr',title:'实际总消费金额',width:100},
+                {field:'sumg',title:'剩余积分',width:100},
+                {field:'tjr',title:'推荐者',formatter:function(value){if(value==false){return ''}else{return value}},width:120},
                 {field:'create_time',title:'登记时间',width:120}
             ]],
             toolbar: "#toolbar",
@@ -244,16 +316,8 @@
 
     });
 
-    function statusformater(value, row, index) {
-        return row.summoney > 0 ? "<span class='glyphicon glyphicon-ok success'></span>" : "<span class='glyphicon glyphicon-remove'></span>";
 
-    }
 
-    // 表单部分js
-    /*$('#myModal').modal({
-        // backdrop: false,
-        show:false
-    })*/
     $('.datetimepicker').datepicker({
         language: 'zh-CN', //语言
         format: 'yyyy-mm-dd',
@@ -263,11 +327,7 @@
     });
 
 
-
-
-
-    // 积分使用
-
+    // 表单部分js
 
     // 添加下线
     $('#addChildFormBtn').on('click',function() {
@@ -297,7 +357,7 @@
         })
         .done(function(data) {
 
-            console.log(data)
+            // console.log(data)
             if(data=='"该用户消费记录添加成功！"'){
                 $('#addconbtn').attr('disabled',true);
                 $('#addconform').get(0).reset();
@@ -309,7 +369,7 @@
 
         })
         .fail(function() {
-            console.log("error");
+            $('#msg').html('发生错误!请及时联系管理员!');
         });
         return false;
     });
@@ -321,13 +381,42 @@
         // $(this).html('');
     });
 
+    // 积分管理
+    $('#startManPoints').on('click',function(){
+        var selected=$('#dg').datagrid('getSelected');
+        // console.info(selected)
+        if(selected){
+            $('#manPointsFormTit').html(selected.name+'('+selected.telephone+')');
+            $('.alblePoints').html(selected.sumg);
+            $('#manPointsFormModel').modal();
 
-    // 二次
-    $('#secAddCon').on('click',function(){
-        $('#addConDialog').modal('hide');
-        $('#addConModal').modal();
-        $('#addconbtn').attr('disabled',false);
-        $('#msg').html('');
+
+        }else{
+            alert('请选择用户');
+        }
+    });
+    $('#manPointsSubmit').on('click',function(){
+        var selected=$('#dg').datagrid('getSelected');
+        var alblePoints=$('.alblePoints').html();//剩余积分
+        var pid=selected.pid;
+        var sid=selected.id;
+        var name=selected.name;
+        var tel=selected.telephone;
+        var manPointsFormData=$('#manPointsForm').serialize();
+        manPointsFormData+='&alblePoints='+alblePoints+'&pid='+pid+'&sid='+sid+'&nama='+name+'&tel='+tel;
+        $.ajax({
+            url: '{:url("manPoints")}?r='+Math.random(),
+            type: 'POST',
+            dataType: 'html',
+            data: manPointsFormData
+        })
+        .done(function(data) {
+            $('#manPointsMsg').html('提示信息：'+data);
+        })
+        .fail(function() {
+            $('#manPointsMsg').html('发生错误!请及时联系管理员!');
+        });
+
     })
 
     // 搜索功能
