@@ -1,0 +1,25 @@
+就是说格式是
+$arr = array(
+    'uid'     => 1,
+    'name' => '111',
+)
+$arr = array(
+    'data1' = array(
+        'uid'     =>１，
+　　'name' => '111'
+    ),
+    'data2' => array(
+        'uid'     => 2,
+        'name' => '1111',
+    )
+)
+二维关联数组
+以上2种数据格式
+
+$validate = new Validate($rule, $msg);
+foreach($data as $value){
+    $result   = $validate->check($value);
+    if(!$result){
+        return $validate->getError()
+    }
+}
