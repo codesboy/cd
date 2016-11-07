@@ -25,22 +25,33 @@ class Creditdata extends Base{
             $offset=($page-1)*$rows;
 
             // 排序条件
-            $sort=input('sort')?input('sort'):'id';
+            $sort=input('sort')?input('sort'):'u.id';
             $order=input('order')?input('order'):'desc';
 
-            $credit_users=CreditUsers::limit($offset,$rows)->order([$sort=>$order])->select();
+            // $credit_users=CreditUsers::limit($offset,$rows)->order([$sort=>$order])->select();
+            $CreditUsersModel=new CreditUsers;
+            $credit_users=$CreditUsersModel->alias('u')
+                ->join('credit_consumption c','c.uid=u.id')
+                ->join('credit_users uu','uu.id=u.pid','left')
+                // ->field('u.name,u.sex,u.age,u.telephone,u.create_time')
+                ->field('u.id,u.name,uu.name tjr,uu.telephone tjrtel,u.sex,u.age,u.telephone,sum(c.account_payable) suma,sum(c.used_credit) sumu,sum(c.real_pay) sumr,sum(get_credit)-sum(used_credit) sumg,u.create_time')
+                ->group('u.id')
+                ->limit($offset,$rows)
+                ->order([$sort=>$order])
+                ->select();
+            // return $credit_users;exit;
             // $credit_users=CreditUsers::select();
             // $credit_users=CreditUsers::paginate(3);
             // dump($credit_users->creditConsumptions);
             // exit;
             // 获取客户的所有积分记录
-            foreach($credit_users as $key=>$user){
+            /*foreach($credit_users as $key=>$user){
                 // echo $key."<br>";
                 $credit = CreditUsers::find($user['id']);//一个客户 obj
                 // dump($credit);
                 // dump($credit->creditConsumptions);
                 // exit;
-                $detail=$credit->creditConsumptions()->field('sum(account_payable) suma,sum(used_credit) sumu,sum(real_pay) sumr,sum(get_credit)-sum(used_credit) sumg')->select();//一个客户的积分列表 array
+                $detail=$credit->creditConsumptions()->field('sum(account_payable) suma,sum(used_credit) sumu,sum(real_pay) sumr,sum(get_credit)-sum(used_credit) sumg')->order(['suma'=>'desc'])->select();//一个客户的积分列表 array
                 // dump($detail);
                 // dump($detail[0]['suma']);
                 $credit->tjr=CreditUsers::where('id',$credit['pid'])->value('name,id','id');
@@ -52,13 +63,13 @@ class Creditdata extends Base{
                 $result[]=$credit->toArray();
                 // $credit->append(['update_time'])->toArray();
                 // $result=array_merge($credit,$detail);
-            }
+            }*/
             // exit;
             // dump($credit);
             $total=CreditUsers::count('id');
             $allCreditData=[
                 'total'=>$total,
-                'rows'=>$result
+                'rows'=>$credit_users
             ];
             // exit;
             return json($allCreditData);
@@ -69,6 +80,32 @@ class Creditdata extends Base{
         }
 
     }
+    // 获取客户详细消费积分列表
+    public function getCreditDetail($uid){
+        if(Request()->isPost()){
+            $uid=input('uid');
+            $credit_users=CreditUsers::get($uid);
+            // dump($credit_users);exit;
+            // var_dump($credit_users->creditConsumptions);
+            $total=$credit_users->creditConsumptions()->count();
+            $creditList=$credit_users->creditConsumptions()->alias('c')
+            ->join('disease d','d.id=c.disease_id','left')
+            // ->order('id','desc')
+            ->field('disease_name,account_payable,used_credit,real_pay,get_credit,comment,pay_time,create_time')
+            ->select();
+            $creditDetailData=[
+                'total'=>$total,
+                'rows'=>$creditList
+            ];
+            return (json($creditDetailData));
+        }else{
+            return 'Hello World!';
+        }
+    }
+
+
+
+
 
     // 新增下线
     public function addChild(){

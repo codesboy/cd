@@ -23,7 +23,7 @@ class Add extends Base
             // dump($info_data);
             // exit;
             $validate = validate('Credit');
-            if($validate->check($info_data)){
+            if($validate->scene('addparent')->check($info_data)){
                 $result=CreditUsers::create($info_data);
                 if($result){
                     return '客户添加成功!';

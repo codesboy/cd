@@ -60,15 +60,6 @@
                 <a href="{:url('')}" class="easyui-linkbutton" plain="true" target="_blank" title="全屏显示表格"><span class="glyphicon glyphicon-fullscreen"></span>全屏显示</a>
                 <a href="javascript:;" class="easyui-linkbutton" plain="true"><span class="glyphicon glyphicon-export"></span>导出数据</a>
             </div>
-            <div class="btn-toolbar" role="toolbar" style="margin-bottom: 8px;">
-                <div class="btn-group btn-group-sm">
-                    <button type="button" class="btn btn-default">今日</button>
-                    <button type="button" class="btn btn-default">昨日</button>
-                    <button type="button" class="btn btn-default">本周</button>
-                    <button type="button" class="btn btn-default">本月</button>
-                    <button type="button" class="btn btn-default">本季度</button>
-                </div>
-            </div>
         </div>
         <div style="margin-bottom: 8px;">
             模糊查询（姓名/手机号）：<input id="mohu" class="easyui-textbox" type="text" style="width: 100px">
@@ -251,10 +242,10 @@
                 // {field:'birthday',title:'出生日期',width:70},
                 {field:'age',title:'年龄',sortable:true,formatter: function (value) {if(value==0){return '未知'}else{return value}},width:40},
                 {field:'suma',title:'应付总消费金额',sortable:true,width:70},
-                {field:'sumu',title:'总使用积分',width:100},
-                {field:'sumr',title:'实际总消费金额',width:100},
-                {field:'sumg',title:'剩余积分',width:100},
-                {field:'tjr',title:'推荐者',formatter:function(value){if(value==false){return ''}else{return value}},width:120},
+                {field:'sumu',title:'总使用积分',sortable:true,width:100},
+                {field:'sumr',title:'实际总消费金额',sortable:true,width:100},
+                {field:'sumg',title:'剩余积分',sortable:true,width:100},
+                {field:'tjr',title:'推荐者',formatter:function(value,row){if(value==null){return '无'}else{return value+'：'+row.tjrtel}},width:120},
                 {field:'create_time',title:'登记时间',width:120}
             ]],
             toolbar: "#toolbar",
@@ -267,45 +258,44 @@
             // striped:true, //斑马线效果
             singleSelect: true, //单选
             method: 'post',
-
             // 子网络
             view: detailview,
-
             onExpandRow: function(index, row) {
                 var ddv = $(this).datagrid('getRowDetail', index).find('table.ddv');
 
                 ddv.datagrid({
-                    url: '{:url("Consumption/getcpdetail")}?uid=' + row.id,
+                    url: '{:url("Creditdata/getCreditDetail")}?uid=' + row.id+'&r='+Math.random(),
                     fitColumns: true,
                     singleSelect: true,
                     rownumbers: true,
                     loadMsg: '正在玩命加载详细列表......',
                     height: 'auto',
-                    showFooter: true,
+                    autoRowHeight:true,
+                    // showFooter: true,
                     columns: [[
-                        {field: 'footer',title: '',width: 100},
-                        {field: 'money',title: '本次消费金额(元)',width: 100},
-                        {field: 'wd',title: '网电咨询师',width: 100},
-                        {field: 'qt',title: '前台咨询师',width: 100},
-                        {field: 'doctor',title: '接诊医生',width: 100},
-                        {field: 'disease_name',title: '就诊病种',width: 100},
-                        {field: 'ill_desc',title: '病情描述',width: 100},
-                        {field: 'jz_time',title: '就诊时间',width: 100}
+                        {field: 'disease_name',title: '本次消费项目',width: 100},
+                        {field: 'account_payable',title: '本次应付金额',width: 100},
+                        {field: 'used_credit',title: '本次使用积分',width: 100},
+                        {field: 'real_pay',title: '本次实付金额',width: 100},
+                        {field: 'get_credit',title: '本次获得积分',width: 100},
+                        {field: 'comment',title: '备注',width: 100},
+                        {field: 'pay_time',title: '消费时间',width: 100},
+                        {field: 'create_time',title: '登记时间',width: 100}
                     ]],
                     onResize: function() {
                         $('#dg').datagrid('fixDetailRowHeight', index);
                     },
                     onLoadSuccess: function(data) {
-                        // console.log(data);
+                        console.log(data);
                         setTimeout(function() {
                             $('#dg').datagrid('fixDetailRowHeight', index);
                         }, 0);
                     }
                 });
-                $('#dg').datagrid('fixDetailRowHeight', index);
+                $('#dg').datagrid('fixDetailRowHeight',index);
             },
             detailFormatter: function(index, row) {
-                return '<div style="padding:2px"><table class="ddv" title="该客户消费明细列表"></table></div>';
+                return '<div style="padding:2px"><table class="ddv" title="该客户消费、积分明细列表"></table></div>';
             }
         });
         // 刷新数据

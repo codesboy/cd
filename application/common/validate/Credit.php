@@ -7,6 +7,7 @@ class Credit extends Validate{
         'name'  =>  'require|max:25',
         'telephone' =>  ['require','regex'=>'/^1(3[0-9]|4[57]|5[0-35-9]|7[01678]|8[0-9])\d{8}$/','unique'=>'credit_users'],
         'age' => 'number|between:0,120',
+        'sex'=>'number',
         'disease_id' => 'number',
         'money' => 'number',
         'pay_time' => 'date',
@@ -34,8 +35,8 @@ class Credit extends Validate{
     ];
 
     protected $scene = [
-        'addparent'  =>  ['name','telephone','age','pid'],
-        'addchild'  =>  ['disease_id','money','pay_time','pid'],
+        'addparent'  =>  ['name','telephone','age','sex'],
+        'addchild'  =>  ['disease_id','money','pay_time'],
         'addpoints'=>['uid','disease_id','pay_time','account_payable','used_credit']
     ];
 

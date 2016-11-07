@@ -10,6 +10,7 @@ class AddForm extends Model{
 	// 获取表单数据
 	function getinfo($v){
 		$data=Db::name($v)
+		// ->field($arr)这里需要加上字段 不要*
 		->select();
 		return $data;
 	}
