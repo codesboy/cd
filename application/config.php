@@ -239,11 +239,11 @@ return [
         // 使用中文验证码
         // 'useZh' =>true,
         // 字体大小
-        'fontSize' => 16,
+        'fontSize' => 20,
         // 验证码长度（位数）
         'length'   => 4,
         // 'imageW' =>80,
-        // 'useNoise' =>false,
+        'useNoise' =>false,
         // 'useCurve' =>false,
     ],
     // 开启应用Trace调试

@@ -8,11 +8,11 @@ class Login extends Controller
 {
     public function index()
     {
-        return $this->fetch();
+        return $this->fetch('index2');
     }
 
     public function check(){
-        
+
         if(request()->isPost()){
             $login=new Log;//实例化模型
             $AllowLogin=$login->login(input('username'),input('password'),input('code'));
