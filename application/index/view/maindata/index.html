@@ -206,7 +206,7 @@
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label class="control-label" for="name">姓&emsp;&emsp;名</label>
-                                <input class="form-control" id="name" type="text" name="name" placeholder="姓名" varlue="{$name}"/>
+                                <input class="form-control" id="name" type="text" name="name" placeholder="姓名" varlue=""/>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label class="control-label">性别</label>
@@ -223,29 +223,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
-                                <label class="control-label">就诊&ensp;&ensp;病种</label>
-                                <select name="disease_id" required1="required" class="form-control">
-                                    <option value="">请选择</option>
-                                    {volist name="disease" id="c" }
-                                    <option value="{$c.id}">{$c.disease_name}</option>
-                                    {/volist}
-                                </select>
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <label class="control-label" for="jz_time">消费&ensp;&ensp;日期</label>
-                                <input class="form-control datetimepicker" id="jz_time" name="jz_time" type="text" placeholder="选择日期" required1="required" />
-                                <span class="add-on"><i class="icon-remove"></i></span>
-                                <span class="add-on"><i class="icon-calendar"></i></span>
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <label class="control-label" for="money">消费金额</label>
-                                <input class="form-control" id="money" type="text" name="money" value="0" placeholder="消费金额,无消费填0" required1="required" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 form-group">
-                                <label class="control-label" for="ill_desc">病情&ensp;&ensp;描述</label>
-                                <textarea id="ill_desc" class="form-control" name="ill_desc" rows="3" required1="required"></textarea>
+                                <label class="control-label" for="birthday">手机号</label>
+                                <input class="form-control datetimepicker" id="birthday" name="birthday" type="text" placeholder="选择日期" required1="required" />
                             </div>
                         </div>
                     </form>
