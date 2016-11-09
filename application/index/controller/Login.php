@@ -8,7 +8,7 @@ class Login extends Controller
 {
     public function index()
     {
-        return $this->fetch('index2');
+        return $this->fetch();
     }
 
     public function check(){

@@ -34,6 +34,8 @@
     .btns{text-align: center;}
     #msg{color: #f00;}
     .alblePoints{color: #f00;}
+    /*.datagrid-body{height: auto!important;}*/
+    /*table{}*/
     /* 冲突样式重置 */
     .panel-header{width: 100%!important;}
     .panel-body{width: 100%!important;}
@@ -63,8 +65,8 @@
         </div>
         <div style="margin-bottom: 8px;">
             模糊查询（姓名/手机号）：<input id="mohu" class="easyui-textbox" type="text" style="width: 100px">
-            Money From：<input id="startmoney" class="easyui-textbox" style="width:100px">
-            To：<input id="endmoney" class="easyui-textbox" style="width:100px">
+            <!-- Points From：<input id="startpoint" class="easyui-textbox" style="width:100px">
+            To：<input id="endpoint" class="easyui-textbox" style="width:100px"> -->
             <a href="javascript:;" id="search" class="easyui-linkbutton"><span class="glyphicon glyphicon-search"></span>Search</a>
         </div>
     </div>
@@ -230,7 +232,7 @@
             iconCls: 'icon-list',
             autoRowHeight: false,
             // nowrap: false,
-            url: '{:url('returnCreditData')}',
+            url: '{:url('returnCreditData')}'+'&r='+Math.random(),
             columns:[[
                 // {field:'id',title:'ID',width:1,width:'auto'},
                 {field:'checkbox',checkbox:true},
@@ -252,8 +254,8 @@
             fitColumns: true, //表格宽度自适应
             rownumbers: true,
             pagination: true, //分页组件
-            pageSize: 50, //初始化显示条数
-            pageList: [10, 50, 100, 200],
+            pageSize: 30, //初始化显示条数
+            pageList: [10, 30,50, 100, 200],
             loadMsg: '玩命加载数据中......',
             // striped:true, //斑马线效果
             singleSelect: true, //单选
@@ -267,10 +269,13 @@
                     url: '{:url("Creditdata/getCreditDetail")}?uid=' + row.id+'&r='+Math.random(),
                     fitColumns: true,
                     singleSelect: true,
+                    remoteSort:false,
                     rownumbers: true,
                     loadMsg: '正在玩命加载详细列表......',
                     height: 'auto',
                     autoRowHeight:true,
+                    fixRowHeight:index,
+                    fixDetailRowHeight:index,
                     // showFooter: true,
                     columns: [[
                         {field: 'disease_name',title: '本次消费项目',width: 100},
@@ -286,9 +291,10 @@
                         $('#dg').datagrid('fixDetailRowHeight', index);
                     },
                     onLoadSuccess: function(data) {
-                        console.log(data);
+                        // console.log(data);
                         setTimeout(function() {
-                            $('#dg').datagrid('fixDetailRowHeight', index);
+                            // $('#dg').datagrid('fixDetailRowHeight', index);
+                            $('#dg').datagrid('fixRowHeight',index);//防止出现滑动条
                         }, 0);
                     }
                 });
@@ -413,8 +419,8 @@
     $('#search').on('click',function(){
         $('#dg').datagrid('load',{
             name: $('#mohu').val(),
-            startmoney: $('#startmoney').val(),
-            endmoney: $('#endmoney').val(),
+            startmoney: $('#startpoint').val(),
+            endmoney: $('#endpoint').val(),
         });
     })
 </script>

@@ -66,7 +66,7 @@
                     <div class="menu-sep"></div>
                     <div iconCls="icon-redo" id="addCon">新增消费</div>
                 </div>
-                <a href="javascript:;" class="easyui-linkbutton" plain="true" title="编辑客户"><span class="glyphicon glyphicon-edit"></span>编辑客户</a>
+                <a href="javascript:;" class="easyui-linkbutton" id="alertEdit" plain="true" title="编辑客户"><span class="glyphicon glyphicon-edit"></span>编辑客户</a>
                 <a id="reload" class="easyui-linkbutton" plain="true" target="_blank" title="刷新数据"><span class="glyphicon glyphicon-refresh"></span>刷新数据</a>
                 <a href="{:url('')}" class="easyui-linkbutton" plain="true" target="_blank" title="全屏显示表格"><span class="glyphicon glyphicon-fullscreen"></span>全屏显示</a>
                 <a href="javascript:;" class="easyui-linkbutton" plain="true"><span class="glyphicon glyphicon-export"></span>导出数据</a>
@@ -110,7 +110,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="addcontitle">Modal title</h4>
+                    <h4 class="modal-title glyphicon glyphicon-tags" id="addcontitle">Modal title</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-inline" role="form" id="addconform">
@@ -193,6 +193,73 @@
         </div>
     </div>
 
+    <!-- 编辑表单 -->
+    <div class="modal fade" id="editorModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title glyphicon glyphicon-edit" id="editTitle">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline" role="form" id="addconform">
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label class="control-label" for="name">姓&emsp;&emsp;名</label>
+                                <input class="form-control" id="name" type="text" name="name" placeholder="姓名" varlue="{$name}"/>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label class="control-label">性别</label>
+                                <select class="form-control" id="sex" name="sex">
+                                    <option value="">未知</option>
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label class="control-label" for="birthday">出生日期</label>
+                                <input class="form-control datetimepicker" id="birthday" name="birthday" type="text" placeholder="选择日期" required1="required" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label class="control-label">就诊&ensp;&ensp;病种</label>
+                                <select name="disease_id" required1="required" class="form-control">
+                                    <option value="">请选择</option>
+                                    {volist name="disease" id="c" }
+                                    <option value="{$c.id}">{$c.disease_name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label class="control-label" for="jz_time">消费&ensp;&ensp;日期</label>
+                                <input class="form-control datetimepicker" id="jz_time" name="jz_time" type="text" placeholder="选择日期" required1="required" />
+                                <span class="add-on"><i class="icon-remove"></i></span>
+                                <span class="add-on"><i class="icon-calendar"></i></span>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label class="control-label" for="money">消费金额</label>
+                                <input class="form-control" id="money" type="text" name="money" value="0" placeholder="消费金额,无消费填0" required1="required" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label class="control-label" for="ill_desc">病情&ensp;&ensp;描述</label>
+                                <textarea id="ill_desc" class="form-control" name="ill_desc" rows="3" required1="required"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <span class="pull-left text-danger addconmsg"></span>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="addconbtn">保存</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 <script>
     // datagrid部分js
     $(function() {
@@ -201,7 +268,7 @@
             iconCls: 'icon-list',
             autoRowHeight: false,
             // nowrap: false,
-            url: '{:url('returndata')}',
+            url: '{:url('returndata')}'+'&r='+Math.random(),
             columns:[[
                 // {field:'id',title:'ID',width:1,width:'auto'},
                 {field:'checkbox',checkbox:true},
@@ -265,7 +332,7 @@
 
 
                 ddv.datagrid({
-                    url: '{:url("Consumption/getcpdetail")}?uid=' + row.id,
+                    url: '{:url("Consumption/getcpdetail")}?uid='+row.id+'&r='+Math.random(),
                     fitColumns: true,
                     singleSelect: true,
                     rownumbers: true,
@@ -420,7 +487,7 @@
         var selected=$('#dg').datagrid('getSelected');
         // console.info(selected)
         if(selected){
-            $('#addcontitle').html('为客户 '+selected.name+'('+selected.telephone+') 添加就诊/消费记录');
+            $('#addcontitle').html('为客户: '+selected.name+'('+selected.telephone+') 添加就诊/消费记录');
             $('#addConModal').modal();
             $('#addconbtn').on('click', function(event) {
 
@@ -472,6 +539,18 @@
             startmoney: $('#startmoney').val(),
             endmoney: $('#endmoney').val(),
         });
+    });
+
+    // 编辑功能
+    $('#alertEdit').on('click',function(){
+        var selected=$('#dg').datagrid('getSelected');
+        // console.info(selected)
+        if(selected){
+            $('#editTitle').html('修改客户: '+selected.name+'('+selected.telephone+') 资料');
+            $('#editorModal').modal();
+        }else{
+            alert('请选择用户');
+        }
     })
 </script>
 

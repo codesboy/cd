@@ -8,7 +8,7 @@ class CreditUsers extends Model
     protected $autoWriteTimestamp = true;
     protected $type = [
         'pay_time'  =>  'timestamp:Y-m-d',
-        'create_time'  =>  'timestamp:Y-m-d',
+        'create_time'  =>  'timestamp:Y-m-d H:i:s',
     ];
 
     // 定义关联 一个客户下有多条积分记录

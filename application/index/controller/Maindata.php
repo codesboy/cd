@@ -72,7 +72,6 @@ class Maindata extends Base
 			// $money_where=input('startmoney');
 			$startmoney=input('startmoney')?input('startmoney'):0;
 			$endmoney=input('endmoney')?input('endmoney'):10000;
-			$arr=[];
 
 			$data=$user->alias('u')
 			// ->join('consumption con','con.uid=u.id')

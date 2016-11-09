@@ -24,6 +24,11 @@ class Creditdata extends Base{
             $rows=input('rows');
             $offset=($page-1)*$rows;
 
+            // 筛选条件
+            $name=input('name');
+            $startpoint=input('startpoint')?input('startpoint'):0;
+            $endpoint=input('endpoint')?input('endpoint'):10000;
+
             // 排序条件
             $sort=input('sort')?input('sort'):'u.id';
             $order=input('order')?input('order'):'desc';
@@ -34,10 +39,12 @@ class Creditdata extends Base{
                 ->join('credit_consumption c','c.uid=u.id')
                 ->join('credit_users uu','uu.id=u.pid','left')
                 // ->field('u.name,u.sex,u.age,u.telephone,u.create_time')
-                ->field('u.id,u.name,uu.name tjr,uu.telephone tjrtel,u.sex,u.age,u.telephone,sum(c.account_payable) suma,sum(c.used_credit) sumu,sum(c.real_pay) sumr,sum(get_credit)-sum(used_credit) sumg,u.create_time')
+                ->field('u.id,u.name,uu.name tjr,uu.telephone tjrtel,u.sex,u.age,u.telephone,sum(c.account_payable) suma,sum(c.used_credit) sumu,sum(c.real_pay) sumr,sum(c.get_credit)-sum(c.used_credit) sumg,u.create_time')
+                ->where('u.name|u.telephone','like',"%$name%")
+                // ->where('sumg','between',[$startpoint,$endpoint])
                 ->group('u.id')
-                ->limit($offset,$rows)
                 ->order([$sort=>$order])
+                ->limit($offset,$rows)
                 ->select();
             // return $credit_users;exit;
             // $credit_users=CreditUsers::select();
