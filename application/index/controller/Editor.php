@@ -1,30 +1,26 @@
 <?php
 namespace app\index\controller;
-// use app\index\model\Menu;
 use think\Validate;
-use think\Db;
+use think\View;
 use app\index\model\AddForm;
 use app\index\model\UsersInfo;
-class Useradd extends Base{
+class Editor extends Base{
     public function updateUser(){
         // if (Request()->isPost()) {
-            $userid=input('uid');
-            $user=UsersInfo::get($userid);
+            // $userid=input('uid');
+            $user=new UsersInfo;
+            $oneUser=$user->field('name,sex,birthday,telephone')->find(5);
+            // $oneUser=$user->field('name,sex,birthday,telephone')->get(5);
 
-            $name=$user->name;
-            $sex=$user->sex;
-            $telephone=$user->telephone;
-            $birthday=$user->birthday;
+            $data=$oneUser->toArray();
 
-            $this->assign([
-                'name'  => $name,
-                // 'from'  => $from,
-                'sex' => $sex,
-                'telephone' => $telephone,
-                'birthday' => $birthday
-            ]);
-
+           // dump($data);die;
+            $this->assign($data);
             return $this->fetch('maindata/index');
+
+
+            // $view = new View();
+            // return $view->fetch('maindata/index');
         // }
     }
 }

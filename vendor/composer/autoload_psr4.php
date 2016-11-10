@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'think\\composer\\' => array($vendorDir . '/topthink/think-installer/src'),
     'think\\captcha\\' => array($vendorDir . '/topthink/think-captcha/src'),
+    'think\\' => array($baseDir . '/thinkphp/library/think'),
 );
