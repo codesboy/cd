@@ -15,8 +15,10 @@ class Editor extends Base{
             $data=$oneUser->toArray();
 
            // dump($data);die;
-            $this->assign($data);
-            return $this->fetch('maindata/index');
+           $name='aa';
+
+            $this->assign('name',$name);
+            return $this->fetch('public/editor');
 
 
             // $view = new View();

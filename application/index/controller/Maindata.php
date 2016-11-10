@@ -26,6 +26,7 @@ class Maindata extends Base
             'province' => $province,
             'wdzxs' => $wdzxs,
             'qtzxs' => $qtzxs,
+            'name'=>11
 
         ]);
 
@@ -76,16 +77,16 @@ class Maindata extends Base
 			$data=$user->alias('u')
 			// ->join('consumption con','con.uid=u.id')
 			->join('(select a.*,sum(money) summoney from (select * from client_consumption ORDER BY jz_time desc) a group by a.uid ) con','con.uid=u.id')
-			->join('province p','p.province_id=u.province_id','LEFT')
-			->join('city c','c.city_id=u.city_id','LEFT')
-			->join('county co','co.county_id=u.county_id','LEFT')
-			->join('dev_from d','d.id=u.dev_id','LEFT')
-			->join('source s','s.id=u.from_id','LEFT')
-			->join('zx_tools z','z.id=u.tool_id','LEFT')
-			->join('wangdian_zixun w','w.id=wdzx_id','LEFT')
-			->join('qiantai_zixun q','q.id=qtzx_id','LEFT')
-			->join('doctors doc','doc.id=doctor_id','LEFT')
-			->join('disease dis','dis.id=disease_id','LEFT')
+			->join('client_province p','p.province_id=u.province_id','LEFT')
+			->join('client_city c','c.city_id=u.city_id','LEFT')
+			->join('client_county co','co.county_id=u.county_id','LEFT')
+			->join('client_dev_from d','d.id=u.dev_id','LEFT')
+			->join('client_source s','s.id=u.from_id','LEFT')
+			->join('client_zx_tools z','z.id=u.tool_id','LEFT')
+			->join('client_wangdian_zixun w','w.id=wdzx_id','LEFT')
+			->join('client_qiantai_zixun q','q.id=qtzx_id','LEFT')
+			->join('client_doctors doc','doc.id=doctor_id','LEFT')
+			->join('client_disease dis','dis.id=disease_id','LEFT')
 			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,c.city_name,co.county_name,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,addtime')
 			// ->group('u.id')
 			->where('name|telephone','like',"%$name%")
@@ -139,8 +140,25 @@ class Maindata extends Base
 	    dump($user);//array
 	}*/
 
-	public function search(){
+	/*public function updateUser(){
+	    // if (Request()->isPost()) {
+	        // $userid=input('uid');
+	        $user=new UsersInfo;
+	        $oneUser=$user->field('name,sex,birthday,telephone')->find(5);
+	        // $oneUser=$user->field('name,sex,birthday,telephone')->get(5);
 
-	}
+	        $data=$oneUser->toArray();
+
+	       // dump($data);die;
+	        // $this->assign('data',$data);
+	        // return $this->fetch('maindata/index');
+
+
+	        // $view = new View();
+	        $view = new View();
+			$view->name = 'thinkphp';
+	        return $view->fetch('index');
+	    // }
+	}*/
 
 }

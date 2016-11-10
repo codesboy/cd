@@ -1,11 +1,4 @@
 <?php
-/**
- * @authors Rehack (565195693@qq.com)
- * @link    http://rehack.cn
- * @date    2016-10-23 21:49:10
- * @version $Id$
- */
-
 namespace app\index\controller;
 use think\Validate;
 use app\index\model\Consumption as cpmodel;
@@ -16,10 +9,10 @@ class Consumption extends Base{
         if(Request()->isPost()){
             $uid=input('uid');
             $cp=cpmodel::where('uid',$uid)
-            ->join('wangdian_zixun w','w.id=wdzx_id')
-            ->join('qiantai_zixun q','q.id=qtzx_id')
-            ->join('doctors d','d.id=doctor_id')
-            ->join('disease dis','dis.id=disease_id')
+            ->join('client_wangdian_zixun w','w.id=wdzx_id')
+            ->join('client_qiantai_zixun q','q.id=qtzx_id')
+            ->join('client_doctors d','d.id=doctor_id')
+            ->join('client_disease dis','dis.id=disease_id')
             ->field('w.wd_name wd,q.qt_name qt,doctor,disease_name,money,ill_desc,jz_time')
             ->order('jz_time','desc')
             ->select();

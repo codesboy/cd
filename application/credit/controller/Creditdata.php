@@ -36,10 +36,9 @@ class Creditdata extends Base{
             // $credit_users=CreditUsers::limit($offset,$rows)->order([$sort=>$order])->select();
             $CreditUsersModel=new CreditUsers;
             $credit_users=$CreditUsersModel->alias('u')
-                ->join('credit_consumption c','c.uid=u.id')
-                ->join('credit_users uu','uu.id=u.pid','left')
-                // ->field('u.name,u.sex,u.age,u.telephone,u.create_time')
-                ->field('u.id,u.name,uu.name tjr,uu.telephone tjrtel,u.sex,u.age,u.telephone,sum(c.account_payable) suma,sum(c.used_credit) sumu,sum(c.real_pay) sumr,sum(c.get_credit)-sum(c.used_credit) sumg,u.create_time')
+                ->join('client_credit_consumption c','c.uid=u.id')
+                ->join('client_credit_users p','p.id=u.pid','left')
+                ->field('u.id,u.name,p.name tjr,p.telephone tjrtel,u.sex,u.age,u.telephone,sum(c.account_payable) suma,sum(c.used_credit) sumu,sum(c.real_pay) sumr,sum(c.get_credit)-sum(c.used_credit) sumg,u.create_time')
                 ->where('u.name|u.telephone','like',"%$name%")
                 // ->where('sumg','between',[$startpoint,$endpoint])
                 ->group('u.id')
