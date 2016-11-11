@@ -3,6 +3,7 @@ namespace app\credit\controller;
 use app\index\controller\Base;
 use app\index\model\AddForm;
 use think\Validate;
+// use think\Db;
 use app\credit\model\CreditUsers;
 use app\credit\model\CreditConsumption;
 class Creditdata extends Base{
@@ -35,7 +36,7 @@ class Creditdata extends Base{
 
             // $credit_users=CreditUsers::limit($offset,$rows)->order([$sort=>$order])->select();
             $CreditUsersModel=new CreditUsers;
-            $credit_users=$CreditUsersModel->alias('u')
+            /*$credit_users=$CreditUsersModel->alias('u')
                 ->join('client_credit_consumption c','c.uid=u.id')
                 ->join('client_credit_users p','p.id=u.pid','left')
                 ->field('u.id,u.name,p.name tjr,p.telephone tjrtel,u.sex,u.age,u.telephone,sum(c.account_payable) suma,sum(c.used_credit) sumu,sum(c.real_pay) sumr,sum(c.get_credit)-sum(c.used_credit) sumg,u.create_time')
@@ -44,7 +45,19 @@ class Creditdata extends Base{
                 ->group('u.id')
                 ->order([$sort=>$order])
                 ->limit($offset,$rows)
+                ->select();*/
+
+            $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time')
+                ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
+                ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id')
+                ->where('u.name|u.telephone','like',"%$name%")
+                ->group('u.id')
+                ->order([$sort=>$order])
+                ->limit($offset,$rows)
                 ->select();
+            // dump($credit_users);die;
+
+
             // return $credit_users;exit;
             // $credit_users=CreditUsers::select();
             // $credit_users=CreditUsers::paginate(3);
