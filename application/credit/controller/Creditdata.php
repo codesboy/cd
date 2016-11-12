@@ -49,7 +49,7 @@ class Creditdata extends Base{
 
             $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time')
                 ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
-                ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id')
+                ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id','left')
                 ->where('u.name|u.telephone','like',"%$name%")
                 ->group('u.id')
                 ->order([$sort=>$order])
