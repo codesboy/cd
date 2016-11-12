@@ -27,12 +27,13 @@ CREATE TABLE `client_admin` (
   `status` tinyint(4) unsigned DEFAULT NULL,
   `level` tinyint(4) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_admin` */
 
 insert  into `client_admin`(`id`,`username`,`password`,`status`,`level`) values 
-(1,'admin','c3284d0f94606de1fd2af172aba15bf3',1,1);
+(1,'admin','c3284d0f94606de1fd2af172aba15bf3',1,1),
+(3,'test','14e1b600b1fd579f47433b88e8d85291',NULL,NULL);
 
 /*Table structure for table `client_city` */
 
@@ -412,7 +413,7 @@ CREATE TABLE `client_consumption` (
   `jz_time` int(11) unsigned NOT NULL COMMENT '就诊时间',
   `ill_desc` varchar(255) NOT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_consumption` */
 
@@ -489,7 +490,10 @@ insert  into `client_consumption`(`id`,`uid`,`wdzx_id`,`qtzx_id`,`doctor_id`,`di
 (71,37,2,1,1,1,6.00,1480521600,'有'),
 (72,32,2,2,1,3,2.00,1478016000,'发'),
 (73,32,3,1,2,4,5.00,1477929600,'哦'),
-(74,28,3,1,2,4,5.00,1477929600,'哦');
+(74,28,3,1,2,4,5.00,1477929600,'哦'),
+(75,38,1,1,1,1,2000.00,1478880000,'啥的阿萨德'),
+(76,38,1,1,1,1,300.00,1478966400,'实打实的问问'),
+(77,38,3,1,1,1,600.00,1479052800,'我问问');
 
 /*Table structure for table `client_county` */
 
@@ -4074,7 +4078,7 @@ CREATE TABLE `client_users_info` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `usersn` (`usersn`),
   UNIQUE KEY `tel` (`telephone`)
-) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_users_info` */
 
@@ -4112,7 +4116,8 @@ insert  into `client_users_info`(`id`,`name`,`usersn`,`sex`,`birthday`,`age`,`te
 (34,'y','FA29038932929457',2,1476806400,0,'13655555555',510000,510100,510106,1,2,2,1477703893),
 (35,'VF','FA29046655841988',1,1452700800,0,'13699999654',510000,510500,510502,2,7,2,1477704665),
 (36,'余','FB03861230934042',1,1478620800,0,'13200011111',510000,510400,510402,2,3,2,1478186123),
-(37,'ui','FB03861828851913',1,1478102400,0,'13522552291',510000,510400,510401,1,1,2,1478186182);
+(37,'ui','FB03861828851913',1,1478102400,0,'13522552291',510000,510400,510401,1,1,2,1478186182),
+(38,'张三','FB12433133133579',2,1454515200,0,'13655554444',510000,510100,510104,1,1,1,1478943313);
 
 /*Table structure for table `client_users_yuyue` */
 
