@@ -26,3 +26,5 @@ foreach($data as $value){
 
 导入积分数据
 INSERT INTO client_credit_users (id,name,age,sex,telephone,pid,create_time,update_time) SELECT uid,memname,age,sex,memtel,parent_id,addtime,addtime FROM cdbc_member_extend
+
+年龄的计算

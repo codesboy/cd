@@ -42,8 +42,8 @@ class User extends Validate
         'qtzx_id.require' => '请选择前台咨询师！',
         'doctor_id.require' => '请选择接诊医生！',
         'disease_id.require'  => '请选择咨询病种！',
-        'jz_time.require' => '请选择初诊时间！',
-        'jz_time.date' => '初诊时间格式错误！',
+        'jz_time.require' => '请选择就诊时间！',
+        'jz_time.date' => '就诊时间格式错误！',
         'money.require' => '请填写消费金额，未消费请填0',
         'money.number' => '消费金额格式错误！',
         'ill_desc.require' => '请填写病情描述！'
@@ -52,6 +52,8 @@ class User extends Validate
     // 验证场景
     protected $scene = [
         'users_info'  =>  ['name','birthday','telephone','province_id','city_id','county_id','dev_id','from_id','tool_id'],
-        'users_consumption'  =>  ['wdzx_id','qtzx_id','doctor_id','disease_id','jz_time','money','ill_desc']
+        // 'users_consumption'  =>  ['wdzx_id','qtzx_id','doctor_id','disease_id','jz_time','money','ill_desc']
+        'users_consumption'  =>  ['doctor_id','disease_id','jz_time','money','ill_desc']
+        // 'users_consumption'  =>  ['doctor_id','disease_id',['jz_time','require|date','请选择就诊时间！|就诊时间格式错误！'],'money','ill_desc']
     ];
 }

@@ -9,11 +9,11 @@ class Consumption extends Base{
         if(Request()->isPost()){
             $uid=input('uid');
             $cp=cpmodel::where('uid',$uid)
-            ->join('client_wangdian_zixun w','w.id=wdzx_id')
-            ->join('client_qiantai_zixun q','q.id=qtzx_id')
-            ->join('client_doctors d','d.id=doctor_id')
-            ->join('client_disease dis','dis.id=disease_id')
-            ->field('w.wd_name wd,q.qt_name qt,doctor,disease_name,money,ill_desc,jz_time')
+            ->join('client_wangdian_zixun w','w.id=wdzx_id','left')
+            ->join('client_qiantai_zixun q','q.id=qtzx_id','left')
+            ->join('client_doctors d','d.id=doctor_id','left')
+            ->join('client_disease dis','dis.id=disease_id','left')
+            ->field('w.wd_name wd,q.qt_name qt,doctor,disease_name,money,ill_desc,jz_time,create_time')
             ->order('jz_time','desc')
             ->select();
 
