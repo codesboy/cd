@@ -6,6 +6,8 @@ use think\Validate;
 // use think\Db;
 use app\credit\model\CreditUsers;
 use app\credit\model\CreditConsumption;
+use \PHPExcel;
+use \PHPExcel_IOFactory;
 class Creditdata extends Base{
     public function index(){
         $addform=new AddForm;
@@ -17,46 +19,44 @@ class Creditdata extends Base{
         return $this->fetch();
     }
 
-    // 返回主数据
+    // 得到积分客户数据
+    private function getCreditsDate(){
+
+        // 分页条件
+        $page=input('page');
+        $rows=input('rows');
+        $offset=($page-1)*$rows;
+
+        // 筛选条件
+        $name=input('name');
+        $startpoint=input('startpoint')?input('startpoint'):0;
+        $endpoint=input('endpoint')?input('endpoint'):10000;
+
+        // 排序条件
+        $sort=input('sort')?input('sort'):'u.id';
+        $order=input('order')?input('order'):'desc';
+
+        $CreditUsersModel=new CreditUsers;
+
+        $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time')
+            ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
+            ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id','left')
+            ->where('u.name|u.telephone','like',"%$name%")
+            // ->where('sum(get_credit)-sum(used_credit)','between',[$startpoint,$endpoint])
+            ->group('u.id')
+            // ->where('sumg','between',[10,50])
+            ->order([$sort=>$order])
+            ->limit($offset,$rows)
+            ->select();
+        return $credit_users;
+    }
+    // 处理数据返回给前端使用
     public function returnCreditData(){
         if(Request()->isPost()){
-            // 分页条件
-            $page=input('page');
-            $rows=input('rows');
-            $offset=($page-1)*$rows;
 
-            // 筛选条件
-            $name=input('name');
-            $startpoint=input('startpoint')?input('startpoint'):0;
-            $endpoint=input('endpoint')?input('endpoint'):10000;
 
-            // 排序条件
-            $sort=input('sort')?input('sort'):'u.id';
-            $order=input('order')?input('order'):'desc';
+            $credit_users=$this->getCreditsDate();
 
-            // $credit_users=CreditUsers::limit($offset,$rows)->order([$sort=>$order])->select();
-            $CreditUsersModel=new CreditUsers;
-            /*$credit_users=$CreditUsersModel->alias('u')
-                ->join('client_credit_consumption c','c.uid=u.id')
-                ->join('client_credit_users p','p.id=u.pid','left')
-                ->field('u.id,u.name,p.name tjr,p.telephone tjrtel,u.sex,u.age,u.telephone,sum(c.account_payable) suma,sum(c.used_credit) sumu,sum(c.real_pay) sumr,sum(c.get_credit)-sum(c.used_credit) sumg,u.create_time')
-                ->where('u.name|u.telephone','like',"%$name%")
-                // ->where('sumg','between',[$startpoint,$endpoint])
-                ->group('u.id')
-                ->order([$sort=>$order])
-                ->limit($offset,$rows)
-                ->select();*/
-
-            $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time')
-                ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
-                ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id','left')
-                ->where('u.name|u.telephone','like',"%$name%")
-                // ->where('sumg','between',[$startpoint,$endpoint])
-                ->group('u.id')
-                // ->where('sumg','between',[10,50])
-                ->order([$sort=>$order])
-                ->limit($offset,$rows)
-                ->select();
             // dump($credit_users);die;
 
 
@@ -123,9 +123,6 @@ class Creditdata extends Base{
             return 'Hello World!';
         }
     }
-
-
-
 
 
     // 新增下线
@@ -329,5 +326,88 @@ class Creditdata extends Base{
                 }
             }
         }
+    }
+
+    // 导出数据到excel
+    public function export(){
+        $objPHPExcel=new PHPExcel;
+        // dump($objPHPExcel);die;
+        $objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
+                                     ->setLastModifiedBy("Maarten Balliauw")
+                                     ->setTitle("Office 2007 XLSX Test Document")
+                                     ->setSubject("Office 2007 XLSX Test Document")
+                                     ->setDescription("Test document for Office 2007 XLSX, generated using PHP classes.")
+                                     ->setKeywords("office 2007 openxml php")
+                                     ->setCategory("Test result file");
+        // Add some data
+        $oSheet = $objPHPExcel->getActiveSheet(); //获取当前活动sheet标签
+        $oSheet->setTitle('成都贝臣齿科客户积分情况表');
+        $oSheet->getDefaultStyle()->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//居中
+        $oSheet->getColumnDimension('R')->setWidth(20);//设置列宽
+        $oSheet->getStyle('A1:R1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID);
+        $oSheet->getStyle('A1:R1')->getFill()->getStartColor()->setARGB("#0cedffb");//表头背景颜色
+        $oSheet->getStyle('A1:R1')->getFont()->setBold(true);//表头字体加粗
+        $arr=range('D','K');
+        // var_dump($arr);
+        // exit;
+        for($i=0;$i<count($arr);$i++){
+            $oSheet->getColumnDimension($arr[$i])->setWidth(20);
+        }
+
+
+        // echo $this->returndata()->data;die;
+        $data=$this->getCreditsDate();
+        // dump($data);die;
+        // 填充数据
+        // $oSheet->fromArray($row); //此方法占内存
+        $j=2;
+        foreach ($data as $key => $value) {
+            $oSheet->setCellValue('A'.$j,$value['name'])
+            ->setCellValue('B'.$j,$value['telephone'])
+            ->setCellValue('C'.$j,$value['sex'])
+            ->setCellValue('D'.$j,$value['age'])
+            ->setCellValue('E'.$j,$value['suma'])
+            ->setCellValue('F'.$j,$value['sumu'])
+            ->setCellValue('G'.$j,$value['sumr'])
+            ->setCellValue('H'.$j,$value['sumg'])
+            ->setCellValue('I'.$j,$value['tjr'])
+            ->setCellValue('J'.$j,$value['create_time']);
+            $j++;
+        }
+        //
+
+        //插入表头
+        // $oSheet->insertNewRowBefore(1,1);
+        $objPHPExcel->setActiveSheetIndex(0)
+                                ->setCellValue('A1', '姓名')
+                                ->setCellValue('B1', '手机号码')
+                                ->setCellValue('C1', '性别')
+                                ->setCellValue('D1', '年龄')
+                                ->setCellValue('E1', '应付总消费金额')
+                                ->setCellValue('F1', '总使用积分')
+                                ->setCellValue('G1', '实际总消费金额')
+                                ->setCellValue('H1', '剩余积分')
+                                ->setCellValue('I1', '推荐者')
+                                ->setCellValue('J1', '登记时间');
+
+        $date=date("Ymd");
+        // Redirect output to a client’s web browser (Excel5)
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="成都贝臣齿科客户积分情况表'.$date.'.xls"');
+        header('Cache-Control: max-age=0');
+        // If you're serving to IE 9, then the following may be needed
+        header('Cache-Control: max-age=1');
+
+        // If you're serving to IE over SSL, then the following may be needed
+        // header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+        header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+        header ('Pragma: public'); // HTTP/1.0
+
+
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
+        exit;
     }
 }

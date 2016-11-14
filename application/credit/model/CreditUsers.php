@@ -17,4 +17,11 @@ class CreditUsers extends Model
         return $this->hasMany('CreditConsumption','uid');
     }
 
+    // sex读取器
+    protected function getSexAttr($value)
+    {
+        $sex = [0=>'未知',1=>'男',2=>'女'];
+        return $sex[$value];
+    }
+
 }

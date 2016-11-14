@@ -155,7 +155,7 @@ class Maindata extends Base
 
 	// 导出Excel
 	public function export(){
-		$objPHPExcel=new \PHPExcel;
+		$objPHPExcel=new PHPExcel;
 		// dump($objPHPExcel);die;
 		$objPHPExcel->getProperties()->setCreator("Maarten Balliauw")
 									 ->setLastModifiedBy("Maarten Balliauw")
@@ -166,7 +166,7 @@ class Maindata extends Base
 									 ->setCategory("Test result file");
 		// Add some data
 		$oSheet = $objPHPExcel->getActiveSheet(); //获取当前活动sheet标签
-		$oSheet->setTitle('成都贝臣齿科客户积分情况表');
+		$oSheet->setTitle('成都贝臣齿科客户就诊消费情况表');
 		$oSheet->getDefaultStyle()->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//居中
 		$oSheet->getColumnDimension('R')->setWidth(20);//设置列宽
 		$oSheet->getStyle('A1:R1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID);
