@@ -18,5 +18,20 @@ class UsersInfo extends Model
     // 定义关联
     public function consumptions(){
         return $this->hasMany('Consumption','uid');
+
+
+    }
+
+    // sex读取器
+    protected function getSexAttr($value)
+    {
+        $sex = [0=>'未知',1=>'男',2=>'女'];
+        return $sex[$value];
+    }
+
+    // 年龄读取器
+    protected function getUserAgeAttr($value,$data)
+    {
+        return getAge($data['birthday']);
     }
 }
