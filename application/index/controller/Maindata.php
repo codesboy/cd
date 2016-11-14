@@ -79,14 +79,14 @@ class Maindata extends Base
 			->join('client_qiantai_zixun q','q.id=qtzx_id','LEFT')
 			->join('client_doctors doc','doc.id=doctor_id','LEFT')
 			->join('client_disease dis','dis.id=disease_id','LEFT')
-			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,c.city_name,co.county_name,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,addtime')
+			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,c.city_name,co.county_name,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,u.create_time')
 			// ->group('u.id')
 			->where('name|telephone','like',"%$name%")
 			->where('summoney','between',[$startmoney,$endmoney])
 			->order([$sort=>$order])
 			->limit($offset,$rows)
 			->select();
-		$data1=$user->view('UsersInfo','id,name,sex,birthday,age,telephone,addtime')
+		$data1=$user->view('UsersInfo','id,name,sex,birthday,age,telephone,create_time')
 			->view('Province','province_name','Province.province_id=UsersInfo.province_id')
 			->view('City','city_name','City.city_id=UsersInfo.city_id')
 			->view('County','county_name','County.county_id=UsersInfo.county_id')
@@ -98,7 +98,7 @@ class Maindata extends Base
 			->view('QiantaiZixun','qt_name qtname','QiantaiZixun.id=qtzx_id')
 			->view('Doctors','doctor','Doctors.id=Consumption.doctor_id')
 			->view('Disease','disease_name','Disease.id=disease_id')
-			->order('UsersInfo.addtime desc,Consumption.jz_time desc')
+			->order('UsersInfo.create_time desc,Consumption.jz_time desc')
 			->group('UsersInfo.id')
 			->select(false);
 
@@ -204,7 +204,7 @@ class Maindata extends Base
 			->setCellValue('O'.$j,$value['disease_name'])
 			->setCellValue('P'.$j,$value['jz_time'])
 			->setCellValue('Q'.$j,$value['summoney'])
-			->setCellValue('R'.$j,$value['addtime']);
+			->setCellValue('R'.$j,$value['create_time']);
 			$j++;
 		}
 		//

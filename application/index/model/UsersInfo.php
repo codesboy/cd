@@ -6,11 +6,14 @@ use think\Model;
 // 用户信息模型
 class UsersInfo extends Model
 {
+    // 开启写入时间戳
+    protected $autoWriteTimestamp = true;
+
     // 设置数据表主键,默认主键自动识别
     protected $pk    = 'id';
     protected $type = [
         'birthday'    =>  'timestamp:Y-m-d',
-        'addtime'    =>  'timestamp',
+        'create_time'    =>  'timestamp',
         'jz_time'    =>  'timestamp:Y-m-d'
 
     ];
@@ -30,8 +33,8 @@ class UsersInfo extends Model
     }
 
     // 年龄读取器
-    protected function getUserAgeAttr($value,$data)
+    protected function getAgeAttr($value,$data)
     {
-        return getAge($data['birthday']);
+        return getAge(date('Y-m-d',$data['birthday']));
     }
 }
