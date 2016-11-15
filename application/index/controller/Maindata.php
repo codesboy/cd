@@ -168,15 +168,15 @@ class Maindata extends Base
 		$oSheet = $objPHPExcel->getActiveSheet(); //获取当前活动sheet标签
 		$oSheet->setTitle('成都贝臣齿科客户就诊消费情况表');
 		$oSheet->getDefaultStyle()->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//居中
-		$oSheet->getColumnDimension('R')->setWidth(20);//设置列宽
+		$oSheet->getColumnDimension('B')->setWidth(20);//设置列宽
 		$oSheet->getStyle('A1:R1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID);
 		$oSheet->getStyle('A1:R1')->getFill()->getStartColor()->setARGB("#0cedffb");//表头背景颜色
 		$oSheet->getStyle('A1:R1')->getFont()->setBold(true);//表头字体加粗
-		$arr=range('D','K');
+		$arr=range('F','R');
 		// var_dump($arr);
 		// exit;
 		for($i=0;$i<count($arr);$i++){
-			$oSheet->getColumnDimension($arr[$i])->setWidth(20);
+			$oSheet->getColumnDimension($arr[$i])->setWidth(22);
 		}
 
 

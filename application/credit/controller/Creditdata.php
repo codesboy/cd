@@ -343,11 +343,14 @@ class Creditdata extends Base{
         $oSheet = $objPHPExcel->getActiveSheet(); //获取当前活动sheet标签
         $oSheet->setTitle('成都贝臣齿科客户积分情况表');
         $oSheet->getDefaultStyle()->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);//居中
-        $oSheet->getColumnDimension('R')->setWidth(20);//设置列宽
-        $oSheet->getStyle('A1:R1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID);
-        $oSheet->getStyle('A1:R1')->getFill()->getStartColor()->setARGB("#0cedffb");//表头背景颜色
-        $oSheet->getStyle('A1:R1')->getFont()->setBold(true);//表头字体加粗
-        $arr=range('D','K');
+        $oSheet->getColumnDimension('B')->setWidth(20);//单独设置列宽
+        $oSheet->getStyle('A1:J1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID);
+        $oSheet->getStyle('A1:J1')->getFill()->getStartColor()->setARGB("#0cedffb");//表头背景颜色
+        $oSheet->getStyle('A1:J1')->getFont()->setBold(true);//表头字体加粗
+
+
+        // 批量设置列宽
+        $arr=range('A','J');
         // var_dump($arr);
         // exit;
         for($i=0;$i<count($arr);$i++){
