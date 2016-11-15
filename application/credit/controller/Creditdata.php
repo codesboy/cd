@@ -42,12 +42,15 @@ class Creditdata extends Base{
             ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
             ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id','left')
             ->where('u.name|u.telephone','like',"%$name%")
+            // ->whereTime('u.create_time','yesterday')
             // ->where('sum(get_credit)-sum(used_credit)','between',[$startpoint,$endpoint])
             ->group('u.id')
             // ->where('sumg','between',[10,50])
             ->order([$sort=>$order])
             ->limit($offset,$rows)
             ->select();
+
+        // dump($credit_users);die;
         return $credit_users;
     }
     // 处理数据返回给前端使用

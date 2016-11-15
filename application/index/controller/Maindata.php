@@ -48,7 +48,8 @@ class Maindata extends Base
 
 
 	// 得到用户数据
-	private function getUserData(){
+	// private function getUserData(){
+	public function getUserData(){
 		$user=new UsersInfo;
 		// 分页条件
 		$page=input('page');
@@ -66,8 +67,8 @@ class Maindata extends Base
 		$startmoney=input('startmoney')?input('startmoney'):0;
 		$endmoney=input('endmoney')?input('endmoney'):100000000;
 
-		$data=$user->alias('u')
-			// ->join('consumption con','con.uid=u.id')
+		$data=db('users_info')->alias('u')
+		// $data=$user->alias('u')
 			->join('(select a.*,sum(money) summoney from (select * from client_consumption ORDER BY jz_time desc) a group by a.uid ) con','con.uid=u.id')
 			->join('client_province p','p.province_id=u.province_id','LEFT')
 			->join('client_city c','c.city_id=u.city_id','LEFT')
@@ -80,27 +81,21 @@ class Maindata extends Base
 			->join('client_doctors doc','doc.id=doctor_id','LEFT')
 			->join('client_disease dis','dis.id=disease_id','LEFT')
 			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,c.city_name,co.county_name,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,u.create_time')
-			// ->group('u.id')
+			->group('u.id')
 			->where('name|telephone','like',"%$name%")
 			->where('summoney','between',[$startmoney,$endmoney])
 			->order([$sort=>$order])
 			->limit($offset,$rows)
+			->whereTime('u.create_time','d')
 			->select();
-		$data1=$user->view('UsersInfo','id,name,sex,birthday,age,telephone,create_time')
-			->view('Province','province_name','Province.province_id=UsersInfo.province_id')
-			->view('City','city_name','City.city_id=UsersInfo.city_id')
-			->view('County','county_name','County.county_id=UsersInfo.county_id')
-			->view('DevFrom','dev','DevFrom.id=dev_id')
-			->view('Source','source_name','Source.id=UsersInfo.from_id')
-			->view('ZxTools','tool','ZxTools.id=tool_id')
-			->view('Consumption',["sum('money')"=>'summoney'],'uid=UsersInfo.id')
-			->view('WangdianZixun','wd_name wdname','WangdianZixun.id=wdzx_id')
-			->view('QiantaiZixun','qt_name qtname','QiantaiZixun.id=qtzx_id')
-			->view('Doctors','doctor','Doctors.id=Consumption.doctor_id')
-			->view('Disease','disease_name','Disease.id=disease_id')
-			->order('UsersInfo.create_time desc,Consumption.jz_time desc')
-			->group('UsersInfo.id')
-			->select(false);
+			// ->select(false);
+
+			// dump($data);die;
+
+		$data1=db('users_info')
+			->whereTime('create_time', 'd')
+            ->select(false);
+
 
 		return $data;
 	}
