@@ -72,12 +72,13 @@
                 <a href="{:url('export')}" class="easyui-linkbutton" plain="true" target="_self"><span class="glyphicon glyphicon-export"></span>导出数据</a>
             </div>
             <div class="btn-toolbar" role="toolbar" style="margin-bottom: 8px;">
-                <div class="btn-group btn-group-sm">
-                    <button type="button" class="btn btn-default">今日</button>
-                    <button type="button" class="btn btn-default">昨日</button>
-                    <button type="button" class="btn btn-default">本周</button>
-                    <button type="button" class="btn btn-default">本月</button>
-                    <button type="button" class="btn btn-default">本季度</button>
+                <div class="btn-group btn-group-sm timebtns">
+                    <button type="button" class="btn btn-default" data-time="today">今日</button>
+                    <button type="button" class="btn btn-default" data-time="yesterday">昨日</button>
+                    <button type="button" class="btn btn-default" data-time="week">本周</button>
+                    <button type="button" class="btn btn-default" data-time="last week">上周</button>
+                    <button type="button" class="btn btn-default" data-time="month">本月</button>
+                    <button type="button" class="btn btn-default" data-time="last month">上月</button>
                 </div>
             </div>
         </div>
@@ -488,6 +489,16 @@
         }else{
             alert('请选择用户');
         }
+    });
+
+    // 时间查询
+    $('.timebtns button').on('click',function(){
+        var time=$(this).data('time');
+        // alert(time);
+        $('#dg').datagrid('load',{
+            selecttime: time
+        });
+
     })
 </script>
 

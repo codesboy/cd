@@ -7,7 +7,7 @@ class User extends Validate
 {
     protected $rule = [
         'name'  =>  'require|max:25',
-        'brithday'  =>  'require|date',
+        'birthday'  =>  'require|date',
         'telephone' =>  ['require','regex'=>'/^1(3[0-9]|4[57]|5[0-35-9]|7[01678]|8[0-9])\d{8}$/','unique'=>'users_info'],
         'province_id' => 'require|number',
         'city_id' => 'require|number',
@@ -27,7 +27,7 @@ class User extends Validate
     protected $message  =   [
         'name.require' => '请填写客户姓名！',
         'name.max'     => '客户姓名最多不能超过25个字符！',
-        'birthday.require'     => '客户出生日期必填！',
+        'birthday.require'     => '客户出生日期必选！',
         'birthday.date'     => '客户出生日期格式有误！',
         'telephone.require'  => '请填写客户手机号！',
         'telephone.regex'    => '客户手机号格式错误！',
@@ -53,7 +53,7 @@ class User extends Validate
     protected $scene = [
         'users_info'  =>  ['name','birthday','telephone','province_id','city_id','county_id','dev_id','from_id','tool_id'],
         // 'users_consumption'  =>  ['wdzx_id','qtzx_id','doctor_id','disease_id','jz_time','money','ill_desc']
-        'users_consumption'  =>  ['doctor_id','disease_id','jz_time','money','ill_desc']
+        'users_consumption'  =>  ['wdzx_id','qtzx_id','doctor_id','disease_id','jz_time','money','ill_desc']
         // 'users_consumption'  =>  ['doctor_id','disease_id',['jz_time','require|date','请选择就诊时间！|就诊时间格式错误！'],'money','ill_desc']
     ];
 }

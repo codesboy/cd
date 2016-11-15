@@ -66,9 +66,10 @@ class Maindata extends Base
 		// $money_where=input('startmoney');
 		$startmoney=input('startmoney')?input('startmoney'):0;
 		$endmoney=input('endmoney')?input('endmoney'):100000000;
+		$time=input('selecttime')?input('selecttime'):'y';
 
-		$data=db('users_info')->alias('u')
-		// $data=$user->alias('u')
+		// $data=db('users_info')->alias('u')
+		$data=$user->alias('u')
 			->join('(select a.*,sum(money) summoney from (select * from client_consumption ORDER BY jz_time desc) a group by a.uid ) con','con.uid=u.id')
 			->join('client_province p','p.province_id=u.province_id','LEFT')
 			->join('client_city c','c.city_id=u.city_id','LEFT')
@@ -86,14 +87,14 @@ class Maindata extends Base
 			->where('summoney','between',[$startmoney,$endmoney])
 			->order([$sort=>$order])
 			->limit($offset,$rows)
-			->whereTime('u.create_time','d')
+			->whereTime('u.create_time',$time)
 			->select();
 			// ->select(false);
 
 			// dump($data);die;
 
 		$data1=db('users_info')
-			->whereTime('create_time', 'd')
+			->whereTime('create_time', 'yesterday')
             ->select(false);
 
 

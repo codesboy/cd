@@ -20,7 +20,8 @@ class Creditdata extends Base{
     }
 
     // 得到积分客户数据
-    private function getCreditsDate(){
+    // private function getCreditsDate(){
+    public function getCreditsDate(){
 
         // 分页条件
         $page=input('page');
@@ -42,17 +43,26 @@ class Creditdata extends Base{
             ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
             ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id','left')
             ->where('u.name|u.telephone','like',"%$name%")
-            // ->whereTime('u.create_time','yesterday')
+            // ->whereTime('u.create_time','d')
             // ->where('sum(get_credit)-sum(used_credit)','between',[$startpoint,$endpoint])
-            ->group('u.id')
             // ->where('sumg','between',[10,50])
+            ->group('u.id')
             ->order([$sort=>$order])
             ->limit($offset,$rows)
             ->select();
-
+            // $aa=new Builder;
         // dump($credit_users);die;
         return $credit_users;
+
+        /*$credit_users=$CreditUsersModel->alias('c')
+        ->join('credit_consumption','credit_consumption.uid=c.id','left')
+        ->whereTime('c.create_time','d')
+        ->select();
+        // var_dump($data);
+        return $credit_users;*/
     }
+
+
     // 处理数据返回给前端使用
     public function returnCreditData(){
         if(Request()->isPost()){
