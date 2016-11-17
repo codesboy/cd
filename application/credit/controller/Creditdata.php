@@ -39,7 +39,7 @@ class Creditdata extends Base{
 
         $CreditUsersModel=new CreditUsers;
 
-        $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time')
+        $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time,pid')
             ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
             ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id','left')
             ->where('u.name|u.telephone','like',"%$name%")
@@ -141,9 +141,9 @@ class Creditdata extends Base{
     // 新增下线
     public function addChild(){
         if(Request()->isPost()){
+            // dump(input('post.'));die;
 
             // 下线本次消费金额
-
             $pay=(float)input('money');
 
             // 推荐人积分率5%
@@ -186,12 +186,12 @@ class Creditdata extends Base{
                 [
                     'uid'=>input('pid'),
                     'disease_id'=>0,
-                    'pay_time'=>input('pay_time'),
+                    'pay_time'=>null,
                     'account_payable'=>0,
                     'used_credit'=>0,
                     'real_pay'=>0,
                     'get_credit'=>$p_credit,
-                    'comment'=>'积分来自'.input('name').'的消费！'
+                    'comment'=>'积分来自 '.input('name').'('.input('telephone').')的消费！'
                 ]
 
             ];
@@ -204,14 +204,14 @@ class Creditdata extends Base{
                 // return '1';
                 // exit;
                 $credit_user=new CreditUsers;
-                $credit_user->save($credituserdata);
+                $credit_user->save($credituserdata);//写入基本信息
                 // 获取自增ID
                 $getid=$credit_user->id;
                 $creditconsumptiondata[0]['uid']=$getid;
                 if($creditconsumptiondata[1]['get_credit']==0){
                     $creditconsumptiondata[1]['comment']='下线未消费';
                 }
-                if($getid){
+                if($getid && $pay){
                     // 推荐者和被推荐者积分记录写入数据库
                     $credit_re=new CreditConsumption;
                     if($credit_re->saveAll($creditconsumptiondata)){
@@ -220,7 +220,7 @@ class Creditdata extends Base{
                         return '添加失败,请及时联系管理员!';
                     }
                 }else{
-                    return '添加失败,请及时联系管理员!';
+                    return '下线添加成功,暂未消费,未获得积分！';
                 }
             }else{
                 return $validate->getError();
@@ -238,7 +238,7 @@ class Creditdata extends Base{
             $account_payable=input('money');//本次消费金额，即本次应付金额
             $pay_time=input('pay_time');//本次消费时间
             $usePointsNum=input('usePointsNum');//本次所使用积分
-            $alblePoints=input('alblePoints');// 剩余积分
+            $alblePoints=(int)input('alblePoints');// 剩余积分
             $isAddParC=input('isAddParC');//是否为该客户的介绍人累积积分 0否 1是
             $pid=input('pid');//该客户的推荐人的id号
             $sid=input('sid');//自己的id号
@@ -282,6 +282,31 @@ class Creditdata extends Base{
             if($pid>0 && $tjrGetPoints>0){
                 $twoData=[
                     [
+                        'uid'=>$sid,
+                        // 'uid'=>33,
+                        'disease_id'=>$disease_id,
+                        'pay_time'=>$pay_time,
+                        'account_payable'=>$account_payable,
+                        'used_credit'=>$usePointsNum,
+                        'real_pay'=>$real_pay,
+                        'get_credit'=>$get_credit,
+                        'comment'=>$comment
+                    ],
+                    [
+                        'uid'=>$pid,
+                        // 'uid'=>55,
+                        'disease_id'=>0,
+                        'pay_time'=>0,
+                        'account_payable'=>0,
+                        'used_credit'=>0,
+                        'real_pay'=>0,
+                        'get_credit'=>$tjrGetPoints,
+                        'comment'=>'积分来自 '.$name.'('.$tel.')的消费！'
+                    ]
+                ];
+
+                $twoData11=[
+                    'self'=>[
                         // 'uid'=>$sid,
                         'uid'=>33,
                         'disease_id'=>$disease_id,
@@ -292,9 +317,9 @@ class Creditdata extends Base{
                         'get_credit'=>$get_credit,
                         'comment'=>$comment
                     ],
-                    [
-                        // 'uid'=>$pid,
-                        'uid'=>55,
+                    'parent'=>[
+                        'uid'=>$pid,
+                        // 'uid'=>55,
                         'disease_id'=>0,
                         'pay_time'=>0,
                         'account_payable'=>0,
@@ -304,7 +329,21 @@ class Creditdata extends Base{
                         'comment'=>'积分来自'.$name.'('.$tel.')的消费！'
                     ]
                 ];
-                if($validate->scene('addpoints')->batch()->check($twoData)){
+
+                // 验证多条数据
+                foreach($twoData as $value){
+                    $result   = $validate->scene('addpoints')->check($value);
+                    if(!$result){
+                        return $validate->getError();
+                        exit;
+                    }
+                    if($points->saveAll($twoData)){
+                        return '添加成功!';
+                    }else{
+                        return '添加失败,请及时联系管理员!';
+                    }
+                }
+                /*if($validate->scene('addpoints')->batch()->check($twoData)){
                 // if($validate->scene('addpoints')->check($twoData)){
                     // 推荐者和被推荐者积分记录写入数据库
                     if($points->saveAll($twoData)){
@@ -314,7 +353,7 @@ class Creditdata extends Base{
                     }
                 }else{
                     return $validate->getError();
-                }
+                }*/
             }else{ //否则只为自己插入一条积分记录
                 $singleData=[
                     'uid'=>$sid,

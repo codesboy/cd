@@ -248,7 +248,7 @@
                 {field:'sumu',title:'总使用积分',sortable:true,width:100},
                 {field:'sumr',title:'实际总消费金额',sortable:true,width:100},
                 {field:'sumg',title:'剩余积分',sortable:true,width:100},
-                {field:'tjr',title:'推荐者',formatter:function(value,row){if(value==null){return '无'}else{return value+'：'+row.tjrtel}},width:120},
+                {field:'tjr',title:'推荐者(来源)',formatter:function(value,row){if(value==null){return '无'}else{return value+'：'+row.tjrtel}},width:120},
                 {field:'create_time',title:'登记时间',width:120}
             ]],
             toolbar: "#toolbar",
@@ -285,7 +285,7 @@
                         {field: 'real_pay',title: '本次实付金额',width: 100},
                         {field: 'get_credit',title: '本次获得积分',width: 100},
                         {field: 'comment',title: '备注',width: 100},
-                        {field: 'pay_time',title: '消费时间',width: 100},
+                        {field: 'pay_time',title: '消费时间',formatter:function(value){if(value=='1970-01-01'){return ''}else{return value}},width: 100},
                         {field: 'create_time',title: '登记时间',width: 100}
                     ]],
                     onResize: function() {
@@ -334,7 +334,7 @@
         if(selected){
             $('#addChildFormTit').html(selected.name+'('+selected.telephone+')');
             $('#addChildFormModel').modal();
-
+            $('#addChildBtn').attr('disabled',false);
 
         }else{
             alert('请选择用户');
@@ -353,13 +353,16 @@
             data: formData
         })
         .done(function(data) {
-
             // console.log(data)
-            if(data=='"该用户消费记录添加成功！"'){
-                $('#addconbtn').attr('disabled',true);
-                $('#addconform').get(0).reset();
-                $('#addConModal').modal('hide');
-                $('#addConDialog').modal();
+            // console.log(data.indexOf('添加成功'));
+            // return false;
+            if(data.indexOf('添加成功')>=0){
+                $('#addChildBtn').attr('disabled',true);
+                $('#addChildForm').get(0).reset();
+                $('#msg').html('');
+                $('#dg').datagrid('reload');
+                $('#addChildFormModel').modal('hide');
+                // $('#addConDialog').modal();
             }else{
                 $('#msg').html('提示信息：'+data);
             }
@@ -371,12 +374,12 @@
         return false;
     });
 
-    $('#addChildFormModel').on('hidden.bs.modal', function (e) {
-        // console.log(e)
-        $('#addChildForm')[0].reset();
-        $('#msg').html('');
-        // $(this).html('');
-    });
+    // $('#addChildFormModel').on('hidden.bs.modal', function (e) {
+    //     // console.log(e)
+    //     $('#addChildForm')[0].reset();
+    //     $('#msg').html('');
+    //     // $(this).html('');
+    // });
 
     // 积分管理
     $('#startManPoints').on('click',function(){
@@ -386,21 +389,24 @@
             $('#manPointsFormTit').html(selected.name+'('+selected.telephone+')');
             $('.alblePoints').html(selected.sumg);
             $('#manPointsFormModel').modal();
-
-
+            $('#manPointsSubmit').attr('disabled',false);
         }else{
             alert('请选择用户');
         }
     });
     $('#manPointsSubmit').on('click',function(){
         var selected=$('#dg').datagrid('getSelected');
+        // console.log(selected);
+        // return false;
         var alblePoints=$('.alblePoints').html();//剩余积分
         var pid=selected.pid;
         var sid=selected.id;
         var name=selected.name;
         var tel=selected.telephone;
         var manPointsFormData=$('#manPointsForm').serialize();
-        manPointsFormData+='&alblePoints='+alblePoints+'&pid='+pid+'&sid='+sid+'&nama='+name+'&tel='+tel;
+        manPointsFormData+='&alblePoints='+alblePoints+'&pid='+pid+'&sid='+sid+'&name='+name+'&tel='+tel;
+        // console.log(manPointsFormData);
+        // return false;
         $.ajax({
             url: '{:url("manPoints")}?r='+Math.random(),
             type: 'POST',
@@ -408,12 +414,22 @@
             data: manPointsFormData
         })
         .done(function(data) {
-            $('#manPointsMsg').html('提示信息：'+data);
+            if(data.indexOf('添加成功')>=0){
+                $('#manPointsSubmit').attr('disabled',true);
+                $('#manPointsForm').get(0).reset();
+                $('#manPointsMsg').html('');
+                $('#dg').datagrid('reload');
+                $('#manPointsFormModel').modal('hide');
+
+                // $('#addConDialog').modal();
+            }else{
+                $('#manPointsMsg').html('提示信息：'+data);
+            }
         })
         .fail(function() {
             $('#manPointsMsg').html('发生错误!请及时联系管理员!');
         });
-
+        return false;
     })
 
     // 搜索功能

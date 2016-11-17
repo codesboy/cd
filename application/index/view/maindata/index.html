@@ -408,6 +408,7 @@
                     $('#formdata').get(0).reset();
                     $('#msg').html('');
                     // $('#myModal').modal('hide');
+                    $('#dg').datagrid('reload');
                     $('#addUserDialog').modal();
                     $('#submit').attr('disabled', false);
                 }
@@ -444,6 +445,7 @@
                     if(conaddresult=='"该用户消费记录添加成功！"'){
                         $('#addconbtn').attr('disabled',true);
                         $('#addconform').get(0).reset();
+                        $('#dg').datagrid('reload');
                         $('#addConModal').modal('hide');
                         $('#addConDialog').modal();
                     }else{
