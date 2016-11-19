@@ -1,7 +1,7 @@
 <?php
 namespace app\credit\controller;
-use app\index\controller\Base;
-use app\index\model\AddForm;
+use app\system\controller\Base;
+use app\system\model\AddForm;
 use think\Validate;
 // use think\Db;
 use app\credit\model\CreditUsers;

@@ -1,6 +1,6 @@
 <?php
 namespace app\credit\controller;
-use app\index\controller\Base;
+use app\system\controller\Base;
 // use app\index\model\AddForm;
 use app\credit\model\CreditUsers;
 class Add extends Base

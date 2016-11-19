@@ -1,7 +1,7 @@
 <?php
-namespace app\index\controller;
+namespace app\system\controller;
 // use think\Controller;
-use app\index\model\Menu;
+use app\system\model\Menu;
 // use app\index\model\AddForm;
 class Index extends Base
 {

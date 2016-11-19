@@ -1,5 +1,5 @@
 <?php
-namespace app\index\model;
+namespace app\system\model;
 use think\Model;
 use think\Db;
 // 左侧导航菜单模型

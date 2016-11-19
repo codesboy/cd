@@ -1,9 +1,9 @@
 <?php
-namespace app\index\controller;
+namespace app\system\controller;
 use think\Validate;
 use think\View;
-use app\index\model\AddForm;
-use app\index\model\UsersInfo;
+use app\system\model\AddForm;
+use app\system\model\UsersInfo;
 class Editor extends Base{
     public function updateUser(){
         // if (Request()->isPost()) {

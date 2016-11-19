@@ -1,10 +1,10 @@
 <?php
-namespace app\index\controller;
-// use app\index\model\Menu;
+namespace app\system\controller;
+// use app\system\model\Menu;
 use think\Validate;
 use think\Db;
-use app\index\model\AddForm;
-use app\index\model\UsersInfo;
+use app\system\model\AddForm;
+use app\system\model\UsersInfo;
 class Useradd extends Base{
 	// 填充表单数据
 	public function index(){

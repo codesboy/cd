@@ -1,7 +1,7 @@
 <?php
-namespace app\index\controller;
-use app\index\model\AddForm;
-use app\index\model\UsersInfo;
+namespace app\system\controller;
+use app\system\model\AddForm;
+use app\system\model\UsersInfo;
 // use think\Db;
 use \PHPExcel;
 use \PHPExcel_IOFactory;

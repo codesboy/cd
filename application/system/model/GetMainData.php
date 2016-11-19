@@ -1,5 +1,5 @@
 <?php
-namespace app\index\model;
+namespace app\system\model;
 use think\Model;
 use think\Db;
 // use think\paginator;

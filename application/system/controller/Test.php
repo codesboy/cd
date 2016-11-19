@@ -1,5 +1,5 @@
 <?php
-namespace app\index\controller;
+namespace app\system\controller;
 class Test extends Base {
 
     public $data;

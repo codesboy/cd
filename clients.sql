@@ -205,7 +205,7 @@ CREATE TABLE `client_menu` (
 
 /*Data for the table `client_menu` */
 
-insert  into `client_menu`(`id`,`menuname`,`icon`,`url`,`pid`) values (1,'客户管理','credit-card','',0),(2,'客户查询','plus','/index/maindata/',1),(4,'管理员设置','icon-sys','menu1/treegrid.html',16),(5,'权限设置','icon-sys','menu1/treegrid.html',16),(7,'新增客户','user-plus','/index/useradd/',1),(6,'数据字典',NULL,'',16),(16,'系统设置',NULL,'',0),(10,'积分系统',NULL,'',0),(11,'添加客户','user-plus','/credit/add/',10),(15,'积分查询',NULL,'/credit/creditdata/',10);
+insert  into `client_menu`(`id`,`menuname`,`icon`,`url`,`pid`) values (1,'客户管理','credit-card','',0),(2,'客户查询','plus','/system/maindata/',1),(4,'管理员设置','icon-sys','menu1/treegrid.html',16),(5,'权限设置','icon-sys','menu1/treegrid.html',16),(7,'新增客户','user-plus','/system/useradd/',1),(6,'数据字典',NULL,'',16),(16,'系统设置',NULL,'',0),(10,'积分系统',NULL,'',0),(11,'添加客户','user-plus','/credit/add/',10),(15,'积分查询',NULL,'/credit/creditdata/',10);
 
 /*Table structure for table `client_province` */
 

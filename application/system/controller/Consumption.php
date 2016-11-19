@@ -1,7 +1,7 @@
 <?php
-namespace app\index\controller;
+namespace app\system\controller;
 use think\Validate;
-use app\index\model\Consumption as cpmodel;
+use app\system\model\Consumption as cpmodel;
 
 class Consumption extends Base{
     // 获取消费详情

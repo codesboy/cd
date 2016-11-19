@@ -1,7 +1,7 @@
 <?php
-namespace app\index\controller;
+namespace app\system\controller;
 use think\Controller;
-use app\index\model\Login as Log;
+use app\system\model\Login as Log;
 use think\Session;
 
 class Login extends Controller
