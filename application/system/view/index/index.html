@@ -7,12 +7,14 @@
     <!-- <link href="__PUBLIC__static/css/default.css" rel="stylesheet" type="text/css" /> -->
     <link href="__PUBLIC__static/easyui/css/easyui.css" rel="stylesheet" type="text/css" />
     <link href="http://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-
+    <!-- <link rel="stylesheet" href="__PUBLIC__static/bootstrap/css/bootstrap.full.css"> -->
+    <!-- <script src="__PUBLIC__static/bootstrap/js/bootstrap.min.js"></script> -->
     <script src="__PUBLIC__static/easyui/js/jquery.min.js" type="text/javascript"></script>
     <script src="__PUBLIC__static/easyui/js/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="__PUBLIC__static/easyui/js/easyui-lang-zh_CN.js" type="text/javascript"></script>
-    <!-- <script src="__PUBLIC__static/js/outlook2.js" type="text/javascript"></script> -->
-    <!-- <script src="__PUBLIC__static/js/public.js" type="text/javascript"></script> -->
+    <style>
+        .alert-danger{color: #a94442;background-color: #f2dede;border-color: #ebccd1;border: 1px solid transparent;border-radius: 4px;padding: 15px;font-size: 14px;}
+    </style>
 </head>
 
 <body class="easyui-layout" style="overflow-y: hidden" scroll="no">
@@ -24,10 +26,8 @@
     {include file="Public/left" /}
     <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
         <div id="tabs" class="easyui-tabs" fit="true" border="false" style="overflow:hidden">
-            <div title="欢迎使用" style="padding:20px;overflow:hidden; color:red; ">
-                <h1 style="font-size:24px;">您好，<?php echo session('user_name')?>，欢迎使用成都贝臣齿科客户管理系统</h1>
-                <h2>您当前的登录ip：{$Request.ip} </h2>
-                <h2>请使用Chrome、Firefox等现代浏览器操作本系统！</h2>
+            <div title="欢迎使用" style="padding:10px;overflow:hidden; color:red; ">
+                <div class="alert alert-danger" role="alert">您好，<?php echo session('user_name')?>，欢迎使用成都贝臣齿科客户管理系统,您当前的登录ip：{$Request.ip} 请使用Chrome、Firefox等现代浏览器操作本系统！</div>
             </div>
         </div>
     </div>
