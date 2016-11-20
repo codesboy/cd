@@ -80,8 +80,6 @@
             animate:true,
             lines:true,
             onClick: function(node) {
-                $('#staffGird').html('');
-                alert($('#staffGird').html())
                 var selectedId = node.id;
                 // console.log(selectedId);
                 $.ajax({
@@ -93,7 +91,11 @@
                 .done(function(data) {
 
                     if(data.bodys=='没有数据'){
-                        $('#staffGird').html('没有查询到记录');
+                        $('#staffGird').datagrid({
+                            title:"没有相关信息",
+                            data:[],
+                            columns:[]
+                        });
                         return false;
                     }
                     var columns=new Array();
@@ -107,6 +109,7 @@
                         console.log(columns)
                         $('#staffGird').datagrid({
                             // height:500,
+                            title:'',
                             singleSelect:true,
                             url:'',
                             /*frozenColumns :[[
