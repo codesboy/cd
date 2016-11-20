@@ -60,7 +60,7 @@ class Maindata extends Base
 		$sort=input('sort')?input('sort'):'u.id';
 		$order=input('order')?input('order'):'desc';
 
-		// 筛选条件
+		// 筛选条件 where()里面可以是数组 可以为空数组
 		$name=input('name');
 		// $startmoney=input('startmoney')?input('startmoney'):0;
 		// $money_where=input('startmoney');

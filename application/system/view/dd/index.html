@@ -12,8 +12,6 @@
     <script src="__PUBLIC__static/easyui/js/jquery.min.js" type="text/javascript"></script>
     <script src="__PUBLIC__static/easyui/js/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="__PUBLIC__static/easyui/js/easyui-lang-zh_CN.js" type="text/javascript"></script>
-    <!-- <script src="__PUBLIC__static/js/outlook2.js" type="text/javascript"></script> -->
-    <!-- <script src="__PUBLIC__static/js/public.js" type="text/javascript"></script> -->
     <style>
         td{text-align: center;}
     </style>
@@ -70,18 +68,33 @@
             </table>
 
         </div>
-        <div data-options="region:'east',split:true" title="详细信息" style="width:300px;"></div>
+        <div data-options="region:'east',split:true" title="详细信息" style="width:500px;">
+            <form action="">
+                <label for="">名称</label><br>
+                <input type="text" name="" value=""><br>
+                <label for="">父级栏目</label><br>
+                <select name="" id="">
+                    <option value=""></option>
+                </select><br>
+                <input type="button" value="保存">
+            </form>
+        </div>
 
 
     </div>
 
     <script>
+        // 字典类别 字典项列表
+        var selectedId=null;
         $('.easyui-tree').tree({
             animate:true,
             lines:true,
             onClick: function(node) {
-                var selectedId = node.id;
+                selectedId = node.id;//获取当前选中节点的id
                 // console.log(selectedId);
+                var father = $(this).tree("getParent",node.target);//获取当前节点的父节点
+                var child = $(this).tree("getChildren",node.target);//获取当前节点的子节点 返回数组
+                // console.log(child.length);//子节点个数
                 $.ajax({
                     url: "{:url('getTreeList')}?r="+Math.random(),
                     type: 'POST',
@@ -89,7 +102,6 @@
                     data: {table: selectedId}
                 })
                 .done(function(data) {
-
                     if(data.bodys=='没有数据'){
                         $('#staffGird').datagrid({
                             title:"没有相关信息",
@@ -98,32 +110,63 @@
                         });
                         return false;
                     }
-                    var columns=new Array();
-                        $.each(data.headers[0], function(i, field){
-                            var column={};
-                            column["title"]=i;
-                            column["field"]=field;
-                            column["width"]=100;
-                            columns.push(column);//当需要formatter的时候自己添加就可以了,原理就是拼接字符串.
-                        });
-                        console.log(columns)
-                        $('#staffGird').datagrid({
-                            // height:500,
-                            title:'',
-                            singleSelect:true,
-                            url:'',
-                            /*frozenColumns :[[
-                                {field:'name',title:'项目',width:80,sortable:true,align:'center'},
-                                {field:'count',title:'合计',width:150,sortable:true}
-                            ]],*/
-                            columns : [
-                                columns
-                            ],
-                            rownumbers:true}).datagrid('loadData',data.bodys);
+                    var columns=[];
+                    $.each(data.headers[0], function(i, field){
+                        var column={};
+                        column["title"]=i;
+                        column["field"]=field;
+                        column["width"]=100;
+                        columns.push(column);//当需要formatter的时候自己添加就可以了,原理就是拼接字符串.
+                    });
+                    // console.log(columns)
+                    $('#staffGird').datagrid({
+                        // height:500,
+                        title:'',
+                        singleSelect:true,
+                        url:'',
+                        /*frozenColumns :[[
+                            {field:'name',title:'项目',width:80,sortable:true,align:'center'},
+                            {field:'count',title:'合计',width:150,sortable:true}
+                        ]],*/
+                        columns : [
+                            columns
+                        ],
+                        rownumbers:true,
+
+                    }).datagrid('loadData',data.bodys);
                 })
                 .fail(function() {
                     console.log("error");
                 });
+            }
+        });
+
+        // 编辑字典项
+        $('#staffGird').datagrid({
+            onClickRow:function(index, row){
+                var table=$('#staffGird').datagrid('getSelected');
+                if(row && selectedId){
+                    console.log(selectedId);
+                    var tableName=selectedId,
+                        id=row.id;
+                    $.ajax({
+                        url: '{:url("edit")}?r='+Math.random(),
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {tablename: tableName,id:id}
+                    })
+                    .done(function(data) {
+                        console.log(data);
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    })
+                    .always(function() {
+                        console.log("complete");
+                    });
+
+                }
+                // console.log(index)
             }
         })
 

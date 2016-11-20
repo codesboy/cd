@@ -5,6 +5,7 @@ class Dd extends Base{
         return $this->fetch();
     }
 
+    // 获取数据字典
     public function getTreeList($table=null){
         if($table && Request()->isPost()){
             $data=db($table)->select();
@@ -22,6 +23,14 @@ class Dd extends Base{
             return json($arr);
         }else{
             return ['bodys'=>'没有数据'];
+        }
+    }
+
+    // 编辑字典项
+    public function edit($tablename=null,$id=null){
+        if(Request()->isPost()){
+            $data=\think\Db::name($tablename)->find($id);
+            return $data;
         }
     }
 }
