@@ -14,6 +14,7 @@
     <script src="__PUBLIC__static/easyui/js/easyui-lang-zh_CN.js" type="text/javascript"></script>
     <style>
         td{text-align: center;}
+        #eastform{visibility: hidden;}
     </style>
 </head>
 
@@ -23,35 +24,30 @@
         <!-- <div data-options="region:'south',split:true" style="height:50px;"></div> -->
         <div data-options="region:'west',split:true" title="字典类别" style="width:200px;">
             <ul class="easyui-tree">
-                <li>
-                    <span>个人信息</span>
+                <li id="dev_from" data-options="checked:true">
+                    <span>开发渠道</span>
                     <ul>
-                        <li id="dev_from" data-options="state:'closed'">
-                            <span>开发渠道</span>
-                            <ul>
-                                <li id="source">
-                                    <span>信息来源</span>
-                                </li>
+                        <li id="source">
+                            <span>信息来源</span>
+                        </li>
 
-                                <li id="zx_tools">
-                                    <span>咨询工具</span>
-                                </li>
-                            </ul>
+                        <li id="zx_tools">
+                            <span>咨询工具</span>
                         </li>
                     </ul>
                 </li>
-                <li data-options="state:'closed'">
-                    <span>咨询信息</span>
-                    <ul>
-                        <li id="disease">
-                            <span>病种类型</span>
-                        </li>
-                        <li id="doctors">
-                            <span>接诊医生</span>
-                        </li>
-                    </ul>
+                <li id="disease">
+                    <span>病种类型</span>
                 </li>
-            </ul>
+                <li id="doctors">
+                    <span>接诊医生</span>
+                </li>
+                <li id="wangdian_zixun">
+                    <span>网电咨询师</span>
+                </li>
+                <li id="qiantai_zixun">
+                    <span>前台咨询师</span>
+                </li>
         </div>
         <div data-options="region:'center',title:'字典项列表'">
             <!-- 工具栏 -->
@@ -68,15 +64,28 @@
             </table>
 
         </div>
-        <div data-options="region:'east',split:true" title="详细信息" style="width:500px;">
-            <form action="">
-                <label for="">名称</label><br>
-                <input type="text" name="" value=""><br>
-                <label for="">父级栏目</label><br>
-                <select name="" id="">
-                    <option value=""></option>
-                </select><br>
-                <input type="button" value="保存">
+        <div id="east" data-options="region:'east',split:true" title="详细信息" style="width:500px;">
+            <form action="" id="eastform">
+                <table cellpadding="10">
+                    <tr style="display: block;">
+                        <td class="nametext" style="width:90px;text-align:right;"></td>
+                        <td><input class="easyui-textbox" type="text" name="name" data-options="required:true" id="name" value=""></input></td>
+                    </tr>
+                    <tr class="fatherDom">
+                        <td style="width:90px;text-align:right;">开发渠道</td>
+                        <td>
+                            <select class="easyui-combobox" name="language"><option value="ar">Arabic</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="zh-cht">Chinese Traditional</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option value="en" selected="selected">English</option></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="text-align:center;padding:5px">
+                                <a id="save" href="javascript:void(0)" class="easyui-linkbutton">保存</a>
+                                <a id="reset" href="javascript:void(0)" class="easyui-linkbutton">清除</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </form>
         </div>
 
@@ -84,15 +93,21 @@
     </div>
 
     <script>
-        // 字典类别 字典项列表
+        // 点击字典类别加载对应字典项列表
         var selectedId=null;
         $('.easyui-tree').tree({
             animate:true,
             lines:true,
             onClick: function(node) {
+                $('#eastform').css('visibility','visible');
+                $('#eastform').form('load',{
+                    name:''
+                });
+                // $('#eastform').show();
                 selectedId = node.id;//获取当前选中节点的id
                 // console.log(selectedId);
                 var father = $(this).tree("getParent",node.target);//获取当前节点的父节点
+                // console.log(father)
                 var child = $(this).tree("getChildren",node.target);//获取当前节点的子节点 返回数组
                 // console.log(child.length);//子节点个数
                 $.ajax({
@@ -108,8 +123,16 @@
                             data:[],
                             columns:[]
                         });
+                        $('#eastform').hide();
                         return false;
                     }
+                    $('.nametext').html(node.text+"名称");
+                    if(!(child.length==0 && father)){
+                        $('.fatherDom').css('display','none');
+                    }else{
+                        $('.fatherDom').css('display','inline-block');
+                    }
+
                     var columns=[];
                     $.each(data.headers[0], function(i, field){
                         var column={};
@@ -141,33 +164,54 @@
             }
         });
 
-        // 编辑字典项
+        // 填充详细信息表单
         $('#staffGird').datagrid({
             onClickRow:function(index, row){
                 var table=$('#staffGird').datagrid('getSelected');
                 if(row && selectedId){
-                    console.log(selectedId);
+                    // console.log(selectedId);
                     var tableName=selectedId,
                         id=row.id;
-                    $.ajax({
-                        url: '{:url("edit")}?r='+Math.random(),
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {tablename: tableName,id:id}
-                    })
-                    .done(function(data) {
-                        console.log(data);
-                    })
-                    .fail(function() {
-                        console.log("error");
-                    })
-                    .always(function() {
-                        console.log("complete");
+                    // 加载数据
+                    var arr=[];
+                    for(var i in row){
+                        arr.push(row[i]);
+                    }
+                    // console.log(arr)
+                    $('#eastform').form('load',{
+                        name:arr[1]
                     });
 
+
+
+                }else{
+                    $('#eastform').form('load',{
+                        name:''
+                    });
                 }
                 // console.log(index)
             }
+        });
+
+        $('#save').on('click',function(){
+            console.log($('#name').val())
+            if(!$('#name').val()){
+                return false;
+            }
+            $.ajax({
+                url: '{:url("edit")}?r='+Math.random(),
+                type: 'POST',
+                dataType: 'json',
+                data: {tablename: selectedId,name:$('#name').val()}
+            })
+            .done(function(data) {
+                // console.log(data);
+            })
+            .fail(function() {
+                console.log("error");
+            });
+            return false;
+
         })
 
     </script>

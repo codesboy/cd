@@ -28,3 +28,11 @@ foreach($data as $value){
 INSERT INTO client_credit_users (id,name,age,sex,telephone,pid,create_time,update_time) SELECT uid,memname,age,sex,memtel,parent_id,addtime,addtime FROM cdbc_member_extend
 
 年龄的计算
+
+一个用户属于一个用户组(就是角色)
+一个用户组包含多个用户
+不同的用户所显示的菜单功能不一样
+控制用户的权限就是设置用户组的权限
+我这样理解的
+
+还有一种是用户 角色 部门 这种应该更复杂
