@@ -2,6 +2,9 @@
 namespace app\system\controller;
 class Dd extends Base{
     public function index(){
+        // 开发渠道赋值
+        $dev=\think\Db::name('dev_from')->select();
+        $this->assign('dev',$dev);
         return $this->fetch();
     }
 
@@ -32,5 +35,12 @@ class Dd extends Base{
             $data=\think\Db::name($tablename)->find($id);
             return $data;
         }
+    }
+
+    // 开发渠道列表
+    public function devFrom(){
+        $dev=\think\Db::name('dev_from')->select();
+        $this->assign('dev',$dev);
+        return $this->fetch('index');
     }
 }

@@ -51,7 +51,7 @@
         </div>
         <div data-options="region:'center',title:'字典项列表'">
             <!-- 工具栏 -->
-            <div id="tb" style="padding:5px;height:auto">
+            <!-- <div id="tb" style="padding:5px;height:auto">
                 <div style="margin-bottom:5px">
                     <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"></a>
                     <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>
@@ -59,7 +59,7 @@
                     <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
                     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
                 </div>
-            </div>
+            </div> -->
             <table id="staffGird">
             </table>
 
@@ -74,7 +74,11 @@
                     <tr class="fatherDom">
                         <td style="width:90px;text-align:right;">开发渠道</td>
                         <td>
-                            <select class="easyui-combobox" name="language"><option value="ar">Arabic</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="zh-cht">Chinese Traditional</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option value="en" selected="selected">English</option></select>
+                            <select class="easyui-combobox" id="dev_from" name="dev_from" data-options="panelHeight:'auto',editable:false">
+                                {volist name='dev' id='vo'}
+                                <option value="{$vo.id}">{$vo.dev}</option>
+                                {/volist}
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -130,7 +134,7 @@
                     if(!(child.length==0 && father)){
                         $('.fatherDom').css('display','none');
                     }else{
-                        $('.fatherDom').css('display','inline-block');
+                        $('.fatherDom').css('display','block');
                     }
 
                     var columns=[];
@@ -165,8 +169,11 @@
         });
 
         // 填充详细信息表单
+        var aFields=[];
         $('#staffGird').datagrid({
             onClickRow:function(index, row){
+                aFields=$('#staffGird').datagrid('getColumnFields');
+                // return
                 var table=$('#staffGird').datagrid('getSelected');
                 if(row && selectedId){
                     // console.log(selectedId);
@@ -182,6 +189,10 @@
                         name:arr[1]
                     });
 
+                    if($('.fatherDom').css("display")  =='block'){
+
+                        $('#dev_from').combobox('select',row.pid);
+                    }
 
 
                 }else{
@@ -193,16 +204,20 @@
             }
         });
 
+        // 保存数据
         $('#save').on('click',function(){
-            console.log($('#name').val())
             if(!$('#name').val()){
                 return false;
             }
+            var fieldname=aFields[1];
+            console.log($('#staffGird').datagrid('getColumnFields'));
+
             $.ajax({
                 url: '{:url("edit")}?r='+Math.random(),
                 type: 'POST',
                 dataType: 'json',
-                data: {tablename: selectedId,name:$('#name').val()}
+                // data: {tablename: selectedId,fieldname:$('#name').val()}
+                data: 'tablename='+selectedId+'&'+fieldname+'='+$('#name').val()
             })
             .done(function(data) {
                 // console.log(data);

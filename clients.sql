@@ -153,8 +153,8 @@ CREATE TABLE `client_department` (
 DROP TABLE IF EXISTS `client_dev_from`;
 
 CREATE TABLE `client_dev_from` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `dev` varchar(255) NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `dev` varchar(255) NOT NULL COMMENT '开发渠道',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
@@ -256,8 +256,8 @@ DROP TABLE IF EXISTS `client_source`;
 
 CREATE TABLE `client_source` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `source_name` varchar(255) NOT NULL,
-  `pid` int(10) unsigned NOT NULL,
+  `source_name` varchar(255) NOT NULL COMMENT '信息来源名称',
+  `pid` tinyint(3) unsigned NOT NULL COMMENT '父级(开发渠道)id',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
@@ -349,13 +349,14 @@ DROP TABLE IF EXISTS `client_zx_tools`;
 
 CREATE TABLE `client_zx_tools` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `tool` varchar(255) NOT NULL,
+  `tool` varchar(255) NOT NULL COMMENT '咨询工具名称',
+  `pid` tinyint(3) unsigned NOT NULL COMMENT '父级(开发渠道)id',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_zx_tools` */
 
-insert  into `client_zx_tools`(`id`,`tool`) values (1,'商务通'),(2,'QQ'),(3,'微信');
+insert  into `client_zx_tools`(`id`,`tool`,`pid`) values (1,'商务通',1),(2,'QQ',3),(3,'微信',2);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
