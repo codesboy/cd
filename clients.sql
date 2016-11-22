@@ -156,11 +156,11 @@ CREATE TABLE `client_dev_from` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `dev` varchar(255) NOT NULL COMMENT '开发渠道',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_dev_from` */
 
-insert  into `client_dev_from`(`id`,`dev`) values (1,'企划部'),(2,'网络部'),(3,'网络渠道');
+insert  into `client_dev_from`(`id`,`dev`) values (1,'企划部'),(2,'网络部'),(3,'网络渠道'),(7,'5'),(8,'io');
 
 /*Table structure for table `client_disease` */
 
@@ -184,11 +184,11 @@ CREATE TABLE `client_doctors` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `doctor` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_doctors` */
 
-insert  into `client_doctors`(`id`,`doctor`) values (1,'曾杨'),(2,'冯洁');
+insert  into `client_doctors`(`id`,`doctor`) values (1,'曾杨'),(2,'冯洁'),(3,'3das');
 
 /*Table structure for table `client_menu` */
 
@@ -259,11 +259,11 @@ CREATE TABLE `client_source` (
   `source_name` varchar(255) NOT NULL COMMENT '信息来源名称',
   `pid` tinyint(3) unsigned NOT NULL COMMENT '父级(开发渠道)id',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_source` */
 
-insert  into `client_source`(`id`,`source_name`,`pid`) values (1,'道闸广告',1),(2,'电梯广告',1),(3,'搜狗pc',2),(4,'微博',3),(5,'微信',3),(6,'朋友介绍',1),(7,'朋友介绍',2);
+insert  into `client_source`(`id`,`source_name`,`pid`) values (1,'道闸广告',1),(2,'电梯广告',1),(3,'搜狗pc',2),(4,'微博',3),(5,'微信',3),(6,'朋友介绍',1),(7,'朋友介绍',2),(8,'网站',2);
 
 /*Table structure for table `client_users_info` */
 
@@ -337,11 +337,11 @@ CREATE TABLE `client_wangdian_zixun` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `wd_name` varchar(20) NOT NULL COMMENT '网电咨询师姓名',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_wangdian_zixun` */
 
-insert  into `client_wangdian_zixun`(`id`,`wd_name`) values (1,'杨雪梅'),(2,'李怡'),(3,'杨桦'),(4,'张余'),(5,'刘华云');
+insert  into `client_wangdian_zixun`(`id`,`wd_name`) values (1,'杨雪梅'),(2,'李怡'),(3,'杨桦'),(4,'张余'),(5,'刘华云'),(6,'uiui');
 
 /*Table structure for table `client_zx_tools` */
 
@@ -352,11 +352,11 @@ CREATE TABLE `client_zx_tools` (
   `tool` varchar(255) NOT NULL COMMENT '咨询工具名称',
   `pid` tinyint(3) unsigned NOT NULL COMMENT '父级(开发渠道)id',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_zx_tools` */
 
-insert  into `client_zx_tools`(`id`,`tool`,`pid`) values (1,'商务通',1),(2,'QQ',3),(3,'微信',2);
+insert  into `client_zx_tools`(`id`,`tool`,`pid`) values (1,'商务通',1),(2,'QQ',3),(3,'微信',2),(4,'uiui',3),(5,'uiuiii',3);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

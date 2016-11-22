@@ -24,28 +24,28 @@
         <!-- <div data-options="region:'south',split:true" style="height:50px;"></div> -->
         <div data-options="region:'west',split:true" title="字典类别" style="width:200px;">
             <ul class="easyui-tree">
-                <li id="dev_from" data-options="checked:true">
+                <li id="DevFrom" data-options="checked:true">
                     <span>开发渠道</span>
                     <ul>
-                        <li id="source">
+                        <li id="Source">
                             <span>信息来源</span>
                         </li>
 
-                        <li id="zx_tools">
+                        <li id="ZxTools">
                             <span>咨询工具</span>
                         </li>
                     </ul>
                 </li>
-                <li id="disease">
+                <li id="Disease">
                     <span>病种类型</span>
                 </li>
-                <li id="doctors">
+                <li id="Doctors">
                     <span>接诊医生</span>
                 </li>
-                <li id="wangdian_zixun">
+                <li id="WangdianZixun">
                     <span>网电咨询师</span>
                 </li>
-                <li id="qiantai_zixun">
+                <li id="QiantaiZixun">
                     <span>前台咨询师</span>
                 </li>
         </div>
@@ -66,22 +66,25 @@
         </div>
         <div id="east" data-options="region:'east',split:true" title="详细信息" style="width:500px;">
             <form action="" id="eastform">
-                <table cellpadding="10">
-                    <tr style="display: block;">
+                <table cellpadding="10" id="easttable">
+                    <tr>
                         <td class="nametext" style="width:90px;text-align:right;"></td>
-                        <td><input class="easyui-textbox" type="text" name="name" data-options="required:true" id="name" value=""></input></td>
+                        <td><input class="easyui-textbox1" type="text" name="" data-options="required:true" id="name" value=""></input></td>
                     </tr>
                     <tr class="fatherDom">
                         <td style="width:90px;text-align:right;">开发渠道</td>
-                        <td>
-                            <select class="easyui-combobox" id="dev_from" name="dev_from" data-options="panelHeight:'auto',editable:false">
+                        <td style="text-align: left;">
+                            <!-- <select class="easyui-combobox" id="dev_from" name="dev_from" data-options="panelHeight:'auto',editable:false"> -->
+                            <select class="easyui-combobox111" id="dev_from" name="pid">
                                 {volist name='dev' id='vo'}
                                 <option value="{$vo.id}">{$vo.dev}</option>
                                 {/volist}
                             </select>
+
                         </td>
                     </tr>
                     <tr>
+                        <td><input type="hidden" value="" name="id" id="id"></td>
                         <td>
                             <div style="text-align:center;padding:5px">
                                 <a id="save" href="javascript:void(0)" class="easyui-linkbutton">保存</a>
@@ -97,8 +100,12 @@
     </div>
 
     <script>
+        // console.log($('.fatherDom').children())
         // 点击字典类别加载对应字典项列表
         var selectedId=null;
+        // var fatherDom=$('.fatherDom')[0];
+        var childrenDom=$('.fatherDom').children();
+        // var childrenDom=null;
         $('.easyui-tree').tree({
             animate:true,
             lines:true,
@@ -130,11 +137,26 @@
                         $('#eastform').hide();
                         return false;
                     }
-                    $('.nametext').html(node.text+"名称");
-                    if(!(child.length==0 && father)){
-                        $('.fatherDom').css('display','none');
+
+
+
+
+                    // 控制父级栏目选项是否显示
+
+                    if(!(child.length==0 && father)){ //无父级栏目 需要删除select节点
+                        if($('.fatherDom').children().length>0){
+
+                            $('.fatherDom').empty();//删除此dom节点
+                            // console.log('已经删除子节点');
+                        }
                     }else{
-                        $('.fatherDom').css('display','block');
+                       // console.log('子元素个数'+$('.fatherDom').children().length);
+                        if($('.fatherDom').children().length==0){
+                           childrenDom.appendTo('.fatherDom');
+                           // console.log('添加了子元素');
+                           // console.log('子元素个数'+$('.fatherDom').children().length);
+                        }
+
                     }
 
                     var columns=[];
@@ -161,48 +183,60 @@
                         rownumbers:true,
 
                     }).datagrid('loadData',data.bodys);
+                    $('.nametext').html(node.text+"名称");
+                    // console.log($('#staffGird').datagrid('getColumnFields')[1])
+                    $('#name').attr('name', $('#staffGird').datagrid('getColumnFields')[1]);
+                    $('#id').val('');
                 })
                 .fail(function() {
                     console.log("error");
                 });
             }
         });
+        // $(function(){
+            // 填充详细信息表单
+            var aFields=[];
+            $('#staffGird').datagrid({
+                onClickRow:function(index, row){
+                    aFields=$('#staffGird').datagrid('getColumnFields');
+                    // return
+                    var table=$('#staffGird').datagrid('getSelected');
+                    if(row && selectedId){
+                        // console.log(selectedId);
+                        var tableName=selectedId,
+                            id=row.id;
+                        // 加载数据
+                        var arr=[];
+                        for(var i in row){
+                            arr.push(row[i]);
+                        }
+                        $('#name').val(arr[1]);
+                        $('#id').val(arr[0]);
+                        // console.log(arr)
+                        /*var nameVal=$('#name').attr('name');
+                        console.log(nameVal)
+                        $('#eastform').form('load',{
+                            nameVal:arr[1],
+                            id:arr[0]
+                        });*/
 
-        // 填充详细信息表单
-        var aFields=[];
-        $('#staffGird').datagrid({
-            onClickRow:function(index, row){
-                aFields=$('#staffGird').datagrid('getColumnFields');
-                // return
-                var table=$('#staffGird').datagrid('getSelected');
-                if(row && selectedId){
-                    // console.log(selectedId);
-                    var tableName=selectedId,
-                        id=row.id;
-                    // 加载数据
-                    var arr=[];
-                    for(var i in row){
-                        arr.push(row[i]);
+
+                        // 设置select下拉选中项
+                        if($('.fatherDom').children.length>0){
+                            // console.log(row.pid)
+                            $('#dev_from').val(row.pid);
+                        }
+
+                    }else{
+                        $('#eastform').form('load',{
+                            name:''
+                        });
                     }
-                    // console.log(arr)
-                    $('#eastform').form('load',{
-                        name:arr[1]
-                    });
-
-                    if($('.fatherDom').css("display")  =='block'){
-
-                        $('#dev_from').combobox('select',row.pid);
-                    }
-
-
-                }else{
-                    $('#eastform').form('load',{
-                        name:''
-                    });
+                    // console.log(index)
                 }
-                // console.log(index)
-            }
-        });
+            });
+        // })
+
 
         // 保存数据
         $('#save').on('click',function(){
@@ -213,11 +247,12 @@
             console.log($('#staffGird').datagrid('getColumnFields'));
 
             $.ajax({
-                url: '{:url("edit")}?r='+Math.random(),
+                url: '{:url("edit")}?tablename='+selectedId+'&r='+Math.random(),
                 type: 'POST',
                 dataType: 'json',
                 // data: {tablename: selectedId,fieldname:$('#name').val()}
-                data: 'tablename='+selectedId+'&'+fieldname+'='+$('#name').val()
+                // data: fieldname=$('#name').val()+'$pid='
+                data: $('#eastform').serialize()
             })
             .done(function(data) {
                 // console.log(data);
