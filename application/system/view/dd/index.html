@@ -56,7 +56,7 @@
                     <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"></a>
                     <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>
                     <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
-                    <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
+                    <a id="reloa" class="easyui-linkbutton" iconCls="icon-reload" plain="true"></a>
                     <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
                 </div>
             </div> -->
@@ -87,8 +87,10 @@
                         <td><input type="hidden" value="" name="id" id="id"></td>
                         <td>
                             <div style="text-align:center;padding:5px">
-                                <a id="save" href="javascript:void(0)" class="easyui-linkbutton">保存</a>
-                                <a id="reset" href="javascript:void(0)" class="easyui-linkbutton">清除</a>
+                                <!-- <a id="save" href="javascript:void(0)" class="easyui-linkbutton">保存</a> -->
+                                <input type="button" id="save" value="保存">
+                                <input type="reset" value="清除">
+                                <!-- <a id="reset" href="javascript:void(0)" class="easyui-linkbutton">清除</a> -->
                             </div>
                         </td>
                     </tr>
@@ -100,11 +102,16 @@
     </div>
 
     <script>
+        /*$('#reloa').on('click',function(){
+            $('#staffGird').datagrid('reload');
+        })*/
         // console.log($('.fatherDom').children())
         // 点击字典类别加载对应字典项列表
-        var selectedId=null;
+        var selectedId=null;//tree节点 每一个节点对应一个表名
         // var fatherDom=$('.fatherDom')[0];
         var childrenDom=$('.fatherDom').children();
+        var dataGridData=null;
+        var nodeText=null;
         // var childrenDom=null;
         $('.easyui-tree').tree({
             animate:true,
@@ -128,7 +135,8 @@
                     data: {table: selectedId}
                 })
                 .done(function(data) {
-                    if(data.bodys=='没有数据'){
+                    dataGridData=data.bodys;
+                    if(dataGridData=='没有数据'){
                         $('#staffGird').datagrid({
                             title:"没有相关信息",
                             data:[],
@@ -173,17 +181,14 @@
                         title:'',
                         singleSelect:true,
                         url:'',
-                        /*frozenColumns :[[
-                            {field:'name',title:'项目',width:80,sortable:true,align:'center'},
-                            {field:'count',title:'合计',width:150,sortable:true}
-                        ]],*/
                         columns : [
                             columns
                         ],
                         rownumbers:true,
 
-                    }).datagrid('loadData',data.bodys);
-                    $('.nametext').html(node.text+"名称");
+                    }).datagrid('loadData',dataGridData);
+                    nodeText=node.text;
+                    $('.nametext').html(nodeText+"名称");
                     // console.log($('#staffGird').datagrid('getColumnFields')[1])
                     $('#name').attr('name', $('#staffGird').datagrid('getColumnFields')[1]);
                     $('#id').val('');
@@ -237,32 +242,45 @@
             });
         // })
 
+        $(function(){
+            // 保存数据
+            $('#save').on('click',function(){
+                if(!$('#name').val()){
+                    alert('请填写相关信息后再保存!');
+                    return false;
+                }
+                var fieldname=aFields[1];
+                // console.log($('#staffGird').datagrid('getColumnFields'));
 
-        // 保存数据
-        $('#save').on('click',function(){
-            if(!$('#name').val()){
+                $.ajax({
+                    url: '{:url("edit")}?tablename='+selectedId+'&r='+Math.random(),
+                    type: 'POST',
+                    dataType: 'html',
+                    // data: {tablename: selectedId,fieldname:$('#name').val()}
+                    // data: fieldname=$('#name').val()+'$pid='
+                    data: $('#eastform').serialize()
+                })
+                .done(function(data) {
+                    // console.log(data.indexOf('成功'));
+                    if(data.indexOf('成功')>=0){
+                        $('#staffGird').datagrid('loadData',dataGridData);//刷新数据失效
+                        // window.location.reload();//刷新整个页面
+                        // $('span option["text='+nodeText+'"]').parent().parent('li').click();
+                        // getNode()方法
+                        $('#eastform')[0].reset();
+                        // $('#dg').datagrid('reload');
+                    }else{
+                        alert(data);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                });
                 return false;
-            }
-            var fieldname=aFields[1];
-            console.log($('#staffGird').datagrid('getColumnFields'));
 
-            $.ajax({
-                url: '{:url("edit")}?tablename='+selectedId+'&r='+Math.random(),
-                type: 'POST',
-                dataType: 'json',
-                // data: {tablename: selectedId,fieldname:$('#name').val()}
-                // data: fieldname=$('#name').val()+'$pid='
-                data: $('#eastform').serialize()
             })
-            .done(function(data) {
-                // console.log(data);
-            })
-            .fail(function() {
-                console.log("error");
-            });
-            return false;
-
         })
+
 
     </script>
 

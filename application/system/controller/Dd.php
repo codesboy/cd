@@ -40,10 +40,28 @@ class Dd extends Base{
     public function edit($tablename=null){
         if(Request()->isPost()){
             $data=input('post.');
-            dump(input('post.'));
+            // dump(input('post.'));
             // return $tablename;
             $model=model($tablename);
-            $model->save($data);
+            if($data['id']){//id存在进行更新
+                $update=$model->isUpdate(true)->save($data);
+                if($update>0){
+                    return '更新成功!';
+                }else{
+                    return '更新失败!';
+                }
+                // dump($update);
+            }else{//id不存在进行新增
+                $add=$model->save($data);
+                // dump($add);
+                if($add>0){
+                    return '新增成功!';
+                }else{
+                    return '新增失败!';
+                }
+
+            }
+
         }
     }
 
