@@ -22,16 +22,17 @@ DROP TABLE IF EXISTS `client_admin`;
 
 CREATE TABLE `client_admin` (
   `id` tinyint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) NOT NULL,
-  `password` varchar(32) NOT NULL,
-  `status` tinyint(4) unsigned DEFAULT NULL,
+  `username` varchar(20) NOT NULL COMMENT '用户名',
+  `password` varchar(32) NOT NULL COMMENT '密码',
+  `status` tinyint(4) unsigned DEFAULT NULL COMMENT '状态',
   `level` tinyint(4) unsigned DEFAULT NULL,
+  `prem` varchar(20) NOT NULL COMMENT '拥有的菜单权限',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_admin` */
 
-insert  into `client_admin`(`id`,`username`,`password`,`status`,`level`) values (1,'admin','c3284d0f94606de1fd2af172aba15bf3',1,1),(3,'test','14e1b600b1fd579f47433b88e8d85291',NULL,NULL);
+insert  into `client_admin`(`id`,`username`,`password`,`status`,`level`,`prem`) values (1,'admin','c3284d0f94606de1fd2af172aba15bf3',1,1,'1,10,16'),(3,'cousum','c3284d0f94606de1fd2af172aba15bf3',1,1,'1'),(5,'suadmin','c3284d0f94606de1fd2af172aba15bf3',1,1,'1,10,16'),(4,'credit','14e1b600b1fd579f47433b88e8d85291',1,1,'10');
 
 /*Table structure for table `client_city` */
 
@@ -160,7 +161,7 @@ CREATE TABLE `client_dev_from` (
 
 /*Data for the table `client_dev_from` */
 
-insert  into `client_dev_from`(`id`,`dev`) values (1,'企划部'),(2,'网络部'),(3,'网络渠道'),(7,'5'),(8,'io');
+insert  into `client_dev_from`(`id`,`dev`) values (1,'企划部'),(2,'网络部'),(3,'网络渠道'),(7,'玉兔'),(8,'渠道');
 
 /*Table structure for table `client_disease` */
 
@@ -205,7 +206,7 @@ CREATE TABLE `client_menu` (
 
 /*Data for the table `client_menu` */
 
-insert  into `client_menu`(`id`,`menuname`,`icon`,`url`,`pid`) values (1,'客户管理','credit-card','',0),(2,'客户查询','plus','/system/maindata/',1),(4,'管理员设置','icon-sys','menu1/treegrid.html',16),(5,'权限设置','icon-sys','menu1/treegrid.html',16),(7,'新增客户','user-plus','/system/useradd/',1),(6,'数据字典',NULL,'/system/dd/',16),(16,'系统设置',NULL,'',0),(10,'积分系统',NULL,'',0),(11,'添加客户','user-plus','/credit/add/',10),(15,'积分查询',NULL,'/credit/creditdata/',10);
+insert  into `client_menu`(`id`,`menuname`,`icon`,`url`,`pid`) values (1,'客户管理','credit-card','',0),(2,'客户查询','plus','/system/maindata/',1),(7,'新增客户','user-plus','/system/useradd/',1),(6,'数据字典',NULL,'/system/dd/',16),(16,'系统设置',NULL,'',0),(10,'积分系统',NULL,'',0),(11,'添加客户','user-plus','/credit/add/',10),(15,'积分查询',NULL,'/credit/creditdata/',10);
 
 /*Table structure for table `client_province` */
 
@@ -341,7 +342,7 @@ CREATE TABLE `client_wangdian_zixun` (
 
 /*Data for the table `client_wangdian_zixun` */
 
-insert  into `client_wangdian_zixun`(`id`,`wd_name`) values (1,'杨雪梅'),(2,'李怡'),(3,'杨桦'),(4,'张余'),(5,'刘华云'),(6,'uiui');
+insert  into `client_wangdian_zixun`(`id`,`wd_name`) values (1,'杨雪梅'),(2,'李怡'),(3,'杨桦'),(4,'张余'),(5,'刘华云'),(6,'-又');
 
 /*Table structure for table `client_zx_tools` */
 
@@ -356,7 +357,7 @@ CREATE TABLE `client_zx_tools` (
 
 /*Data for the table `client_zx_tools` */
 
-insert  into `client_zx_tools`(`id`,`tool`,`pid`) values (1,'商务通',1),(2,'QQ',3),(3,'微信',2),(4,'uiui',3),(5,'uiuiii',3);
+insert  into `client_zx_tools`(`id`,`tool`,`pid`) values (1,'商务通',1),(2,'QQ',3),(3,'微信',2),(4,'uiui',3),(5,'6767',7);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
