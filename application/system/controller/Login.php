@@ -3,7 +3,7 @@ namespace app\system\controller;
 use think\Controller;
 use app\system\model\Login as Log;
 use think\Session;
-
+use think\Cache;
 class Login extends Controller
 {
     public function index()
@@ -45,4 +45,11 @@ class Login extends Controller
         return $this->success('退出成功!','index');
     }
 
+    /**
+     * 清空缓存
+     */
+    public function clear(){
+        Cache::clear();
+        return '缓存清除成功！';
+    }
 }
