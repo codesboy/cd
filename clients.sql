@@ -129,11 +129,11 @@ CREATE TABLE `client_credit_users` (
   `update_time` int(11) unsigned NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `tel` (`telephone`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_credit_users` */
 
-insert  into `client_credit_users`(`id`,`name`,`sex`,`age`,`telephone`,`pid`,`comment`,`create_time`,`update_time`) values (1,'1',1,23,'13544441124',0,'的',1479363317,1479363317),(2,'1-1',2,55,'13666633214',1,'u',1479363360,1479363360),(3,'1-2',2,35,'13688777458',1,'',1479363530,1479363530),(4,'1-3',1,0,'13699998874',1,'',1479364652,1479364652);
+insert  into `client_credit_users`(`id`,`name`,`sex`,`age`,`telephone`,`pid`,`comment`,`create_time`,`update_time`) values (1,'1',2,22,'13544440007',0,'的',1479363317,1480325361),(2,'1-1',2,65,'13666633214',1,'u',1479363360,1480324410),(3,'1-2',1,35,'13688777458',1,'',1479363530,1480324354),(4,'1-3',2,36,'13699998874',1,'',1479364652,1480324346),(5,'2',2,66,'13266608475',0,'beiz',1480325943,1480325943);
 
 /*Table structure for table `client_department` */
 
