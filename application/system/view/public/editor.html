@@ -7,13 +7,13 @@
                 <h4 class="modal-title glyphicon glyphicon-edit" id="editTitle">Modal title</h4>
             </div>
             <div class="modal-body">
-                <form class="form-inline" role="form" id="addconform">
+                <form class="form-inline" role="form" id="editForm">
                     <div class="row">
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
                             <label class="control-label" for="name">姓&emsp;&emsp;名</label>
                             <input class="form-control" id="name" type="text" name="name" placeholder="姓名" value="{$name}">
                         </div>
-                        <div class="col-md-4 form-group">
+                        <div class="col-md-6 form-group">
                             <label class="control-label">性别</label>
                             <select class="form-control" id="sex" name="sex">
                                 <option value="">未知</option>
@@ -21,15 +21,38 @@
                                 <option value="2">女</option>
                             </select>
                         </div>
-                        <div class="col-md-4 form-group">
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6 form-group">
                             <label class="control-label" for="birthday">出生日期</label>
                             <input class="form-control datetimepicker" id="birthday" name="birthday" type="text" placeholder="选择日期" required1="required" />
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label class="control-label" for="telephone">手机号</label>
+                            <input class="form-control datetimepicker" id="telephone" name="telephone" type="text" placeholder="选择日期" required1="required" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 form-group">
-                            <label class="control-label" for="birthday">手机号</label>
-                            <input class="form-control datetimepicker" id="birthday" name="birthday" type="text" placeholder="选择日期" required1="required" />
+                            <label class="control-label" for="userAttrArea">省&emsp;&emsp;份</label>
+                            <select name="province_id" id="userAttrArea" required1="required" class="form-control">
+                                {volist name="province" id="f"}
+                                <option value="{$f.province_id}" {if condition="510000 eq $f['province_id']"} selected{/if}>{$f.province_name}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="control-label" for="userAttrCity">市&emsp;&emsp;级</label>
+                            <select name="city_id" id="userAttrCity" required1="required" class="form-control">
+
+                            </select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label class="control-label" for="userAttrCounty">区&emsp;&emsp;县</label>
+                            <select name="county_id" id="userAttrCounty" required1="required" class="form-control">
+
+                            </select>
                         </div>
                     </div>
                 </form>
