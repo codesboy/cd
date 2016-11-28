@@ -1,5 +1,6 @@
 <?php
 namespace app\system\controller;
+// 数据字典控制器类
 class Dd extends Base{
     public function index(){
         // 开发渠道赋值

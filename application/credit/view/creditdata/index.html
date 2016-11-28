@@ -55,12 +55,10 @@
                     <div iconCls="icon-undo" data-toggle="modal" id="addChildFormBtn">新增下线</div>
                     <div class="menu-sep"></div>
                     <div iconCls="icon-redo" id="startManPoints">积分管理</div>
-                    <!-- <div class="menu-sep"></div>
-                    <div iconCls="icon-redo" id="usePoints">积分使用</div> -->
                 </div>
-                <!-- <a href="javascript:;" class="easyui-linkbutton" plain="true" title="编辑客户"><span class="glyphicon glyphicon-edit"></span>编辑客户</a> -->
-                <a id="reload" class="easyui-linkbutton" plain="true" target="_blank" title="刷新数据"><span class="glyphicon glyphicon-refresh"></span>刷新数据</a>
-                <a href="{:url('')}" class="easyui-linkbutton" plain="true" target="_blank" title="全屏显示表格"><span class="glyphicon glyphicon-fullscreen"></span>全屏显示</a>
+                <a id="openEditModal" class="easyui-linkbutton" plain="true"><span class="glyphicon glyphicon-edit"></span>修改资料</a>
+                <a id="reload" class="easyui-linkbutton" plain="true"><span class="glyphicon glyphicon-refresh"></span>刷新数据</a>
+                <a href="{:url('')}" class="easyui-linkbutton" plain="true" target="_blank"><span class="glyphicon glyphicon-fullscreen"></span>全屏显示</a>
                 <a href="{:url('export')}" class="easyui-linkbutton" plain="true"><span class="glyphicon glyphicon-export"></span>导出数据</a>
             </div>
         </div>
@@ -224,6 +222,52 @@
         </div>
     </div>
 
+    <!-- 资料编辑表单 -->
+    <div class="modal fade" id="editModel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"></span>修改客户 <span id="editFormTit" class="text-primary"></span> 资料</h4>
+                </div>
+                <form method="post" class="form-inline" role="form" id="editForm">
+                    <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="name">姓&ensp;&ensp;名</label>
+                                    <input class="form-control" id="name" name="name" type="text" placeholder="姓名" required="required" value="" />
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="sex">性别</label>
+                                    <select name="sex" required="required" class="form-control" id="sex">
+                                        <option value="0">未知</option>
+                                        <option value="1">男</option>
+                                        <option value="2">女</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="telephone">手机号</label>
+                                    <input class="form-control" id="telephone" name="telephone" type="text" placeholder="手机号码" required="required" value="" />
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label class="control-label" for="age">年龄</label>
+                                    <input class="form-control" id="age" name="age" type="text" placeholder="年龄" required="required" value="" />
+                                </div>
+                                <input type="hidden" name="id" value="">
+                            </div>
+                        <!-- </form> -->
+                    </div>
+                    <div class="modal-footer">
+                        <label id="editMsg" class="pull-left text-danger"></label>
+                        <button type="button" class="btn btn-success" id="editSubmit">保存</button>
+                        <button type="reset" class="btn btn-warning">重置</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 <script>
     // datagrid部分js
@@ -249,7 +293,9 @@
                 {field:'sumr',title:'实际总消费金额',sortable:true,width:100},
                 {field:'sumg',title:'剩余积分',sortable:true,width:100},
                 {field:'tjr',title:'推荐者(来源)',formatter:function(value,row){if(value==null){return '无'}else{return value+'：'+row.tjrtel}},width:120},
-                {field:'create_time',title:'登记时间',width:120}
+                {field:'comment',title:'备注',width:120},
+                {field:'create_time',title:'登记时间',width:120},
+                {field:'update_time',title:'修改时间',width:120}
             ]],
             toolbar: "#toolbar",
             fitColumns: true, //表格宽度自适应
@@ -430,15 +476,73 @@
             $('#manPointsMsg').html('发生错误!请及时联系管理员!');
         });
         return false;
-    })
+    });
 
     // 搜索功能
     $('#search').on('click',function(){
         $('#dg').datagrid('load',{
             name: $('#mohu').val(),
             startpoint: $('#startpoint').val(),
-            endpoint: $('#endpoint').val(),
+            endpoint: $('#endpoint').val()
         });
+    });
+
+    // 修改客户资料
+    $('#openEditModal').on('click',function(){
+        var selected=$('#dg').datagrid('getSelected');
+        // console.info(selected)
+        if(selected){
+            $('#editFormTit').html(selected.name+'('+selected.telephone+')');
+            $('#editForm input[name=name]').val(selected.name);
+            $('#editForm input[name=id]').val(selected.id);
+            switch (selected.sex) {
+                case '男':
+                    selected.sex=1;
+                    break;
+                case '女':
+                    selected.sex=2;
+                    break;
+                default:
+                    selected.sex=0;
+                    break;
+            }
+            $('#editForm select[name=sex]').val(selected.sex)
+            $('#editForm input[name=telephone]').val(selected.telephone);
+            $('#editForm input[name=telephone]').val(selected.telephone);
+            $('#editForm input[name=age]').val(selected.age);
+            $('#editModel').modal();
+            $('#editSubmit').attr('disabled',false);
+        }else{
+            alert('请选择用户');
+        }
+    });
+    $('#editSubmit').on('click',function(){
+        if($('#editForm input[name=id]').val()>0){
+            $.ajax({
+                url: '{:url("edit")}?r='+Math.random(),
+                type: 'POST',
+                dataType: 'html',
+                data: $('#editForm').serialize()
+            })
+            .done(function(data) {
+                if(data=='"修改成功"'){
+                    $('#editSubmit').attr('disabled',true);
+                    // console.log(data);
+                    $('#dg').datagrid('reload');
+                    $('#editModel').modal('hide');
+                }else{
+                    $('#editMsg').html('提示信息：'+data);
+                }
+
+            })
+            .fail(function() {
+                alert("发送错误");
+            });
+            return false;
+        }else{
+            alert('请先选择客户!');
+        }
+
     })
 </script>
 

@@ -39,7 +39,7 @@ class Creditdata extends Base{
 
         $CreditUsersModel=new CreditUsers;
 
-        $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time,pid')
+        $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time,comment,pid,update_time')
             ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
             ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id','left')
             ->where('u.name|u.telephone','like',"%$name%")
@@ -377,6 +377,28 @@ class Creditdata extends Base{
                     return $validate->getError();
                 }
             }
+        }
+    }
+
+    // 修改客户资料
+    public function edit(){
+        if(Request()->isPost()){
+            $data=input('post.');
+            // 验证器
+            $validate = validate('Credit');
+            if($validate->scene('edit')->check($data)){
+                $user=new CreditUsers;
+                if($user->isUpdate(true)->save($data)>0){
+                    return '修改成功';
+                }else{
+                    return '修改失败';
+                }
+            }else{
+                return $validate->getError();
+            }
+
+        }else{
+            exit;
         }
     }
 
