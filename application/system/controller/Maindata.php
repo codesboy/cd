@@ -81,7 +81,7 @@ class Maindata extends Base
 			->join('client_qiantai_zixun q','q.id=qtzx_id','LEFT')
 			->join('client_doctors doc','doc.id=doctor_id','LEFT')
 			->join('client_disease dis','dis.id=disease_id','LEFT')
-			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,c.city_name,co.county_name,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,u.create_time')
+			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,p.province_id,c.city_name,c.city_id,co.county_name,co.county_id,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,u.create_time')
 			->group('u.id')
 			->where('name|telephone','like',"%$name%")
 			->where('summoney','between',[$startmoney,$endmoney])

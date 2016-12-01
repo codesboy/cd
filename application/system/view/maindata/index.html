@@ -328,7 +328,9 @@
                         html_temp += "<option value='" + val[value] + "'>" + val[text] + "</option>";
                     });
                     // console.info(html_temp);
-                    nextdom.html("<option value=''>请选择</option>" + html_temp);
+                    // nextdom.html("<option value='0'>请选择</option>" + html_temp);
+                    nextdom.html('');
+                    nextdom.append("<option value=''>请选择</option>" + html_temp);
                 }
             })
             .fail(function() {
@@ -339,8 +341,8 @@
 
     var initdata = function() {
         var nextdom = $('#userAttrCity'),
-            url = "{:url('useradd/citylink')}"
-        pid = $("#userAttrArea").val(),
+            url = "{:url('useradd/citylink')}",
+            pid = $("#userAttrArea").val(),
             postdata = {
                 'province_id': pid
             },
@@ -350,10 +352,12 @@
     }
     initdata();
 
+    // 点击省份下拉列表
     $('#userAttrArea').change(function() {
         $('#userAttrCounty').html('');
         initdata();
     });
+    // 点击市区下拉列表
     $('#userAttrCity').change(function() {
         var nextdom = $('#userAttrCounty'),
             url = "{:url('useradd/countylink')}"
@@ -490,6 +494,7 @@
             $('#editForm select[name=sex]').val(selected.sex);
             $('#editForm input[name=birthday]').val(selected.birthday);
             $('#editForm input[name=telephone]').val(selected.telephone);
+            // console.info(selected)
             $('#editForm select[name=province_id]').val(selected.province_id);//选中对应的省份
             // $('#editForm .userAttrCity').val('');
             // $('.city1').html('ee');

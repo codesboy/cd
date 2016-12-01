@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="editorModal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -38,7 +37,7 @@
                             <label class="control-label" for="userAttrArea">省&emsp;&emsp;份</label>
                             <select name="province_id" id="userAttrArea" required1="required" class="form-control">
                                 {volist name="province" id="f"}
-                                <option value="{$f.province_id}" {if condition="510000 eq $f['province_id']"} selected{/if}>{$f.province_name}</option>
+                                <option value="{$f.province_id}">{$f.province_name}</option>
                                 {/volist}
                             </select>
                         </div>
