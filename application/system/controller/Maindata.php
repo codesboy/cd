@@ -60,13 +60,33 @@ class Maindata extends Base
 		$sort=input('sort')?input('sort'):'u.id';
 		$order=input('order')?input('order'):'desc';
 
+		// 模糊查询
+		$keywords=input('name');
+		$fuzzy=[];
+		if(!empty($keywords)){
+			$fuzzy['name']=['like',"%{$keywords}%"];
+			$fuzzy['telephone']=['like',"%{$keywords}%"];
+		}
+
 		// 筛选条件 where()里面可以是数组 可以为空数组
-		$name=input('name');
+		$moneyRange=[];
 		// $startmoney=input('startmoney')?input('startmoney'):0;
-		// $money_where=input('startmoney');
-		$startmoney=input('startmoney')?input('startmoney'):0;
-		$endmoney=input('endmoney')?input('endmoney'):100000000;
+		$startmoney=input('startmoney');
+		$endmoney=input('endmoney');
+		// $endmoney=input('endmoney')?input('endmoney'):100000000;
+		if(!empty($startmoney) && !empty($endmoney)){
+			$moneyRange['summoney']=['between',[$startmoney,$endmoney]];
+			// $moneyRange['summoney']=['between',"$startmoney,$endmoney"];
+		}
+
+
+
 		$time=input('selecttime')?input('selecttime'):'y';
+		$timeWhere=[];
+		// $time=input('selecttime');
+		if(!empty($time)){
+			$timeWhere['u.create_time']=[$time];
+		}
 
 		// $data=db('users_info')->alias('u')
 		$data=$user->alias('u')
@@ -83,21 +103,16 @@ class Maindata extends Base
 			->join('client_disease dis','dis.id=disease_id','LEFT')
 			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,p.province_id,c.city_name,c.city_id,co.county_name,co.county_id,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,u.create_time')
 			->group('u.id')
-			->where('name|telephone','like',"%$name%")
-			->where('summoney','between',[$startmoney,$endmoney])
+			->where($moneyRange)
+			->whereOr($fuzzy)
+			// ->where('summoney','between',[$startmoney,$endmoney])
 			->order([$sort=>$order])
 			->limit($offset,$rows)
 			->whereTime('u.create_time',$time)
+			// ->whereTime("")
+			// ->whereTime($timeWhere)
+			// ->select();
 			->select();
-			// ->select(false);
-
-			// dump($data);die;
-
-		$data1=db('users_info')
-			->whereTime('create_time', 'yesterday')
-            ->select(false);
-
-
 		return $data;
 	}
 

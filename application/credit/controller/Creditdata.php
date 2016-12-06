@@ -29,9 +29,23 @@ class Creditdata extends Base{
         $offset=($page-1)*$rows;
 
         // 筛选条件
-        $name=input('name');
-        $startpoint=input('startpoint')?input('startpoint'):0;
-        $endpoint=input('endpoint')?input('endpoint'):10000;
+        $pointsRange="";
+        // $pointsRangeArr=[];
+        $startpoint=input('startpoint');
+        $endpoint=input('endpoint');
+        if(!empty($startpoint) && !empty($endpoint)){
+            // $pointsRange='SUM(get_credit)-SUM(used_credit) BETWEEN :startpoint AND :endpoint ';
+            $pointsRange="sumg BETWEEN $startpoint AND $endpoint";
+            // $pointsRangeArr=['startpoint'=>$startpoint,'endpoint'=>$endpoint];
+        }
+
+        // 模糊查询
+        $keywords=input('name');
+        $fuzzy=[];
+        if(!empty($keywords)){
+            $fuzzy['u.name']=['like',"%{$keywords}%"];
+            $fuzzy['u.telephone']=['like',"%{$keywords}%"];
+        }
 
         // 排序条件
         $sort=input('sort')?input('sort'):'u.id';
@@ -41,25 +55,22 @@ class Creditdata extends Base{
 
         $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time,comment,pid,update_time')
             ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
-            ->view('credit_consumption',['sum(account_payable)'=>'suma','sum(used_credit)'=>'sumu','sum(real_pay)'=>'sumr','sum(get_credit)-sum(used_credit)'=>'sumg'],'uid=u.id','left')
-            ->where('u.name|u.telephone','like',"%$name%")
+            ->view('credit_consumption',['SUM(account_payable)'=>'suma','SUM(used_credit)'=>'sumu','SUM(real_pay)'=>'sumr','SUM(get_credit)-SUM(used_credit)'=>'sumg'],'uid=u.id','left')
+            ->whereOr($fuzzy)
             // ->whereTime('u.create_time','d')
-            // ->where('sum(get_credit)-sum(used_credit)','between',[$startpoint,$endpoint])
-            // ->where('sumg','between',[10,50])
+            // ->where('SUM(get_credit)-SUM(used_credit)','BETWEEN',[$startpoint,$endpoint])
+
+            // ->having('sumg','BETWEEN',[$startpoint,$endpoint])
+            // ->having($pointsRange,$pointsRangeArr)
+            ->having($pointsRange)
+            // ->having('SUM(get_credit)-SUM(used_credit) BETWEEN :startpoint AND :endpoint',['startpoint'=>1,'endpoint'=>7])
             ->group('u.id')
             ->order([$sort=>$order])
             ->limit($offset,$rows)
             ->select();
-            // $aa=new Builder;
-        // dump($credit_users);die;
-        return $credit_users;
+            // ->select(false);
 
-        /*$credit_users=$CreditUsersModel->alias('c')
-        ->join('credit_consumption','credit_consumption.uid=c.id','left')
-        ->whereTime('c.create_time','d')
-        ->select();
-        // var_dump($data);
-        return $credit_users;*/
+        return $credit_users;
     }
 
 
@@ -70,36 +81,6 @@ class Creditdata extends Base{
 
             $credit_users=$this->getCreditsDate();
 
-            // dump($credit_users);die;
-
-
-            // return $credit_users;exit;
-            // $credit_users=CreditUsers::select();
-            // $credit_users=CreditUsers::paginate(3);
-            // dump($credit_users->creditConsumptions);
-            // exit;
-            // 获取客户的所有积分记录
-            /*foreach($credit_users as $key=>$user){
-                // echo $key."<br>";
-                $credit = CreditUsers::find($user['id']);//一个客户 obj
-                // dump($credit);
-                // dump($credit->creditConsumptions);
-                // exit;
-                $detail=$credit->creditConsumptions()->field('sum(account_payable) suma,sum(used_credit) sumu,sum(real_pay) sumr,sum(get_credit)-sum(used_credit) sumg')->order(['suma'=>'desc'])->select();//一个客户的积分列表 array
-                // dump($detail);
-                // dump($detail[0]['suma']);
-                $credit->tjr=CreditUsers::where('id',$credit['pid'])->value('name,id','id');
-                // $credit->tjr=CreditUsers::where('id',$credit['pid'])->value('name');
-                $credit->suma=$detail[0]['suma'];
-                $credit->sumu=$detail[0]['sumu'];
-                $credit->sumr=$detail[0]['sumr'];
-                $credit->sumg=$detail[0]['sumg'];
-                $result[]=$credit->toArray();
-                // $credit->append(['update_time'])->toArray();
-                // $result=array_merge($credit,$detail);
-            }*/
-            // exit;
-            // dump($credit);
             $total=CreditUsers::count('id');
             $allCreditData=[
                 'total'=>$total,
