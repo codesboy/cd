@@ -1,7 +1,7 @@
 <?php
 namespace app\system\controller;
 use think\Controller;
-use app\system\model\Login as Log;
+use app\system\model\Admin as adminModel;
 use think\Session;
 use think\Cache;
 class Login extends Controller
@@ -11,39 +11,53 @@ class Login extends Controller
         return $this->fetch();
     }
 
+    /**
+     * [check ajax登录校验]
+     * @return [type] [description]
+     */
     public function check(){
-
         if(request()->isPost()){
-            $login=new Log;//实例化模型
-            $AllowLogin=$login->login(input('username'),input('password'),input('code'));
-            if($AllowLogin==1){
-                Session::set('user_name',input('username'));
-                $data["code"] = 1;
-                $data['msg']=session('user_name');
-                return json($data);
-            }elseif($AllowLogin==2){
-                // return $this->error('用户名或密码错误！');
-                $data["code"] = 2;
-                $data["msg"] = "用户名或密码不正确！";
-                return json($data);
-            }else if($AllowLogin==4){
-                $data["code"] = 4;
-                $data["msg"] = "验证码错误！";
-                return json($data);
-            }else{
-                $data["code"] = 3;
-                $data["msg"] = "该用户不存在！";
-                return json($data);
+            $username=input('username');
+            $pwd=input('password');
+            $code=input('code');
+            $data['username']=$username;
+            $data['password']=$pwd;
+            $data['code']=$code;
+
+            $where['username']=$username;
+            $where['password']=md5(md5($pwd));
+
+            // 验证码检测
+            if (!captcha_check($code)) {
+                return '验证码错误！';
+                exit;
             }
+            // 验证器
+            $validate = validate('Login');
+            if($validate->check($data)){
+                // 用户名和密码匹配检测
+                $check=adminModel::where($where)->find();
+                if($check){
+                    unset($check["password"]);
+                    Session::set('user_name',$username);
+                    return '登录成功';
+                }else{
+                    return '用户名或密码不正确！';
+                    exit;
+                }
+            }
+
         }
-        // echo "1";
     }
+
 
     // 退出登录
     public function logout(){
         session(null);
         return $this->success('退出成功!','index');
     }
+
+
 
     /**
      * 清空缓存

@@ -47,32 +47,33 @@
 	<script>
 	$('#loginModal').modal({'backdrop':false});
 	// $(function(){
-		$('#loginBtn').on('click',function(){
-			if($('#username').val()==''||$('#password').val()==''||$('#code').val()==''){
-				$('#msg').html('用户名、密码、验证码必填！');
-				return false;
-			}
-			$.ajax({
-				// url: '{:url('Login/check')}?r='+Math.random(),
-				url: "{:url('Login/check')}",
-				type: 'POST',
-				dataType: 'json',
-				data: $('#loginForm').serialize()
-			})
-			.done(function(data) {
-				if(data.code==1){
-				    window.location= "{:url('Index/index')}";
-				}else{
-					$('#verify').click();
-				    $('#msg').html(data.msg);
-				}
-
-			})
-			.fail(function() {
-				$('#msg').html('error,发生错误请及时联系管理员!');
-			});
+	$('#loginBtn').on('click',function(){
+		if($('#username').val()==''||$('#password').val()==''||$('#code').val()==''){
+			$('#msg').html('用户名、密码、验证码必填！');
 			return false;
+		}
+		$.ajax({
+			url: "{:url('Login/check')}?r="+Math.random(),
+			type: 'POST',
+			// dataType: 'json',
+			data: $('#loginForm').serialize()
+		})
+		.done(function(data) {
+			if(data=='登录成功'){
+			    window.location= "{:url('Index/index')}";
+			}else{
+				$('#password').val('');
+				$('#code').val('');
+				$('#verify').click();
+		    	$('#msg').html(data);
+			}
+
+		})
+		.fail(function() {
+			$('#msg').html('error,发生错误请及时联系管理员!');
 		});
+		return false;
+	});
 
 
 	// })
