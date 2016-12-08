@@ -38,7 +38,7 @@
 	                </div>
 	                <div class="modal-footer">
 	                    <span class="text-danger pull-left" id="msg"></span>
-	                    <button type="submit" class="btn btn-primary" id="loginBtn">登录</button>
+	                    <button class="btn btn-primary" id="loginBtn">登录</button>
 	                </div>
 	            </form>
 	        </div>
@@ -61,6 +61,7 @@
 		.done(function(data) {
 			if(data=='登录成功'){
 			    window.location= "{:url('Index/index')}";
+			    // alert(1)
 			}else{
 				$('#password').val('');
 				$('#code').val('');
@@ -77,12 +78,7 @@
 
 
 	// })
-	//回车提交表单
-	$(document).keyup(function(e) {
-		if (e.keyCode == 13) {
-            $('#loginBtn').trigger("click");
-        }
-	});
+
 	// 点击图片更换验证码
 	$('#verify').on('click',function(){
 		// alert($(this).get(0).src)

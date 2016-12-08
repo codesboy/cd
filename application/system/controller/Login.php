@@ -37,6 +37,7 @@ class Login extends Controller
             if($validate->check($data)){
                 // 用户名和密码匹配检测
                 $check=adminModel::where($where)->find();
+                // dump($check);die;
                 if($check){
                     unset($check["password"]);
                     Session::set('user_name',$username);
