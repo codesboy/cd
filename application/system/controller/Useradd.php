@@ -94,7 +94,7 @@ class Useradd extends Base{
 
 			$validate = validate('User');
 
-			if($validate->scene('users_info')->check($info_data) && $validate->scene('users_consumption')->check($consumption_data)){
+			if($validate->scene('users_info')->check($info_data) && $validate->scene('users_info_consumption')->check($consumption_data)){
 			// if($validate->scene('users_info')->check($info_data)){
 				$user=new UsersInfo;
 

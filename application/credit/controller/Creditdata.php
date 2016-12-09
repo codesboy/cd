@@ -33,7 +33,7 @@ class Creditdata extends Base{
         // $pointsRangeArr=[];
         $startpoint=input('startpoint');
         $endpoint=input('endpoint');
-        if(!empty($startpoint) && !empty($endpoint)){
+        if(!empty($startpoint) || !empty($endpoint)){
             // $pointsRange='SUM(get_credit)-SUM(used_credit) BETWEEN :startpoint AND :endpoint ';
             $pointsRange="sumg BETWEEN $startpoint AND $endpoint";
             // $pointsRangeArr=['startpoint'=>$startpoint,'endpoint'=>$endpoint];

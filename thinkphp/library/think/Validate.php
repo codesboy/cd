@@ -34,6 +34,8 @@ class Validate
 
     // 验证提示信息
     protected $message = [];
+    // 验证字段描述
+    protected $field = [];
 
     // 验证规则默认提示信息
     protected static $typeMsg = [
@@ -107,11 +109,13 @@ class Validate
      * @access public
      * @param array $rules 验证规则
      * @param array $message 验证提示信息
+     * @param array $field 验证字段描述信息
      */
-    public function __construct(array $rules = [], $message = [])
+    public function __construct(array $rules = [], $message = [], $field = [])
     {
         $this->rule    = array_merge($this->rule, $rules);
         $this->message = array_merge($this->message, $message);
+        $this->field   = array_merge($this->field, $field);
     }
 
     /**
@@ -119,12 +123,13 @@ class Validate
      * @access public
      * @param array     $rules 验证规则
      * @param array     $message 验证提示信息
+     * @param array     $field 验证字段描述信息
      * @return Validate
      */
-    public static function make($rules = [], $message = [])
+    public static function make($rules = [], $message = [], $field = [])
     {
         if (is_null(self::$instance)) {
-            self::$instance = new self($rules, $message);
+            self::$instance = new self($rules, $message, $field);
         }
         return self::$instance;
     }
@@ -217,6 +222,17 @@ class Validate
     }
 
     /**
+     * 判断是否存在某个验证场景
+     * @access public
+     * @param string $name 场景名
+     * @return bool
+     */
+    public function hasScene($name)
+    {
+        return isset($this->scene[$name]);
+    }
+
+    /**
      * 设置批量验证
      * @access public
      * @param bool $batch  是否批量验证
@@ -280,7 +296,7 @@ class Validate
                 // 字段|描述 用于指定属性名称
                 list($key, $title) = explode('|', $key);
             } else {
-                $title = $key;
+                $title = isset($this->field[$key]) ? $this->field[$key] : $key;
             }
 
             // 场景检测
@@ -392,6 +408,9 @@ class Validate
                     return $message;
                 } elseif (true !== $result) {
                     // 返回自定义错误信息
+                    if (is_string($result) && false !== strpos($result, ':')) {
+                        $result = str_replace([':attribute', ':rule'], [$title, (string) $rule], $result);
+                    }
                     return $result;
                 }
                 $i++;
@@ -403,13 +422,21 @@ class Validate
     /**
      * 验证是否和某个字段的值一致
      * @access protected
-     * @param mixed     $value  字段值
+     * @param mixed     $value 字段值
      * @param mixed     $rule  验证规则
      * @param array     $data  数据
+     * @param string    $field 字段名
      * @return bool
      */
-    protected function confirm($value, $rule, $data)
+    protected function confirm($value, $rule, $data, $field = '')
     {
+        if ('' == $rule) {
+            if (strpos($field, '_confirm')) {
+                $rule = strstr($field, '_confirm', true);
+            } else {
+                $rule = $field . '_confirm';
+            }
+        }
         return $this->getDataValue($data, $rule) == $value;
     }
 
@@ -1182,7 +1209,7 @@ class Validate
             $msg = $title . '规则错误';
         }
 
-        if (is_string($msg) && strpos($msg, '{%')) {
+        if (is_string($msg) && 0 === strpos($msg, '{%')) {
             $msg = Lang::get(substr($msg, 2, -1));
         }
 
@@ -1228,7 +1255,7 @@ class Validate
 
     public static function __callStatic($method, $params)
     {
-        $class = new static;
+        $class = self::make();
         if (method_exists($class, $method)) {
             return call_user_func_array([$class, $method], $params);
         } else {

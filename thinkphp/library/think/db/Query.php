@@ -27,13 +27,15 @@ use think\exception\PDOException;
 use think\Loader;
 use think\Model;
 use think\model\Relation;
+use think\model\relation\BelongsTo;
+use think\model\relation\HasOne;
 use think\Paginator;
 
 class Query
 {
     // 数据库Connection对象实例
     protected $connection;
-    // 数据库驱动类型
+    // 数据库Builder对象实例
     protected $builder;
     // 当前模型类名称
     protected $model;
@@ -61,9 +63,10 @@ class Query
     public function __construct(Connection $connection = null, $model = '')
     {
         $this->connection = $connection ?: Db::connect([], true);
-        $this->builder    = $this->connection->getConfig('builder') ?: $this->connection->getConfig('type');
         $this->prefix     = $this->connection->getConfig('prefix');
         $this->model      = $model;
+        // 设置当前连接的Builder对象
+        $this->setBuilder();
     }
 
     /**
@@ -111,7 +114,40 @@ class Query
     public function connect($config)
     {
         $this->connection = Db::connect($config);
+        $this->setBuilder();
         return $this;
+    }
+
+    /**
+     * 设置当前的数据库Builder对象
+     * @access protected
+     * @return void
+     */
+    protected function setBuilder()
+    {
+        $builder       = $this->connection->getConfig('builder') ?: $this->connection->getConfig('type');
+        $class         = false !== strpos($builder, '\\') ? $builder : '\\think\\db\\builder\\' . ucfirst($builder);
+        $this->builder = new $class($this->connection, $this);
+    }
+
+    /**
+     * 获取当前的模型对象名
+     * @access public
+     * @return string
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
+     * 获取当前的builder实例对象
+     * @access public
+     * @return Builder
+     */
+    public function getBuilder()
+    {
+        return $this->builder;
     }
 
     /**
@@ -351,24 +387,6 @@ class Query
     }
 
     /**
-     * 获取当前的builder实例对象
-     * @access protected
-     * @return Builder
-     */
-    protected function builder()
-    {
-        static $builder = [];
-        $driver         = $this->builder;
-        if (!isset($builder[$driver])) {
-            $class            = false !== strpos($driver, '\\') ? $driver : '\\think\\db\\builder\\' . ucfirst($driver);
-            $builder[$driver] = new $class($this->connection);
-        }
-        // 设置当前查询对象
-        $builder[$driver]->setQuery($this);
-        return $builder[$driver];
-    }
-
-    /**
      * 得到某个字段的值
      * @access public
      * @param string $field   字段名
@@ -457,6 +475,9 @@ class Query
                     $key1   = array_shift($fields);
                     $key2   = $fields ? array_shift($fields) : '';
                     $key    = $key ?: $key1;
+                    if (strpos($key, '.')) {
+                        list($alias, $key) = explode('.', $key);
+                    }
                     foreach ($resultSet as $val) {
                         if ($count > 2) {
                             $result[$val[$key]] = $val;
@@ -704,6 +725,9 @@ class Query
             }
         }
         if (isset($alias)) {
+            if (isset($this->options['alias'][$table])) {
+                $table = $table . '@think' . uniqid();
+            }
             $table = [$table => $alias];
             $this->alias($table);
         }
@@ -917,6 +941,9 @@ class Query
             if (is_array($field)) {
                 // 数组批量查询
                 $where = $field;
+                foreach ($where as $k => $val) {
+                    $this->options['multi'][$k][] = $val;
+                }
             } elseif ($field && is_string($field)) {
                 // 字符串查询
                 $where[$field] = ['null', ''];
@@ -931,13 +958,30 @@ class Query
             $where[$field] = ['eq', $op];
         } else {
             $where[$field] = [$op, $condition];
+            // 记录一个字段多次查询条件
+            $this->options['multi'][$field][] = $where[$field];
         }
         if (!empty($where)) {
             if (!isset($this->options['where'][$logic])) {
                 $this->options['where'][$logic] = [];
             }
+            if (is_string($field) && $this->checkMultiField($field)) {
+                $where[$field] = $this->options['multi'][$field];
+            } elseif (is_array($field)) {
+                foreach ($field as $key => $val) {
+                    if ($this->checkMultiField($key)) {
+                        $where[$key] = $this->options['multi'][$key];
+                    }
+                }
+            }
             $this->options['where'][$logic] = array_merge($this->options['where'][$logic], $where);
         }
+    }
+
+    // 检查是否存在一个字段多次查询条件
+    private function checkMultiField($field)
+    {
+        return isset($this->options['multi'][$field]) && count($this->options['multi'][$field]) > 1;
     }
 
     /**
@@ -952,6 +996,20 @@ class Query
         $logic = strtoupper($logic);
         if (isset($this->options['where'][$logic][$field])) {
             unset($this->options['where'][$logic][$field]);
+        }
+        return $this;
+    }
+
+    /**
+     * 去除某个查询参数
+     * @access public
+     * @param string $option     参数名
+     * @return $this
+     */
+    public function removeOption($option)
+    {
+        if (isset($this->options[$option])) {
+            unset($this->options[$option]);
         }
         return $this;
     }
@@ -1273,18 +1331,6 @@ class Query
     }
 
     /**
-     * 指定数据集返回对象
-     * @access public
-     * @param string $class 指定返回的数据集对象类名
-     * @return $this
-     */
-    public function fetchClass($class)
-    {
-        $this->options['fetch_class'] = $class;
-        return $this;
-    }
-
-    /**
      * 设置从主服务器读取数据
      * @access public
      * @return $this
@@ -1413,6 +1459,11 @@ class Query
             return false;
         } else {
             $tableName = $this->parseSqlTable($tableName);
+        }
+
+        // 修正子查询作为表名的问题
+        if (strpos($tableName, ')')) {
+            return [];
         }
 
         list($guid) = explode(' ', $tableName);
@@ -1581,13 +1632,14 @@ class Query
             $with = explode(',', $with);
         }
 
-        $i            = 0;
+        $first        = true;
         $currentModel = $this->model;
 
         /** @var Model $class */
         $class = new $currentModel;
         foreach ($with as $key => $relation) {
-            $closure = false;
+            $subRelation = '';
+            $closure     = false;
             if ($relation instanceof \Closure) {
                 // 支持闭包查询过滤关联条件
                 $closure    = $relation;
@@ -1600,48 +1652,9 @@ class Query
 
             /** @var Relation $model */
             $model = $class->$relation();
-            $info  = $model->getRelationInfo();
-            if (in_array($info['type'], [Relation::HAS_ONE, Relation::BELONGS_TO])) {
-                if (0 == $i) {
-                    $name  = Loader::parseName(basename(str_replace('\\', '/', $currentModel)));
-                    $table = $this->getTable();
-                    $alias = isset($info['alias'][$name]) ? $info['alias'][$name] : $name;
-                    $this->table([$table => $alias]);
-                    if (isset($this->options['field'])) {
-                        $field = $this->options['field'];
-                        unset($this->options['field']);
-                    } else {
-                        $field = true;
-                    }
-                    $this->field($field, false, $table, $alias);
-                }
-                // 预载入封装
-                $joinTable = $model->getTable();
-                $joinName  = Loader::parseName(basename(str_replace('\\', '/', $info['model'])));
-                $joinAlias = isset($info['alias'][$joinName]) ? $info['alias'][$joinName] : $relation;
-                $this->via($joinAlias);
-
-                if (Relation::HAS_ONE == $info['type']) {
-                    $this->join($joinTable . ' ' . $joinAlias, $alias . '.' . $info['localKey'] . '=' . $joinAlias . '.' . $info['foreignKey'], $info['joinType']);
-                } else {
-                    $this->join($joinTable . ' ' . $joinAlias, $alias . '.' . $info['foreignKey'] . '=' . $joinAlias . '.' . $info['localKey'], $info['joinType']);
-                }
-
-                if ($closure) {
-                    // 执行闭包查询
-                    call_user_func_array($closure, [ & $this]);
-                    //指定获取关联的字段
-                    //需要在 回调中 调方法 withField 方法，如
-                    // $query->where(['id'=>1])->withField('id,name');
-                    if (!empty($this->options['with_field'])) {
-                        $field = $this->options['with_field'];
-                        unset($this->options['with_field']);
-                    }
-                } elseif (isset($info['option']['field'])) {
-                    $field = $info['option']['field'];
-                }
-                $this->field($field, false, $joinTable, $joinAlias, $relation . '__');
-                $i++;
+            if ($model instanceof HasOne || $model instanceof BelongsTo) {
+                $model->eagerly($this, $relation, $subRelation, $closure, $first);
+                $first = false;
             } elseif ($closure) {
                 $with[$key] = $closure;
             }
@@ -1751,7 +1764,7 @@ class Query
         // 分析查询表达式
         $options = $this->parseExpress();
         // 生成SQL语句
-        $sql = $this->builder()->insert($data, $options, $replace);
+        $sql = $this->builder->insert($data, $options, $replace);
         // 获取参数绑定
         $bind = $this->getBind();
         if ($options['fetch_sql']) {
@@ -1795,7 +1808,7 @@ class Query
             return false;
         }
         // 生成SQL语句
-        $sql = $this->builder()->insertAll($dataSet, $options);
+        $sql = $this->builder->insertAll($dataSet, $options);
         // 获取参数绑定
         $bind = $this->getBind();
         if ($options['fetch_sql']) {
@@ -1821,7 +1834,7 @@ class Query
         $options = $this->parseExpress();
         // 生成SQL语句
         $table = $this->parseSqlTable($table);
-        $sql   = $this->builder()->selectInsert($fields, $table, $options);
+        $sql   = $this->builder->selectInsert($fields, $table, $options);
         // 获取参数绑定
         $bind = $this->getBind();
         if ($options['fetch_sql']) {
@@ -1879,7 +1892,7 @@ class Query
             $key = 'think:' . $options['table'] . '|' . $options['where']['AND'][$pk];
         }
         // 生成UPDATE SQL语句
-        $sql = $this->builder()->update($data, $options);
+        $sql = $this->builder->update($data, $options);
         // 获取参数绑定
         $bind = $this->getBind();
         if ($options['fetch_sql']) {
@@ -1934,7 +1947,7 @@ class Query
         }
         if (!$resultSet) {
             // 生成查询SQL
-            $sql = $this->builder()->select($options);
+            $sql = $this->builder->select($options);
             // 获取参数绑定
             $bind = $this->getBind();
             if ($options['fetch_sql']) {
@@ -1959,12 +1972,11 @@ class Query
             }
         }
 
-        // 返回结果处理
-        if (count($resultSet) > 0) {
-            // 数据列表读取后的处理
-            if (!empty($this->model)) {
-                // 生成模型对象
-                $model = $this->model;
+        // 数据列表读取后的处理
+        if (!empty($this->model)) {
+            // 生成模型对象
+            $model = $this->model;
+            if (count($resultSet) > 0) {
                 foreach ($resultSet as $key => $result) {
                     /** @var Model $result */
                     $result = new $model($result);
@@ -1975,12 +1987,16 @@ class Query
                     }
                     $resultSet[$key] = $result;
                 }
-                if (!empty($options['with']) && $result instanceof Model) {
+                if (!empty($options['with'])) {
                     // 预载入
-                    $resultSet = $result->eagerlyResultSet($resultSet, $options['with'], is_object($resultSet) ? get_class($resultSet) : '');
+                    $result->eagerlyResultSet($resultSet, $options['with'], is_object($resultSet) ? get_class($resultSet) : '');
                 }
             }
-        } elseif (!empty($options['fail'])) {
+            // 模型数据集转换
+            $resultSet = (new $model)->toCollection($resultSet);
+        }
+        // 返回结果处理
+        if (!empty($options['fail']) && count($resultSet) == 0) {
             $this->throwNotFound($options);
         }
         return $resultSet;
@@ -2025,7 +2041,7 @@ class Query
         }
         if (!$result) {
             // 生成查询SQL
-            $sql = $this->builder()->select($options);
+            $sql = $this->builder->select($options);
             // 获取参数绑定
             $bind = $this->getBind();
             if ($options['fetch_sql']) {
@@ -2139,19 +2155,30 @@ class Query
         $column    = $column ?: $this->getPk($table);
         $bind      = $this->bind;
         $resultSet = $this->limit($count)->order($column, 'asc')->select();
+        if (strpos($column, '.')) {
+            list($alias, $key) = explode('.', $column);
+        } else {
+            $key = $column;
+        }
+        if ($resultSet instanceof Collection) {
+            $resultSet = $resultSet->all();
+        }
 
         while (!empty($resultSet)) {
             if (false === call_user_func($callback, $resultSet)) {
                 return false;
             }
             $end       = end($resultSet);
-            $lastId    = is_array($end) ? $end[$column] : $end->$column;
+            $lastId    = is_array($end) ? $end[$key] : $end->$key;
             $resultSet = $this->options($options)
                 ->limit($count)
                 ->bind($bind)
                 ->where($column, '>', $lastId)
                 ->order($column, 'asc')
                 ->select();
+            if ($resultSet instanceof Collection) {
+                $resultSet = $resultSet->all();
+            }
         }
         return true;
     }
@@ -2210,7 +2237,7 @@ class Query
             throw new Exception('delete without condition');
         }
         // 生成删除SQL语句
-        $sql = $this->builder()->delete($options);
+        $sql = $this->builder->delete($options);
         // 获取参数绑定
         $bind = $this->getBind();
         if ($options['fetch_sql']) {
