@@ -112,7 +112,7 @@ class Maindata extends Base
 			// ->whereTime("")
 			// ->whereTime($timeWhere)
 			// ->select();
-			->select();
+			->select(false);
 		return $data;
 	}
 
