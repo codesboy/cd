@@ -3,7 +3,8 @@ namespace app\credit\controller;
 use app\system\controller\Base;
 use app\system\model\AddForm;
 use think\Validate;
-// use think\Db;
+use app\system\model\Admin;
+use think\Session;
 use app\credit\model\CreditUsers;
 use app\credit\model\CreditConsumption;
 use \PHPExcel;
@@ -56,6 +57,7 @@ class Creditdata extends Base{
         $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time,comment,pid,update_time')
             ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
             ->view('credit_consumption',['SUM(account_payable)'=>'suma','SUM(used_credit)'=>'sumu','SUM(real_pay)'=>'sumr','SUM(get_credit)-SUM(used_credit)'=>'sumg'],'uid=u.id','left')
+            ->view('admin',['username'=>'create_user_name'],'admin.id=u.create_user_id','left')
             ->whereOr($fuzzy)
             // ->whereTime('u.create_time','d')
             // ->where('SUM(get_credit)-SUM(used_credit)','BETWEEN',[$startpoint,$endpoint])
@@ -142,14 +144,17 @@ class Creditdata extends Base{
 
 
             // 下线基本资料
+            $adminId=Admin::getByUsername(Session::get('user_name'));
             $credituserdata=[
                 'name'=>input('name'),
                 'sex'=>input('sex'),
                 'age'=>input('age'),
                 'telephone'=>input('telephone'),
                 'pid'=>input('pid'),
-                'comment'=>input('comment')
+                'comment'=>input('comment'),
+                'create_user_id'=>$adminId['id']
             ];
+
 
             $getid=0;
 

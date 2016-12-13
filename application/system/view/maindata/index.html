@@ -60,9 +60,7 @@
             <div style="margin-bottom: 8px;">
                 <a href="javascript:;" class="easyui-menubutton" menu="#mm1"><span class="glyphicon glyphicon-plus-sign"></span>添加</a>
                 <div id="mm1" style="width:150px;">
-                    <div iconCls="icon-undo" data-toggle="modal" data-target="#myModal">新增客户</div>
-                    <!-- <div iconCls="icon-undo" onclick="$('#myModal').dialog('open')">新增客户</div> -->
-                    <!-- <div iconCls="icon-undo" onclick="addTab('新增客户','/index/useradd/');">新增客户</div> -->
+                    <div iconCls="icon-undo" data-toggle="modal" data-target="#userAddModal">新增客户</div>
                     <div class="menu-sep"></div>
                     <div iconCls="icon-redo" id="addCon">新增消费</div>
                 </div>
@@ -99,13 +97,9 @@
         </div>
     </div>
 
-    <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-        Launch demo modal
-    </button> -->
     <!-- 添加用户表单 -->
-    {include file="Public/userAddForm"}
+    {include file="public/userAddForm"}
     <!-- 添加消费表单 -->
-    <!-- <div class="modal fade" id="addConModal" tabindex="-1" role="dialog1" aria-labelledby="myModalLabel1" aria-hidden="false"> -->
     <div class="modal fade" id="addConModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -302,7 +296,7 @@
     }
 
     // 表单部分js
-    $('#myModal').modal({
+    $('#userAddModal').modal({
         // backdrop: false,
         show:false
     })
@@ -487,8 +481,11 @@
                 case '女':
                     selected.sex=2;
                     break;
-                default:
+                case '未知':
                     selected.sex=0;
+                    break;
+                default:
+                    selected.sex=selected.sex;
                     break;
             }
             $('#editForm select[name=sex]').val(selected.sex);

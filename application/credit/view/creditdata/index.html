@@ -295,7 +295,8 @@
                 {field:'tjr',title:'推荐者(来源)',formatter:function(value,row){if(value==null){return '无'}else{return value+'：'+row.tjrtel}},width:120},
                 {field:'comment',title:'备注',width:120},
                 {field:'create_time',title:'登记时间',width:120},
-                {field:'update_time',title:'修改时间',width:120}
+                {field:'update_time',title:'修改时间',width:120},
+                {field:'create_user_name',title:'操作员',width:120}
             ]],
             toolbar: "#toolbar",
             fitColumns: true, //表格宽度自适应
@@ -490,7 +491,8 @@
     // 修改客户资料
     $('#openEditModal').on('click',function(){
         var selected=$('#dg').datagrid('getSelected');
-        // console.info(selected)
+        // console.info(selected);
+
         if(selected){
             $('#editFormTit').html(selected.name+'('+selected.telephone+')');
             $('#editForm input[name=name]').val(selected.name);
@@ -502,10 +504,15 @@
                 case '女':
                     selected.sex=2;
                     break;
-                default:
+                case '未知':
                     selected.sex=0;
                     break;
+                default:
+                    selected.sex=selected.sex;
+                    break;
             }
+            /*console.log(selected.sex);
+            return false;*/
             $('#editForm select[name=sex]').val(selected.sex)
             $('#editForm input[name=telephone]').val(selected.telephone);
             $('#editForm input[name=telephone]').val(selected.telephone);
