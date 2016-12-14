@@ -489,7 +489,8 @@
                     break;
             }
             $('#editForm select[name=sex]').val(selected.sex);
-            $('#editForm input[name=birthday]').val(selected.birthday);
+            // $('#editForm input[name=birthday]').val(selected.birthday);
+            $('#editForm input[name=birthday]').attr('value',selected.birthday);
             $('#editForm input[name=telephone]').val(selected.telephone);
             // console.info(selected)
             $('#editForm select[name=province_id]').val(selected.province_id);//选中对应的省份

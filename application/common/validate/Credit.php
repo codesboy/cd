@@ -37,9 +37,10 @@ class Credit extends Validate{
 
     protected $scene = [
         'addparent'  =>  ['name','telephone','age','sex'],
-        'addchild'  =>  ['disease_id','money','pay_time'],
+        'addchild_info'  =>  ['name','telephone'=>['regex'=>'/^1(3[0-9]|4[57]|5[0-35-9]|7[01678]|8[0-9])\d{8}$/','unique'=>'credit_users'],'age','sex'],
+        'addchild_xf'  =>  ['disease_id','money','pay_time'],
         'addpoints'=>['uid','disease_id','pay_time','account_payable','used_credit'],
-        'edit'=>['id','name','telephone','age','sex']
+        'edit'=>['id','name','telephone'=>['regex'=>'/^1(3[0-9]|4[57]|5[0-35-9]|7[01678]|8[0-9])\d{8}$/','unique'=>'credit_users'],'age','sex']
     ];
 
 

@@ -186,11 +186,12 @@ class Creditdata extends Base{
             $validate = validate('Credit');
             // 下线客户资料写入数据库
 
-            if($validate->scene('addparent')->check($credituserdata) && $validate->scene('addchild')->check($creditconsumptiondata)){
+            if($validate->scene('addchild_info')->check($credituserdata) && $validate->scene('addchild_xf')->check($creditconsumptiondata)){
                 // return '1';
                 // exit;
                 $credit_user=new CreditUsers;
-                $credit_user->save($credituserdata);//写入基本信息
+                $credit_user->save($credituserdata);//写入基本信
+                // dump($credit_user);die;
                 // 获取自增ID
                 $getid=$credit_user->id;
                 $creditconsumptiondata[0]['uid']=$getid;
