@@ -52,9 +52,11 @@
             <div style="margin-bottom: 8px;">
                 <a href="javascript:;" class="easyui-menubutton" menu="#mm1"><span class="glyphicon glyphicon-plus-sign"></span>添加</a>
                 <div id="mm1" style="width:150px;">
-                    <div iconCls="icon-undo" data-toggle="modal" id="addChildFormBtn">新增下线</div>
+                    <div iconCls="icon-man" data-toggle="modal" id="addChildFormBtn">新增下线</div>
                     <div class="menu-sep"></div>
-                    <div iconCls="icon-redo" id="startManPoints">积分管理</div>
+                    <div iconCls="icon-sum" id="startManPoints">积分管理</div>
+                    <div class="menu-sep"></div>
+                    <div iconCls="icon-redo" id="openGivingModal">积分转赠</div>
                 </div>
                 <a id="openEditModal" class="easyui-linkbutton" plain="true"><span class="glyphicon glyphicon-edit"></span>修改资料</a>
                 <a id="reload" class="easyui-linkbutton" plain="true"><span class="glyphicon glyphicon-refresh"></span>刷新数据</a>
@@ -256,6 +258,40 @@
                                     <input class="form-control" id="age" name="age" type="text" placeholder="年龄" required="required" value="" />
                                 </div>
                                 <input type="hidden" name="id" value="">
+                            </div>
+                        <!-- </form> -->
+                    </div>
+                    <div class="modal-footer">
+                        <label id="editMsg" class="pull-left text-danger"></label>
+                        <button type="button" class="btn btn-success" id="editSubmit">保存</button>
+                        <button type="reset" class="btn btn-warning">重置</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 积分转赠表单 -->
+    <div class="modal fade" id="givingModel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-user"></span>转赠客户 <span id="editFormTit" class="text-primary"></span> 积分</h4>
+                </div>
+                <form method="post" class="form-inline-" role="form" id="editForm">
+                    <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label class="control-label" for="name">转赠对象手机号</label>
+                                    <input class="form-control" id="name" name="name" type="text" placeholder="姓名" required="required" value="" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label class="control-label" for="telephone">转赠积分数(不能大于剩余积分数<em id="lastPoints">50</em>)</label>
+                                    <input class="form-control" id="telephone" name="telephone" type="text" placeholder="手机号码" required="required" value="" />
+                                </div>
                             </div>
                         <!-- </form> -->
                     </div>
@@ -550,7 +586,20 @@
             alert('请先选择客户!');
         }
 
-    })
+    });
+
+    // 积分转赠
+    $('#openGivingModal').on('click',function(){
+        var selected=$('#dg').datagrid('getSelected');
+        if(selected){
+            $('#editFormTit').html(selected.name+'('+selected.telephone+')');
+            $('#lastPoints').html(selected.sumg)
+            $('#givingModel').modal();
+
+        }else{
+            alert('请选择用户');
+        }
+    });
 </script>
 
 
