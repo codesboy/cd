@@ -83,7 +83,7 @@ class Creditdata extends Base{
 
             $credit_users=$this->getCreditsDate();
 
-            $total=CreditUsers::count('id');
+            $total=count($credit_users);
             $allCreditData=[
                 'total'=>$total,
                 'rows'=>$credit_users
