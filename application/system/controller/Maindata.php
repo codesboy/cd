@@ -120,7 +120,8 @@ class Maindata extends Base
 	public function returndata(){
 		if(Request()->isPost()){
 			$data=$this->getUserData();
-			$total=UsersInfo::count();
+			// dump($data);die;
+			$total=count($data);
 			$result=[
 				'total'=>$total,
 				'rows'=>$data
