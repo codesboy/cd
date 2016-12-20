@@ -89,6 +89,7 @@ class Maindata extends Base
 		}
 
 		// $data=db('users_info')->alias('u')
+
 		$data=$user->alias('u')
 			->join('(select a.*,sum(money) summoney from (select * from client_consumption ORDER BY jz_time desc) a group by a.uid ) con','con.uid=u.id')
 			->join('client_province p','p.province_id=u.province_id','LEFT')
@@ -117,9 +118,17 @@ class Maindata extends Base
 	// 处理全部用户数据给前端使用
 	public function returndata(){
 		if(Request()->isPost()){
+
 			$data=$this->getUserData();
 			// dump($data);die;
-			$total=count($data);
+			$postData=input('post.');
+			// dump(count($postData));die;
+			if(count($postData)==2){
+				$total=UsersInfo::count();
+			}else{
+				$total=count($data);
+			}
+
 			$result=[
 				'total'=>$total,
 				'rows'=>$data
