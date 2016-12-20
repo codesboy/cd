@@ -52,9 +52,9 @@ class Maindata extends Base
 	public function getUserData(){
 		$user=new UsersInfo;
 		// 分页条件
-		$page=input('page');
-		$rows=input('rows');
-		$offset=($page-1)*$rows;
+		$page=input('page');//1 2 3
+		$rows=input('rows');//30
+		$offset=($page-1)*$rows;//0 30 60
 
 		// 排序条件
 		$sort=input('sort')?input('sort'):'u.id';
@@ -105,13 +105,11 @@ class Maindata extends Base
 			->group('u.id')
 			->where($moneyRange)
 			->whereOr($fuzzy)
-			// ->where('summoney','between',[$startmoney,$endmoney])
 			->order([$sort=>$order])
-			->limit($offset,$rows)
+			->limit($offset,$rows)//检索$offset+1到$offset+$rows记录行1-30 31-60
 			->whereTime('u.create_time',$time)
 			// ->whereTime("")
 			// ->whereTime($timeWhere)
-			// ->select();
 			->select();
 		return $data;
 	}
