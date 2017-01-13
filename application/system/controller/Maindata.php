@@ -123,12 +123,12 @@ class Maindata extends Base
 			// dump($data);die;
 			$postData=input('post.');
 			// dump(count($postData));die;
-			if(count($postData)==2){
+			/*if(count($postData)==2){
 				$total=UsersInfo::count();
 			}else{
 				$total=count($data);
-			}
-
+			}*/
+			$total=UsersInfo::count();
 			$result=[
 				'total'=>$total,
 				'rows'=>$data
