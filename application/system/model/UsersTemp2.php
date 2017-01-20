@@ -13,8 +13,8 @@ class UsersTemp2 extends Model
     // protected $pk    = 'id';
     protected $type = [
         // 'birthday'    =>  'timestamp:Y-m-d',
-        'zxsj'    =>  'timestamp',
-        'dzsj'    =>  'timestamp',
+        // 'zxsj'    =>  'timestamp',
+        // 'dzsj'    =>  'timestamp',
         // 'jz_time'    =>  'timestamp:Y-m-d'
 
     ];

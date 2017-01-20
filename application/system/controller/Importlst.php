@@ -5,7 +5,7 @@ use app\system\model\UsersTemp2;
 // use think\Db;
 use \PHPExcel;
 use \PHPExcel_IOFactory;
-class Daoru2 extends Base
+class Importlst extends Base
 {
     public function import(){
         $objReader = PHPExcel_IOFactory::createReader('Excel5'); //use Excel5 for 2003 format
@@ -75,6 +75,13 @@ class Daoru2 extends Base
             //echo $sql;
             //exit
         }
+    }
+
+    public function lst(){
+        $data= UsersTemp2::all();
+        // dump($data);die;
+        $this->assign('data',$data);
+        return $this->fetch('index');
     }
 
 

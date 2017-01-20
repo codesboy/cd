@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-01-20 16:50:15
+Date: 2017-01-20 17:37:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -3827,7 +3827,7 @@ CREATE TABLE `client_menu` (
   `url` varchar(255) NOT NULL,
   `pid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_menu
@@ -3840,6 +3840,7 @@ INSERT INTO `client_menu` VALUES ('16', '系统设置', null, '', '0');
 INSERT INTO `client_menu` VALUES ('10', '积分系统', null, '', '0');
 INSERT INTO `client_menu` VALUES ('11', '添加客户', 'user-plus', '/credit/add/', '10');
 INSERT INTO `client_menu` VALUES ('15', '积分查询', null, '/credit/creditdata/', '10');
+INSERT INTO `client_menu` VALUES ('17', '导入列表', null, '/system/importlst/lst', '1');
 
 -- ----------------------------
 -- Table structure for client_province
