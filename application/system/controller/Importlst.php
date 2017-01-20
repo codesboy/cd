@@ -78,7 +78,10 @@ class Importlst extends Base
     }
 
     public function lst(){
-        $data= UsersTemp2::all();
+        // $data= UsersTemp2::all()->paginate(10);
+        $data= UsersTemp2::paginate(30);
+        // $data= UsersTemp2::select()->paginate(10);
+        // $data= UsersTemp2::select();
         // dump($data);die;
         $this->assign('data',$data);
         return $this->fetch('index');
