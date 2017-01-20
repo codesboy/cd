@@ -4,22 +4,22 @@ namespace app\system\model;
 use think\Model;
 
 // 用户信息模型
-class UsersInfo extends Model
+class UsersTemp2 extends Model
 {
     // 开启写入时间戳
-    protected $autoWriteTimestamp = true;
+    // protected $autoWriteTimestamp = true;
 
     // 设置数据表主键,默认主键自动识别
-    protected $pk    = 'id';
+    // protected $pk    = 'id';
     protected $type = [
-        'birthday'    =>  'timestamp:Y-m-d',
-        'create_time'    =>  'timestamp',
-        'update_time'    =>  'timestamp',
+        // 'birthday'    =>  'timestamp:Y-m-d',
+        'zxsj'    =>  'timestamp',
+        'dzsj'    =>  'timestamp',
         // 'jz_time'    =>  'timestamp:Y-m-d'
 
     ];
 
-    // 定义关联
+    /*// 定义关联
     public function consumptions(){
         return $this->hasMany('Consumption','uid');
 
@@ -37,5 +37,5 @@ class UsersInfo extends Model
     protected function getAgeAttr($value,$data)
     {
         return getAge(date('Y-m-d',$data['birthday']));
-    }
+    }*/
 }
