@@ -13,8 +13,8 @@ class UsersTemp2 extends Model
     // protected $pk    = 'id';
     protected $type = [
         // 'birthday'    =>  'timestamp:Y-m-d',
-        // 'zxsj'    =>  'timestamp',
-        // 'dzsj'    =>  'timestamp',
+        'zxsj'    =>  'timestamp',
+        'dzsj'    =>  'timestamp',
         // 'jz_time'    =>  'timestamp:Y-m-d'
 
     ];
@@ -26,16 +26,18 @@ class UsersTemp2 extends Model
 
     }
 
-    // sex读取器
-    protected function getSexAttr($value)
-    {
-        $sex = [0=>'未知',1=>'男',2=>'女'];
-        return $sex[$value];
-    }
+
 
     // 年龄读取器
     protected function getAgeAttr($value,$data)
     {
         return getAge(date('Y-m-d',$data['birthday']));
     }*/
+
+    // sex读取器
+    protected function getXbAttr($value)
+    {
+        $sex = [0=>'未知',1=>'男',2=>'女'];
+        return $sex[$value];
+    }
 }

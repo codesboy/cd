@@ -17,11 +17,14 @@
 <script src="__PUBLIC__static/bootstrap/js/bootstrap.min.js"></script>
 <script src="__PUBLIC__static/bootstrap/js/bootstrap-datepicker.min.js"></script>
 <script src="__PUBLIC__static/bootstrap/js/bootstrap-datepicker.zh-CN.min.js"></script>
+<style>
+    th,td{text-align: center;}
+</style>
 </head>
 <body>
-    <div class="table-responsive11">
+    <div class="table-responsive">
         <table class="table table-bordered table-hover table-condensed">
-            <caption>基本的表格布局</caption>
+            <caption>病人消费</caption>
               <thead>
                 <tr>
                   <th>id</th>
@@ -45,7 +48,7 @@
               <tbody>
                 {volist name='data' id='vo'}
                     <tr>
-                      <td>{$vo.id}</td>
+                      <td>{$i}</td>
                       <td>{$vo.zt}</td>
                       <td>{$vo.xm}</td>
                       <td>{$vo.xb}</td>
@@ -58,14 +61,14 @@
                       <td>{$vo.zxdh}</td>
                       <td>{$vo.zxsj}</td>
                       <td>{$vo.zxbz}</td>
-                      <td width="100">{$vo.zxqkjy}</td>
+                      <td style="width: 25%">{$vo.zxqkjy}</td>
                       <td>{$vo.dzsj}</td>
                       <td>{$vo.fzlb}</td>
                     </tr>
                 {/volist}
               </tbody>
         </table>
-        {$data->render()}
+        <div style="text-align: center;">{$data->render()}</div>
     </div>
 
 </body>

@@ -32,7 +32,7 @@ class Importlst extends Base
 
             // exit;
 
-            /*switch ($strs[2]) {
+            switch ($strs[2]) {
                 case '男':
                     $strs[2]=1;
                     break;
@@ -43,9 +43,11 @@ class Importlst extends Base
                     $strs[2]=0;
                     break;
             }
-            $strs[10]=strtotime($strs[10]);*/
+
+            // $strs[10]=strtotime($strs[10]);
             // echo $strs[2];
             // echo strtotime($strs[10]);
+            // $shared = new \PHPExcel_Shared_Date();
 
             $user=new UsersTemp2;
             $user->data([
@@ -60,10 +62,11 @@ class Importlst extends Base
                 'zxys'=>$strs[7],
                 'bz'=>$strs[8],
                 'zxdh'=>$strs[9],
-                'zxsj'=>$strs[10],
+                // 'zxsj'=>$shared ->ExcelToPHP($strs[10]),
+                'zxsj'=>strtotime($strs[10]),
                 'zxbz'=>$strs[12],
                 'zxqkjy'=>$strs[13],
-                'dzsj'=>$strs[14],
+                'dzsj'=>strtotime($strs[14]),
                 'fzlb'=>$strs[15],
             ]);
             $result=$user->save();
