@@ -108,7 +108,7 @@ class Importlst extends Base
 
 
         //从第四行开始读取数据{
-        for($row=1;$row<=$highestRow;$row++){
+        for($row=4;$row<=$highestRow;$row++){
             // $str="";
             $strs=[];
             // 注意highestColumnIndex的列数从0开始
@@ -124,8 +124,9 @@ class Importlst extends Base
             $user->data([
                 'xm'=>$strs[2],
                 'khkh'=>$strs[1],
-                'xfje'=>$strs[7],
-                'bz'=>$strs[8]
+                'kmlx'=>$strs[8],
+                'xfje'=>$strs[15],
+                'bz'=>$strs[42],
             ]);
             $result=$user->save();
             // $result=$user->fetchSql()->save();
@@ -144,7 +145,25 @@ class Importlst extends Base
 /**
  * 合并表格
  * CREATE TABLE client_users_temp3 AS
-SELECT client_users_temp.id,client_users_temp.xm,client_users_temp.khkh,client_users_temp.xfje,client_users_temp.bz,client_users_temp2.xb,client_users_temp2.age,client_users_temp2.dh,client_users_temp2.kfqd,client_users_temp2.xxly,client_users_temp2.zxys,client_users_temp2.dzsj,client_users_temp2.zxgj,client_users_temp2.fzlb,client_users_temp2.jzys
+SELECT client_users_temp.xm,client_users_temp.khkh,client_users_temp.kmlx,client_users_temp.xfje,client_users_temp.bz,client_users_temp2.xb,client_users_temp2.age,client_users_temp2.dh,client_users_temp2.kfqd,client_users_temp2.xxly,client_users_temp2.zxys,client_users_temp2.dzsj,client_users_temp2.zxgj,client_users_temp2.fzlb,client_users_temp2.jzys
 FROM client_users_temp,client_users_temp2
 WHERE client_users_temp.xm=client_users_temp2.xm;
+
+
+其他sql
+#delete from client_users_info where id>50;
+#alter table client_users_info auto_increment =50
+TRUNCATE client_users_info
+#update client_users_temp3 set kfqd='市场转诊' where kfqd='现场咨询';
+#select jzys from client_users_temp3 group by jzys;
+#select kfqd,xxly from client_users_temp3 group by xxly;
+#update client_users_temp3 set fzlb=jzys where fzlb='';
+
+
+参照表更新
+UPDATE client_users_temp3 AS t1, client_disease AS t2
+SET
+t1.kmlx = t2.id
+WHERE t1.kmlx = t2.disease_name
+
  */
