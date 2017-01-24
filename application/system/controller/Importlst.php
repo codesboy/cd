@@ -210,4 +210,7 @@ INSERT INTO client_consumption (uid,wdzx_id,qtzx_id,disease_id,money,jz_time,ill
 SELECT b.id,a.zxys,a.fzlb,a.kmlx,a.xfje,a.dzsj,a.bz FROM client_users_temp3 AS a,client_users_info AS b WHERE a.xfje>0 AND a.khkh=b.usersn
 
 
+UPDATE client_consumption SET create_time=1485224979,update_time=1485224979
+
+
  */

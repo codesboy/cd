@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-01-24 12:42:51
+Date: 2017-01-24 17:27:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,7 +32,7 @@ CREATE TABLE `client_admin` (
 -- ----------------------------
 -- Records of client_admin
 -- ----------------------------
-INSERT INTO `client_admin` VALUES ('1', 'admin', 'c3284d0f94606de1fd2af172aba15bf3', '1', '1', '1,10,16');
+INSERT INTO `client_admin` VALUES ('1', 'admin', 'c3284d0f94606de1fd2af172aba15bf3', '1', '1', '1,8,40,50');
 INSERT INTO `client_admin` VALUES ('3', 'cousum', 'c3284d0f94606de1fd2af172aba15bf3', '1', '1', '1');
 INSERT INTO `client_admin` VALUES ('5', '官平', '14e1b600b1fd579f47433b88e8d85291', '1', '1', '10');
 INSERT INTO `client_admin` VALUES ('4', '田敏', '14e1b600b1fd579f47433b88e8d85291', '1', '1', '10');
@@ -4062,14 +4062,15 @@ CREATE TABLE `client_doctors` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `doctor` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_doctors
 -- ----------------------------
-INSERT INTO `client_doctors` VALUES ('1', '曾杨');
-INSERT INTO `client_doctors` VALUES ('2', '冯洁');
-INSERT INTO `client_doctors` VALUES ('3', '3das');
+INSERT INTO `client_doctors` VALUES ('1', '胡家林');
+INSERT INTO `client_doctors` VALUES ('2', '何勇');
+INSERT INTO `client_doctors` VALUES ('3', '刘永明');
+INSERT INTO `client_doctors` VALUES ('4', '行勇军');
 
 -- ----------------------------
 -- Table structure for client_menu
@@ -4082,7 +4083,7 @@ CREATE TABLE `client_menu` (
   `url` varchar(255) NOT NULL,
   `pid` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of client_menu
@@ -4090,12 +4091,14 @@ CREATE TABLE `client_menu` (
 INSERT INTO `client_menu` VALUES ('1', '客户管理', 'credit-card', '', '0');
 INSERT INTO `client_menu` VALUES ('2', '客户查询', 'plus', '/system/maindata/', '1');
 INSERT INTO `client_menu` VALUES ('7', '新增客户', 'user-plus', '/system/useradd/', '1');
-INSERT INTO `client_menu` VALUES ('6', '数据字典', null, '/system/dd/', '16');
-INSERT INTO `client_menu` VALUES ('16', '系统设置', null, '', '0');
-INSERT INTO `client_menu` VALUES ('10', '积分系统', null, '', '0');
-INSERT INTO `client_menu` VALUES ('11', '添加客户', 'user-plus', '/credit/add/', '10');
-INSERT INTO `client_menu` VALUES ('15', '积分查询', null, '/credit/creditdata/', '10');
+INSERT INTO `client_menu` VALUES ('6', '数据字典', null, '/system/dd/', '50');
+INSERT INTO `client_menu` VALUES ('50', '系统设置', null, '', '0');
+INSERT INTO `client_menu` VALUES ('40', '积分系统', null, '', '0');
+INSERT INTO `client_menu` VALUES ('11', '添加客户', 'user-plus', '/credit/add/', '40');
+INSERT INTO `client_menu` VALUES ('15', '积分查询', null, '/credit/creditdata/', '40');
 INSERT INTO `client_menu` VALUES ('17', '导入列表', null, '/system/importlst/lst', '1');
+INSERT INTO `client_menu` VALUES ('8', '数据分析', null, '', '0');
+INSERT INTO `client_menu` VALUES ('9', '图表分析', null, '/analysis/index/index', '8');
 
 -- ----------------------------
 -- Table structure for client_province
