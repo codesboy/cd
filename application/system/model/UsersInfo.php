@@ -15,7 +15,7 @@ class UsersInfo extends Model
         'birthday'    =>  'timestamp:Y-m-d',
         'create_time'    =>  'timestamp',
         'update_time'    =>  'timestamp',
-        // 'jz_time'    =>  'timestamp:Y-m-d'
+        'jz_time'    =>  'timestamp:Y-m-d'
 
     ];
 
@@ -36,6 +36,12 @@ class UsersInfo extends Model
     // 年龄读取器
     protected function getAgeAttr($value,$data)
     {
-        return getAge(date('Y-m-d',$data['birthday']));
+        /*if($data['birthday']){
+
+            return getAge(date('Y-m-d',$data['birthday']));
+        }else{
+            return $value;
+        }*/
+        return $data['birthday']?getAge(date('Y-m-d',$data['birthday'])):$value;
     }
 }

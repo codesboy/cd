@@ -166,4 +166,48 @@ SET
 t1.kmlx = t2.id
 WHERE t1.kmlx = t2.disease_name
 
+更新消费记录表
+FieldTypeComment
+id      int(10) unsigned NOT NULL
+khkh        var char(255) NULL客户卡号
+xm      var char(255) NULL姓名
+xb      var char(255) NULL性别
+age     small       int(255) NULL年龄
+dh      var char(255) NULL电话
+kmlx        var char(255) NULL科目类型
+kfqd        var char(255) NULL开发渠道
+xxly        var char(255) NULL信息来源
+zxgj        var char(50) NULL咨询工具
+zxys        var char(255) NULL咨询医生
+fzlb        var char(255) NULL分诊类别
+dzsj        int(11) NULL到诊时间
+xfje        int(11) NULL消费金额
+bz      var char(1000) NULL备注
+
+
+
+FieldTypeComment
+id      int(10) unsigned NOT NULL
+name        char(20) NOT NULL客户姓名
+usersn      char(20) NULL客户编码
+sex     tiny        int(1) unsigned NULL性别
+birthday        int(11) NULL生日
+age     tiny        int(3) unsigned NULL年龄
+telephone   char(11) NULL手机号
+province_id     mediumint(8) unsigned NULL省份id
+city_id     mediumint(8) unsigned NULL市级id
+county_id       mediumint(8) unsigned NULL区县id
+dev_id          tinyint(3) unsigned NULL开发渠道id
+from_id         tinyint(3) unsigned NULL信息来源id
+tool_id         tinyint(3) unsigned NULL咨询工具id
+create_time     int(10) unsigned NULL登记时间
+update_time     int(11) NULL修改时间
+
+insert into client_users_info (usersn,name,sex,age,telephone,dev_id,from_id,tool_id)
+select khkh,xm,xb,age,dh,kfqd,xxly,zxgj from client_users_temp3 group by khkh
+
+INSERT INTO client_consumption (uid,wdzx_id,qtzx_id,disease_id,money,jz_time,ill_desc)
+SELECT b.id,a.zxys,a.fzlb,a.kmlx,a.xfje,a.dzsj,a.bz FROM client_users_temp3 AS a,client_users_info AS b WHERE a.xfje>0 AND a.khkh=b.usersn
+
+
  */

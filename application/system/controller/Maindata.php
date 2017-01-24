@@ -85,7 +85,7 @@ class Maindata extends Base
 		$timeWhere=[];
 		// $time=input('selecttime');
 		if(!empty($time)){
-			$timeWhere['u.create_time']=[$time];
+			$timeWhere['jz_time']=[$time];
 		}
 
 		// $data=db('users_info')->alias('u')
@@ -108,7 +108,7 @@ class Maindata extends Base
 			->whereOr($fuzzy)
 			->order([$sort=>$order])
 			->limit($offset,$rows)//检索$offset+1到$offset+$rows记录行1-30 31-60
-			->whereTime('u.create_time',$time)
+			->whereTime('jz_time',$time)
 			// ->whereTime("")
 			// ->whereTime($timeWhere)
 			->select();
