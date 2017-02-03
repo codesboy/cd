@@ -3,16 +3,29 @@ namespace app\system\controller;
 use app\system\model\AddForm;
 use app\system\model\UsersTemp;
 use app\system\model\UsersTemp2;
-// use think\Db;
+use think\Db;
 use \PHPExcel;
 use \PHPExcel_IOFactory;
 use \PHPExcel_Cell;
 class Importlst extends Base
 {
+
+    public function lst(){
+        // $data= UsersTemp2::all()->paginate(10);
+        $data= UsersTemp2::paginate(30);
+        // $data= UsersTemp2::select()->paginate(10);
+        // $data= UsersTemp2::select();
+        // dump($data);die;
+        $this->assign('data',$data);
+        return $this->fetch('index');
+    }
+
+
+
     // 导入基本客户资料 医汇通到诊
-    public function import(){
+    public function daoru1(){
         $objReader = PHPExcel_IOFactory::createReader('Excel5'); //use Excel5 for 2003 format
-        $excelpath="a1.xls";
+        $excelpath="a.xls";
         $objPHPExcel = $objReader->load(ROOT_PATH.$excelpath);
         $sheet = $objPHPExcel->getSheet(0);//// 读取第一個工作表
         $highestRow = $sheet->getHighestRow();           //取得总行数
@@ -78,18 +91,10 @@ class Importlst extends Base
         }
     }
 
-    public function lst(){
-        // $data= UsersTemp2::all()->paginate(10);
-        $data= UsersTemp2::paginate(30);
-        // $data= UsersTemp2::select()->paginate(10);
-        // $data= UsersTemp2::select();
-        // dump($data);die;
-        $this->assign('data',$data);
-        return $this->fetch('index');
-    }
+
 
     // 导入客户消费（宏脉 客户消费明细表.xls）
-    public function daoru(){
+    public function daoru2(){
         $objReader = PHPExcel_IOFactory::createReader('Excel5'); //use Excel5 for 2003 format
         $excelpath="b.xls";
         $objPHPExcel = $objReader->load(ROOT_PATH.$excelpath);
@@ -137,6 +142,21 @@ class Importlst extends Base
             //echo $sql;
             //exit
         }
+    }
+
+    // 合并两张表到新表client_users_temp3
+    public function hebing(){
+        $temp3=\think\Db::execute('CREATE TABLE client_users_temp3 AS SELECT client_users_temp.xm,client_users_temp.khkh,client_users_temp.kmlx,client_users_temp.xfje,client_users_temp.bz,client_users_temp2.xb,client_users_temp2.age,client_users_temp2.dh,client_users_temp2.kfqd,client_users_temp2.xxly,client_users_temp2.zxys,client_users_temp2.dzsj,client_users_temp2.zxgj,client_users_temp2.fzlb,client_users_temp2.jzys FROM client_users_temp,client_users_temp2 WHERE client_users_temp.xm=client_users_temp2.xm');
+        if($temp3){
+            // 更新分诊医生字段
+            Db::execute("update client_users_temp3 set fzlb=jzys where fzlb=''");
+        }
+
+    }
+
+    // 将client_users_temp3的内容插入到users_info表
+    public function updateuserinfo(){
+        Db::execute("insert into client_users_info (usersn,name,sex,age,telephone,dev_id,from_id,tool_id) select khkh,xm,xb,age,dh,kfqd,xxly,zxgj from client_users_temp3 group by khkh");
     }
 
 
