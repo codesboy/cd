@@ -21,39 +21,21 @@
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
 
-        $.ajax({
-            url:"{:url('xiangmu')}?r="+Math.random(),
-            type: 'POST',
-            dataType: 'json',
-            data: {},
-        })
-        .done(function(data) {
-            console.log(data);
-            console.log(typeof(data))
-            // 填入数据
-            myChart.setOption({
-                series: [{
-                    data: data
-                }]
-            });
-        })
-        .fail(function() {
-            console.log("error");
-        });
+
 
 
         // 指定图表的配置项和数据
         option = {
             title: {
-                text: '各项目销售数目',
-                textStyle: {
+                text: '各项目销售数量',
+                /*textStyle: {
                     fontSize: 18,
                     fontWeight: 'bolder',
                     color: '#fff'          // 主标题文字颜色
-                },
+                },*/
             },
             tooltip: {},
-            backgroundColor: '#2c343c',
+            // backgroundColor: '#2c343c',
             /*visualMap: {
                 // show: false,
                 min: 80,
@@ -104,6 +86,28 @@
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
+        myChart.showLoading();
+        $.ajax({
+            url:"{:url('xiangmu')}?r="+Math.random(),
+            // async: false,
+            type: 'POST',
+            dataType: 'json',
+            data: {},
+        })
+        .done(function(data) {
+            myChart.hideLoading();
+            console.log(data);
+            console.log(typeof(data))
+            // 填入数据
+            myChart.setOption({
+                series: [{
+                    data: data
+                }]
+            });
+        })
+        .fail(function() {
+            console.log("error");
+        });
     </script>
 </body>
 </html>
