@@ -81,7 +81,7 @@ class Maindata extends Base
 
 
 
-		$time=input('selecttime')?input('selecttime'):'y';
+		$time=input('selecttime')?input('selecttime'):0;
 		$timeWhere=[];
 		// $time=input('selecttime');
 		if(!empty($time)){
@@ -90,7 +90,7 @@ class Maindata extends Base
 
 		// $data=db('users_info')->alias('u')
 
-		$data=$user->alias('u')
+		$data=UsersInfo::alias('u')
 			->join('(select a.*,sum(money) summoney from (select * from client_consumption ORDER BY jz_time desc) a group by a.uid ) con','con.uid=u.id')
 			->join('client_province p','p.province_id=u.province_id','LEFT')
 			->join('client_city c','c.city_id=u.city_id','LEFT')
@@ -107,42 +107,67 @@ class Maindata extends Base
 			->where($moneyRange)
 			->whereOr($fuzzy)
 			->order([$sort=>$order])
-			->limit($offset,$rows)//检索$offset+1到$offset+$rows记录行1-30 31-60
+			// ->limit($offset,$rows)//检索$offset+1到$offset+$rows记录行1-30 31-60
 			->whereTime('jz_time',$time)
-			// ->whereTime("")
-			// ->whereTime($timeWhere)
-			->select();
-		return $data;
+			->paginate(30);
+			// ->select();
+
+			// dump($data->toArray());//array
+			$data=$data->toArray();
+
+			// dump($data);die;
+
+			// dump($data['total']);die;
+
+			$totalnum=$data['total'];//查询到的记录条数 455
+			// echo $totalnum;die;
+
+			$result=[
+				'total'=>$totalnum,
+				// 'total'=>46,
+				'rows'=>$data['data']
+			];
+			return json($result);
+
+
+
+
+
 	}
 
 	// 处理全部用户数据给前端使用
 	public function returndata(){
-		if(Request()->isPost()){
+		// if(Request()->isPost()){
 
 			$data=$this->getUserData();
 			// dump($data);die;
-			$postData=input('post.');
+			// var_dump($data['totalnum']);die;
+			// dump($this->getUserData()->simple);die;
+			// $postData=input('post.');
 			// dump(count($postData));die;
 			/*if(count($postData)==2){
 				$total=UsersInfo::count();
 			}else{
 				$total=count($data);
 			}*/
-			$total=UsersInfo::count();
+			// $total=UsersInfo::count();
+			// $total=count($data);
+			$total=$data['totalnum'];
+			echo $total;die;
 			$result=[
 				'total'=>$total,
-				'rows'=>$data
+				'rows'=>$data['rows']
 			];
 			//重要，easyui的标准数据格式，数据总数和数据内容在同一个json中
 
-	        $result=json($result);
+	        // $result=json($result);
 			return $result;
 
 			// dump($result);
 
-		}else{
-			return 'Hello World!';
-		}
+		// }else{
+		// 	return 'Hello World!';
+		// }
 	}
 
 	// 读取用户数据
@@ -201,7 +226,7 @@ class Maindata extends Base
 
 		// echo $this->returndata()->data;die;
 		$data=$this->getUserData();
-		// dump($data);die;
+		dump($data);die;
 		// 填充数据
 		// $oSheet->fromArray($row); //此方法占内存
 		$j=2;

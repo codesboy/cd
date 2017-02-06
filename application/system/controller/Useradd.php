@@ -57,7 +57,8 @@ class Useradd extends Base{
 	// 新增客户
 	public function useradd(){
 
-		$num=build_order_no(); //客户编号 预约号
+		$randomsn=build_order_no(); //客户编号 预约号
+		$usersn=input('usersn')?input('usersn'):$randomsn;
 
 		// dump(input('post.'));
 		if(request()->isPost()){
@@ -74,7 +75,7 @@ class Useradd extends Base{
 				'tool_id'=>input('tool_id'),
 				// 'age'=>getAge(input('birthday')),
 				// 'addtime'=>time(),
-				'usersn'=>$num
+				'usersn'=>$usersn
 			];
 
 			$consumption_data=[

@@ -51,8 +51,8 @@ class User extends Validate
 
     // 验证场景
     protected $scene = [
-        'users_info'  =>  ['name','birthday','telephone','province_id','city_id','county_id','dev_id','from_id','tool_id'],
-        'users_info_consumption'  =>  ['wdzx_id','qtzx_id','doctor_id','disease_id','jz_time','money','ill_desc'],
+        'users_info'  =>  ['name','birthday','telephone','province_id','city_id','county_id','dev_id','from_id'],
+        'users_info_consumption'  =>  ['qtzx_id','disease_id','jz_time','money','ill_desc'],
         'users_consumption'  =>  ['doctor_id','disease_id','jz_time','money','ill_desc']
     ];
 }

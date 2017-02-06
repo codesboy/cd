@@ -154,9 +154,33 @@ class Importlst extends Base
 
     }
 
+
+
+    // 参照表更新表client_users_temp3表科目类型，开发渠道，信息来源，咨询医生，咨询工具，分诊类别字段
+    public function updatetemp3(){
+        Db::execute('UPDATE client_users_temp3 AS t1, client_disease AS t2 SET t1.kmlx = t2.id WHERE t1.kmlx = t2.disease_name');
+        Db::execute('UPDATE client_users_temp3 AS t1, client_dev_from AS t2 SET t1.kfqd = t2.id WHERE t1.kfqd = t2.dev');
+        Db::execute('UPDATE client_users_temp3 AS t1, client_source AS t2 SET t1.xxly = t2.id WHERE t1.xxly = t2.source_name');
+        Db::execute('UPDATE client_users_temp3 AS t1, client_wangdian_zixun AS t2 SET t1.zxys = t2.id WHERE t1.zxys = t2.wd_name');
+        Db::execute('UPDATE client_users_temp3 AS t1, client_zx_tools AS t2 SET t1.zxgj = t2.id WHERE t1.zxgj = t2.tool');
+        Db::execute('UPDATE client_users_temp3 AS t1, client_qiantai_zixun AS t2 SET t1.fzlb = t2.id WHERE t1.fzlb = t2.qt_name');
+    }
+
     // 将client_users_temp3的内容插入到users_info表
     public function updateuserinfo(){
         Db::execute("insert into client_users_info (usersn,name,sex,age,telephone,dev_id,from_id,tool_id) select khkh,xm,xb,age,dh,kfqd,xxly,zxgj from client_users_temp3 group by khkh");
+    }
+
+    // 将client_users_temp3的消费内容插入到consumption消费记录表
+    public function updatecons(){
+        Db::execute('INSERT INTO client_consumption (uid,wdzx_id,qtzx_id,disease_id,money,jz_time,ill_desc) SELECT b.id,a.zxys,a.fzlb,a.kmlx,a.xfje,a.dzsj,a.bz FROM client_users_temp3 AS a,client_users_info AS b WHERE a.khkh=b.usersn');
+    }
+
+    // 更新client_users_info, client_consumption时间字段
+    public function updatetime(){
+        $now=time();
+        Db::execute("UPDATE client_users_info SET create_time=$now,update_time=$now WHERE ISNULL(create_time)");
+        // Db::execute("UPDATE client_consumption SET create_time=$now,update_time=$now WHERE create_time=0");
     }
 
 
