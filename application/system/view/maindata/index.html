@@ -410,6 +410,7 @@
     });
 
     // 添加就诊/消费记录
+    var uid=null;
     $('#addCon').on('click',function(event) {
         var selected=$('#dg').datagrid('getSelected');
         // console.info(selected)
@@ -417,49 +418,50 @@
             $('#addcontitle').html('为客户: '+selected.name+'('+selected.telephone+') 添加就诊/消费记录');
             $('#addconbtn').attr('disabled',false);
             $('#addConModal').modal();
-            $('#addconbtn').on('click', function(event) {
-
-                var addcondata=$('#addconform').serialize();
-                addcondata=addcondata+'&uid='+selected.id;
-
-                $.ajax({
-                    url: '{:url('Consumption/addcon')}',
-                    type: 'POST',
-                    dataType: 'html',
-                    data: addcondata
-                })
-                .done(function(conaddresult) {
-
-                    console.log(conaddresult)
-                    if(conaddresult=='"该用户消费记录添加成功！"'){
-                        $('#addconbtn').attr('disabled',true);
-                        $('#addconform').get(0).reset();
-                        $('#dg').datagrid('reload');
-                        $('#addConModal').modal('hide');
-                        $('#addConDialog').modal();
-                    }else{
-                        $('.addconmsg').html('提示信息：'+conaddresult);
-                    }
-
-                })
-                .fail(function() {
-                    console.log("error");
-                });
-                return false;
-            });
-            $('#secAddCon').on('click',function(){
-                $('#addConDialog').modal('hide');
-                $('#addConModal').modal();
-                $('#addconbtn').attr('disabled',false);
-                $('.addconmsg').html('');
-            })
-
+            uid=selected.id;
 
         }else{
             alert('请先选择客户!');
         }
 
     });
+    $('#addconbtn').on('click', function(event) {
+        var selected=$('#dg').datagrid('getSelected');
+        var addcondata=$('#addconform').serialize();
+        addcondata=addcondata+'&uid='+uid;
+
+        $.ajax({
+            url: '{:url('Consumption/addcon')}',
+            type: 'POST',
+            dataType: 'html',
+            data: addcondata
+        })
+        .done(function(conaddresult) {
+
+            console.log(conaddresult)
+            if(conaddresult=='"该用户消费记录添加成功！"'){
+                $('#addconbtn').attr('disabled',true);
+                $('#addconform').get(0).reset();
+                $('#dg').datagrid('reload');
+                $('#addConModal').modal('hide');
+                $('#addConDialog').modal();//显示是否继续添加对话框
+            }else{
+                $('.addconmsg').html('提示信息：'+conaddresult);
+            }
+
+        })
+        .fail(function() {
+            console.log("error");
+        });
+        return false;
+    });
+    $('#secAddCon').on('click',function(){
+        $('#addConDialog').modal('hide');
+        // $('#addCon').click();
+        $('#addConModal').modal();
+        $('#addconbtn').attr('disabled',false);
+        $('.addconmsg').html('');
+    })
 
     // 搜索功能
     $('#search').on('click',function(){
