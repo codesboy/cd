@@ -37,11 +37,11 @@ class Consumption extends Base{
     // 添加客户就诊/消费记录
     public function addcon(){
         if(Request()->isPost()){
-            // return input('post.');
+            // return input('post.');die;
             $addcondata=input('post.');
             $validate = validate('User');
             if($validate->scene('users_consumption')->check($addcondata)){
-                cpmodel::create($addcondata);
+                cpmodel::save($addcondata);
                 // dump(input('post.'));
                 return '该用户消费记录添加成功！';
             }else{

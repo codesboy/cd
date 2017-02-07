@@ -102,13 +102,14 @@ class Maindata extends Base
 			->join('client_qiantai_zixun q','q.id=qtzx_id','LEFT')
 			->join('client_doctors doc','doc.id=doctor_id','LEFT')
 			->join('client_disease dis','dis.id=disease_id','LEFT')
-			->field('u.id,u.name,u.sex,u.birthday,u.age,u.telephone,p.province_name,p.province_id,c.city_name,c.city_id,co.county_name,co.county_id,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,u.create_time')
+			->field('u.id,u.name,u.usersn,u.sex,u.birthday,u.age,u.telephone,p.province_name,p.province_id,c.city_name,c.city_id,co.county_name,co.county_id,d.dev,source_name,z.tool,wd_name wdname,qt_name qtname,doc.doctor,disease_name,jz_time,summoney,u.create_time')
 			->group('u.id')
 			->where($moneyRange)
 			->whereOr($fuzzy)
 			->order([$sort=>$order])
 			// ->limit($offset,$rows)//检索$offset+1到$offset+$rows记录行1-30 31-60
 			->whereTime('jz_time',$time)
+			// ->fetchSql(true)
 			->paginate(30);
 			// ->select();
 

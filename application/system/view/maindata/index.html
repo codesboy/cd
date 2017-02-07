@@ -119,16 +119,19 @@
                                     <option value="{$wd.id}">{//$wd.wd_name}</option>
                                     {/volist*/}
                                 </select>
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <label class="control-label">前台咨询师</label>
+                            </div>-->
+                            <div class="col-md-6 form-group">
+                                <label class="control-label">现场咨询师</label>
                                 <select name="qtzx_id" required1="required" class="form-control">
                                     <option value="">请选择</option>
                                     {volist name="qtzxs" id="qt" }
-                                    <option value="{$qt.id}">{//$qt.qt_name}</option>
+                                    <option value="{$qt.id}">{$qt.qt_name}</option>
                                     {/volist}
                                 </select>
-                            </div> -->
+                            </div>
+                            <div class="col-md-6 form-group"></div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6 form-group">
                                 <label class="control-label">接诊医生</label>
                                 <select name="doctor_id" required1="required" class="form-control">
@@ -208,6 +211,7 @@
                 // {field:'usersn',title:'客户编号',width:100},
                 {field:'status',title:'成交',formatter:statusformater,align:'center',width:45},
                 {field:'telephone',title:'手机号码',width:80},
+                {field:'usersn',title:'客户卡号',width:80},
                 {field:'sex',title:'性别',width:45},
                 {field:'birthday',title:'出生日期',sortable:true,width:70},
                 {field:'age',title:'年龄',width:40},
@@ -263,7 +267,7 @@
                         {field: 'qt',title: '现场咨询师',width: 100},
                         {field: 'doctor',title: '接诊医生',width: 100},
                         {field: 'disease_name',title: '就诊病种',width: 100},
-                        {field: 'ill_desc',title: '病情描述',width: 100},
+                        {field: 'ill_desc',title: '病情描述',formatter:function(value){if(value){return '<span title="'+value+'">'+value+'</span>';}},width: 100},
                         {field: 'jz_time',title: '就诊时间',width: 100},
                         {field: 'create_time',title: '登记时间',width: 100},
                     ]],
@@ -411,6 +415,7 @@
         // console.info(selected)
         if(selected){
             $('#addcontitle').html('为客户: '+selected.name+'('+selected.telephone+') 添加就诊/消费记录');
+            $('#addconbtn').attr('disabled',false);
             $('#addConModal').modal();
             $('#addconbtn').on('click', function(event) {
 
