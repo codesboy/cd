@@ -481,7 +481,8 @@
             $('#editTitle').html('修改客户: '+selected.name+'('+selected.telephone+') 资料');
             $('#editForm')[0].reset();
             $('#editForm input[name=name]').val(selected.name);
-            // console.log($('#editForm input[name=name]').val())
+            $('#editForm input[name=id]').val(selected.id);
+            // console.log($('#editForm input[name=id]').val())
             switch (selected.sex) {
                 case '男':
                     selected.sex=1;
@@ -501,13 +502,13 @@
             $('#editForm input[name=birthday]').attr('value',selected.birthday);
             $('#editForm input[name=telephone]').val(selected.telephone);
             // console.info(selected)
-            $('#editForm select[name=province_id]').val(selected.province_id);//选中对应的省份
+            // $('#editForm select[name=province_id]').val(selected.province_id);//选中对应的省份
             // $('#editForm .userAttrCity').val('');
             // $('.city1').html('ee');
             // initdata($('#editForm select[name=province_id]'));//加载对应的市级数据
 
 
-            var nextdom = $('.city1'),
+            /*var nextdom = $('.city1'),
                 url = "{:url('useradd/citylink')}",
                 // pid = $(".userAttrArea").val(),
                 pid = $('#editForm select[name=province_id]').val(),
@@ -516,22 +517,41 @@
                 },
                 value = 'city_id',
                 text = 'city_name';
-            link(nextdom, url, postdata, value, text);
+            link(nextdom, url, postdata, value, text);*/
             // console.log('pid:'+pid)
 
             // $('#editForm select[name=province_id]').change()
             // console.log($('#editForm .userAttrCity').html())
-            $('#editForm .userAttrCity').val(selected.city_id);//选中对应的市级
+            // $('#editForm .userAttrCity').val(selected.city_id);//选中对应的市级
             // $('.city1').val(selected.city_id);//选中对应的市级
             // console.log($('.city1').html())
             // console.log($('.city1').val())
-            $('.city1').val(selected.city_id);//选中对应的市级
+            // $('.city1').val(selected.city_id);//选中对应的市级
             // console.log(selected.city_id)
             // $('#editorModal').modal();
         }else{
             alert('请选择用户');
         }
     });
+    $('#saveEditBtn').on('click',function(){
+        $.ajax({
+            url: '{:url("Editor/updateUser")}',
+            type: 'POST',
+            dataType: 'json',
+            data: $('#editForm').serialize(),
+        })
+        .done(function(data) {
+            if(data=='更新成功'){
+                $('#editorModal').modal();
+            }else{
+                $('#editMsg').html(data);
+            }
+        })
+        .fail(function() {
+            console.log("error");
+        });
+
+    })
 
     // 时间查询
     $('.timebtns button').on('click',function(){

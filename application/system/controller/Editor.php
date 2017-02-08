@@ -6,23 +6,20 @@ use app\system\model\AddForm;
 use app\system\model\UsersInfo;
 class Editor extends Base{
     public function updateUser(){
-        // if (Request()->isPost()) {
-            // $userid=input('uid');
+        if (Request()->isPost()) {
+            // dump(input('post.'));die;
+            $userid=(int) input('id');
+            // dump($userid);
             $user=new UsersInfo;
-            $oneUser=$user->field('name,sex,birthday,telephone')->find(5);
-            // $oneUser=$user->field('name,sex,birthday,telephone')->get(5);
-
-            $data=$oneUser->toArray();
-
-           // dump($data);die;
-           $name='aa';
-
-            $this->assign('name',$name);
-            return $this->fetch('public/editor');
-
-
-            // $view = new View();
-            // return $view->fetch('maindata/index');
-        // }
+            if($userid>0){
+                // return 'aa';
+                $result=UsersInfo::update(input('post.'));
+                if($result){
+                    return "更新成功";
+                }else{
+                    return "更新失败";
+                }
+            }
+        }
     }
 }

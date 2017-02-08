@@ -9,6 +9,7 @@
                 <form class="form-inline" role="form" id="editForm">
                     <div class="row">
                         <div class="col-md-6 form-group">
+                            <input type="hidden" value="" name="id" id="uid">
                             <label class="control-label" for="name">姓&emsp;&emsp;名</label>
                             <input class="form-control" id="name" type="text" name="name" placeholder="姓名" value="{$name}">
                         </div>
@@ -35,9 +36,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <span class="pull-left text-danger addconmsg"></span>
+                <span class="pull-left text-danger editMsg"></span>
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="addconbtn">保存</button>
+                <button type="button" class="btn btn-primary" id="saveEditBtn">保存</button>
             </div>
 
         </div>
