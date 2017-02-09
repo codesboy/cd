@@ -542,7 +542,8 @@
         })
         .done(function(data) {
             if(data=='更新成功'){
-                $('#editorModal').modal();
+                $('#dg').datagrid('reload');
+                $('#editorModal').modal('hide');
             }else{
                 $('#editMsg').html(data);
             }

@@ -39,7 +39,7 @@ class User extends Validate
         'from_id.require' => '请选择信息来源！',
         'tool_id.require' => '请选择咨询工具！',
         'wdzx_id.require' => '请选择网电咨询师！',
-        'qtzx_id.require' => '请选择前台咨询师！',
+        'qtzx_id.require' => '请选择现场咨询师！',
         'doctor_id.require' => '请选择接诊医生！',
         'disease_id.require'  => '请选择咨询病种！',
         'jz_time.require' => '请选择就诊时间！',
