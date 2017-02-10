@@ -82,9 +82,14 @@
             </div>
         </div>
         <div style="margin-bottom: 8px;">
-            模糊查询（姓名/手机号）：<input id="mohu" class="easyui-textbox" type="text" style="width: 100px">
-            消费金额：<input id="startmoney" class="easyui-textbox" style="width:100px">
-            到：<input id="endmoney" class="easyui-textbox" style="width:100px">
+            模糊查询（姓名/手机号）：<input id="mohu" class="easyui-textbox" type="text" style="width: 100px">&emsp;
+            消费金额：<input id="startmoney" class="easyui-textbox" style="width:100px">-<input id="endmoney" class="easyui-textbox" style="width:100px">&emsp;
+            就诊时间：<input id="startmoney" class="easyui-textbox" style="width:100px">-<input id="endmoney" class="easyui-textbox" style="width:100px">
+            <div class="input-daterange input-group" id="datepicker">
+                <input type="text" class="input-sm form-control" name="start" />
+                <span class="input-group-addon">to</span>
+                <input type="text" class="input-sm form-control" name="end" />
+            </div>
             <!-- To：<input id="endmoney" class="easyui-datebox" style="width:100px"> -->
             <!-- Language：
             <select class="easyui-combobox" panelHeight="auto" style="width:100px">
@@ -554,6 +559,8 @@
 
     })
 
+    // 时间范围
+    $('#sandbox-container .input-daterange').datepicker({});
     // 时间查询
     $('.timebtns button').on('click',function(){
         var time=$(this).data('time');
