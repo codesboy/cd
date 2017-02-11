@@ -83,7 +83,7 @@
             </div>
         </div>
         <div style="margin-bottom: 8px;">
-            <form action="" class="form">
+            <form action="" class="searchForm">
                 模糊查询（姓名/手机号）：<input id="mohu" class="easyui-textbox" type="text" style="width: 100px">&emsp;
                 消费金额：<input id="startmoney" class="easyui-textbox" style="width:100px">-<input id="endmoney" class="easyui-textbox" style="width:100px">&emsp;
                 就诊时间：<input id="Begtime" class="easyui-datebox" data-options="editable:false" style="width:110px">-<input id="Endtime" class="easyui-datebox" data-options="editable:false" style="width:110px">
@@ -477,6 +477,8 @@
             name: $('#mohu').val(),
             startmoney: $('#startmoney').val(),
             endmoney: $('#endmoney').val(),
+            starttime: $('#Begtime').val(),
+            endtime: $('#Endtime').val()
         });
     });
 
@@ -566,15 +568,17 @@
 /*    $('.input-daterange').datepicker({
         format: "yyyy-mm-dd"
     });*/
+    // 就诊时间范围组件
     $("#Begtime").datebox({
-     onSelect : function(beginDate){
-      $('#Endtime').datebox().datebox('calendar').calendar({
-       validator: function(date){
-        return beginDate<date;//<=
-       }
-      });
-     }
+        onSelect : function(beginDate){
+            $('#Endtime').datebox().datebox('calendar').calendar({
+                validator: function(date){
+                    return beginDate<=date;//<=
+                }
+            });
+        }
     });
+
     // 时间查询
     $('.timebtns button').on('click',function(){
         var time=$(this).data('time');
@@ -584,6 +588,13 @@
         });
 
     });
+    // 清除筛选表单
+    function clearForm() {
+        $('.searchForm').form('clear');
+        // $('.searchForm')[0].reset();
+    }
+
+    //
 
 
 </script>
