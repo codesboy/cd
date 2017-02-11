@@ -70,7 +70,7 @@
                 <a href="{:url('')}" class="easyui-linkbutton" plain="true" target="_blank" title="全屏显示表格"><span class="glyphicon glyphicon-fullscreen"></span>全屏显示</a>
                 <a href="{:url('export')}" class="easyui-linkbutton" plain="true" target="_self"><span class="glyphicon glyphicon-export"></span>导出数据</a>
             </div>
-            <div class="btn-toolbar" role="toolbar" style="margin-bottom: 8px;">
+            <!-- <div class="btn-toolbar" role="toolbar" style="margin-bottom: 8px;">
                 <div class="btn-group btn-group-sm timebtns">
                     <button type="button" class="btn btn-default" data-time="today">今日</button>
                     <button type="button" class="btn btn-default" data-time="yesterday">昨日</button>
@@ -80,13 +80,13 @@
                     <button type="button" class="btn btn-default" data-time="last month">上月</button>
                     <button type="button" class="btn btn-default" data-time="last year">去年</button>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div style="margin-bottom: 8px;">
             <form action="" class="searchForm">
                 模糊查询（姓名/手机号）：<input id="mohu" class="easyui-textbox" type="text" style="width: 100px">&emsp;
                 消费金额：<input id="startmoney" class="easyui-textbox" style="width:100px">-<input id="endmoney" class="easyui-textbox" style="width:100px">&emsp;
-                就诊时间：<input id="Begtime" class="easyui-datebox" data-options="editable:false" style="width:110px">-<input id="Endtime" class="easyui-datebox" data-options="editable:false" style="width:110px">
+                就诊时间：<input id="Begtime" class="easyui-datebox" data-options="editable:false" style="width:110px">-<input id="Endtime" class="easyui-datebox" data-options="editable:false" style="width:110px">&emsp;
                 <a href="javascript:;" id="search" class="easyui-linkbutton"><span class="glyphicon glyphicon-search"></span>查询</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()"><span class="glyphicon glyphicon-remove"></span>清除</a>
             </form>
