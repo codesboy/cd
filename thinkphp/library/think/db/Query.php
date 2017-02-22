@@ -54,7 +54,7 @@ class Query
     private static $event = [];
 
     /**
-     * 架构函数
+     * 构造函数
      * @access public
      * @param Connection $connection 数据库对象实例
      * @param string     $model      模型名
@@ -2210,7 +2210,7 @@ class Query
             // 执行操作
             $result = '' == $sql ? 0 : $this->execute($sql, $bind);
             if ($result) {
-                if (isset($where[$pk])) {
+                if (is_string($pk) && isset($where[$pk])) {
                     $data[$pk] = $where[$pk];
                 } elseif (is_string($pk) && isset($key) && strpos($key, '|')) {
                     list($a, $val) = explode('|', $key);
@@ -2302,7 +2302,7 @@ class Query
                 }
             }
 
-            if (isset($cache)) {
+            if (isset($cache) && $resultSet) {
                 // 缓存数据集
                 $this->cacheData($key, $resultSet, $cache);
             }
@@ -2459,7 +2459,7 @@ class Query
                 $result = isset($resultSet[0]) ? $resultSet[0] : null;
             }
 
-            if (isset($cache)) {
+            if (isset($cache) && $result) {
                 // 缓存数据
                 $this->cacheData($key, $result, $cache);
             }
