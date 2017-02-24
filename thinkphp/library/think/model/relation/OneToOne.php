@@ -194,7 +194,6 @@ abstract class OneToOne extends Relation
      */
     public function getEagerlyType()
     {
-        $this->removeOption();
         return $this->eagerlyType;
     }
 
