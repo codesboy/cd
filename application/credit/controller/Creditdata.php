@@ -69,10 +69,25 @@ class Creditdata extends Base{
             ->group('u.id')
             ->order([$sort=>$order])
             ->limit($offset,$rows)
-            ->select();
-            // ->select(false);
+            ->paginate(30);
+            // ->select();
 
-        return $credit_users;
+            // dump($data->toArray());//array
+            $data=$credit_users->toArray();
+
+            // dump($data);die;
+
+            // dump($data['total']);die;
+
+            $totalnum=$data['total'];//查询到的记录条数 455
+            // echo $totalnum;die;
+
+            $result=[
+                'total'=>$totalnum,
+                // 'total'=>46,
+                'rows'=>$data['data']
+            ];
+            return json($result);
     }
 
 
