@@ -40,14 +40,6 @@ class Creditdata extends Base{
             // $pointsRangeArr=['startpoint'=>$startpoint,'endpoint'=>$endpoint];
         }
 
-        // 筛选条件 where()里面可以是数组 可以为空数组
-        /*$pointsRange=[];
-        $startpoint=input('startpoint');
-        $endpoint=input('endpoint');
-        if(!empty($startpoint) && !empty($endpoint)){
-            $pointsRange['sumg']=['between',[$startpoint,$endpoint]];
-        }*/
-
         // 模糊查询
         $keywords=input('name');
         $fuzzy=[];
@@ -438,9 +430,33 @@ class Creditdata extends Base{
         }
 
 
-        // echo $this->returndata()->data;die;
-        // $data=json_decode($this->getCreditsData()['rows'],true);
-        $data=$this->getCreditsData()['rows'];
+        // 筛选条件 having参数只能是字符串
+        $pointsRange="";
+        // $pointsRangeArr=[];
+        $startpoint=input('startpoint');
+        $endpoint=input('endpoint');
+        if(!empty($startpoint) || !empty($endpoint)){
+            // $pointsRange='SUM(get_credit)-SUM(used_credit) BETWEEN :startpoint AND :endpoint ';
+            $pointsRange="SUM(get_credit)-SUM(used_credit) BETWEEN $startpoint AND $endpoint";
+            // $pointsRangeArr=['startpoint'=>$startpoint,'endpoint'=>$endpoint];
+        }
+        $CreditUsersModel=new CreditUsers;
+
+        $credit_users=CreditUsers::view('client_credit_users u','id,name,telephone,sex,age,create_time,comment,pid,update_time')
+            ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
+            ->view('credit_consumption',['SUM(account_payable)'=>'suma','SUM(used_credit)'=>'sumu','SUM(real_pay)'=>'sumr','SUM(get_credit)-SUM(used_credit)'=>'sumg'],'uid=u.id','left')
+            ->view('admin',['username'=>'create_user_name'],'admin.id=u.create_user_id','left')
+            ->group('u.id')
+            // ->whereOr($fuzzy)
+            ->having($pointsRange)
+            // ->order([$sort=>$order])/
+            // ->fetchSql(true)
+            ->select();
+
+        // dump($credit_users);//array
+
+
+        $data=$credit_users;
         // dump($data);die;
         // 填充数据
         // $oSheet->fromArray($row); //此方法占内存
