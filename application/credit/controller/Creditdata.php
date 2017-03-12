@@ -22,23 +22,31 @@ class Creditdata extends Base{
 
     // 得到积分客户数据
     // private function getCreditsDate(){
-    public function getCreditsDate(){
+    public function getCreditsData(){
 
         // 分页条件
         $page=input('page');
         $rows=input('rows');
         $offset=($page-1)*$rows;
 
-        // 筛选条件
+        // 筛选条件 having参数只能是字符串
         $pointsRange="";
         // $pointsRangeArr=[];
         $startpoint=input('startpoint');
         $endpoint=input('endpoint');
         if(!empty($startpoint) || !empty($endpoint)){
             // $pointsRange='SUM(get_credit)-SUM(used_credit) BETWEEN :startpoint AND :endpoint ';
-            $pointsRange="sumg BETWEEN $startpoint AND $endpoint";
+            $pointsRange="SUM(get_credit)-SUM(used_credit) BETWEEN $startpoint AND $endpoint";
             // $pointsRangeArr=['startpoint'=>$startpoint,'endpoint'=>$endpoint];
         }
+
+        // 筛选条件 where()里面可以是数组 可以为空数组
+        /*$pointsRange=[];
+        $startpoint=input('startpoint');
+        $endpoint=input('endpoint');
+        if(!empty($startpoint) && !empty($endpoint)){
+            $pointsRange['sumg']=['between',[$startpoint,$endpoint]];
+        }*/
 
         // 模糊查询
         $keywords=input('name');
@@ -58,21 +66,16 @@ class Creditdata extends Base{
             ->view('credit_users',['name'=>'tjr','telephone'=>'tjrtel'],'credit_users.id=u.pid','left')
             ->view('credit_consumption',['SUM(account_payable)'=>'suma','SUM(used_credit)'=>'sumu','SUM(real_pay)'=>'sumr','SUM(get_credit)-SUM(used_credit)'=>'sumg'],'uid=u.id','left')
             ->view('admin',['username'=>'create_user_name'],'admin.id=u.create_user_id','left')
-            ->whereOr($fuzzy)
-            // ->whereTime('u.create_time','d')
-            // ->where('SUM(get_credit)-SUM(used_credit)','BETWEEN',[$startpoint,$endpoint])
-
-            // ->having('sumg','BETWEEN',[$startpoint,$endpoint])
-            // ->having($pointsRange,$pointsRangeArr)
-            ->having($pointsRange)
-            // ->having('SUM(get_credit)-SUM(used_credit) BETWEEN :startpoint AND :endpoint',['startpoint'=>1,'endpoint'=>7])
             ->group('u.id')
+            ->whereOr($fuzzy)
+            ->having($pointsRange)
             ->order([$sort=>$order])
-            ->limit($offset,$rows)
+            // ->fetchSql(true)
             ->paginate(30);
-            // ->select();
 
-            // dump($data->toArray());//array
+            /*dump($credit_users);
+            die;*/
+            // dump($credit_users->toArray());//array
             $data=$credit_users->toArray();
 
             // dump($data);die;
@@ -87,12 +90,13 @@ class Creditdata extends Base{
                 // 'total'=>46,
                 'rows'=>$data['data']
             ];
-            return json($result);
+            // return json($result);
+            return $result;
     }
 
 
     // 处理数据返回给前端使用
-    public function returnCreditData(){
+   /* public function returnCreditData(){
         if(Request()->isPost()){
 
 
@@ -111,7 +115,7 @@ class Creditdata extends Base{
             return 'Hello World!';
         }
 
-    }
+    }*/
     // 获取客户详细消费积分列表
     public function getCreditDetail($uid){
         if(Request()->isPost()){
@@ -435,7 +439,8 @@ class Creditdata extends Base{
 
 
         // echo $this->returndata()->data;die;
-        $data=$this->getCreditsDate();
+        // $data=json_decode($this->getCreditsData()['rows'],true);
+        $data=$this->getCreditsData()['rows'];
         // dump($data);die;
         // 填充数据
         // $oSheet->fromArray($row); //此方法占内存
