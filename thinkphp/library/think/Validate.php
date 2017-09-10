@@ -38,6 +38,7 @@ class Validate
     protected static $typeMsg = [
         'require'     => ':attribute不能为空',
         'number'      => ':attribute必须是数字',
+        'integer'     => ':attribute必须是整数',
         'float'       => ':attribute必须是浮点数',
         'boolean'     => ':attribute必须是布尔值',
         'email'       => ':attribute格式不符',
@@ -165,7 +166,7 @@ class Validate
     }
 
     /**
-     * 获取验证规则的默认提示信息
+     * 设置验证规则的默认提示信息
      * @access protected
      * @param string|array  $type  验证规则类型名称或者数组
      * @param string        $msg  验证提示信息
@@ -456,11 +457,13 @@ class Validate
      * @access protected
      * @param mixed     $value  字段值
      * @param mixed     $rule  验证规则
+     * @param array     $data  数据
      * @return bool
      */
-    protected function egt($value, $rule)
+    protected function egt($value, $rule, $data)
     {
-        return $value >= $rule;
+        $val = $this->getDataValue($data, $rule);
+        return !is_null($val) && $value >= $val;
     }
 
     /**
@@ -468,11 +471,13 @@ class Validate
      * @access protected
      * @param mixed     $value  字段值
      * @param mixed     $rule  验证规则
+     * @param array     $data  数据
      * @return bool
      */
-    protected function gt($value, $rule)
+    protected function gt($value, $rule, $data)
     {
-        return $value > $rule;
+        $val = $this->getDataValue($data, $rule);
+        return !is_null($val) && $value > $val;
     }
 
     /**
@@ -480,11 +485,13 @@ class Validate
      * @access protected
      * @param mixed     $value  字段值
      * @param mixed     $rule  验证规则
+     * @param array     $data  数据
      * @return bool
      */
-    protected function elt($value, $rule)
+    protected function elt($value, $rule, $data)
     {
-        return $value <= $rule;
+        $val = $this->getDataValue($data, $rule);
+        return !is_null($val) && $value <= $val;
     }
 
     /**
@@ -492,11 +499,13 @@ class Validate
      * @access protected
      * @param mixed     $value  字段值
      * @param mixed     $rule  验证规则
+     * @param array     $data  数据
      * @return bool
      */
-    protected function lt($value, $rule)
+    protected function lt($value, $rule, $data)
     {
-        return $value < $rule;
+        $val = $this->getDataValue($data, $rule);
+        return !is_null($val) && $value < $val;
     }
 
     /**
@@ -891,7 +900,7 @@ class Validate
     {
         list($field, $val) = explode(',', $rule);
         if ($this->getDataValue($data, $field) == $val) {
-            return !empty($value);
+            return !empty($value) || '0' == $value;
         } else {
             return true;
         }
@@ -909,7 +918,7 @@ class Validate
     {
         $result = call_user_func_array($rule, [$value, $data]);
         if ($result) {
-            return !empty($value);
+            return !empty($value) || '0' == $value;
         } else {
             return true;
         }
@@ -927,7 +936,7 @@ class Validate
     {
         $val = $this->getDataValue($data, $rule);
         if (!empty($val)) {
-            return !empty($value);
+            return !empty($value) || '0' == $value;
         } else {
             return true;
         }
@@ -1180,13 +1189,15 @@ class Validate
     /**
      * 获取数据值
      * @access protected
-     * @param array     $data  数据
-     * @param string    $key  数据标识 支持二维
+     * @param array $data 数据
+     * @param string $key 数据标识 支持二维
      * @return mixed
      */
     protected function getDataValue($data, $key)
     {
-        if (strpos($key, '.')) {
+        if (is_numeric($key)) {
+            $value = $key;
+        } elseif (strpos($key, '.')) {
             // 支持二维数组验证
             list($name1, $name2) = explode('.', $key);
             $value               = isset($data[$name1][$name2]) ? $data[$name1][$name2] : null;
@@ -1215,6 +1226,8 @@ class Validate
             $msg = $this->message[$attribute];
         } elseif (isset(self::$typeMsg[$type])) {
             $msg = self::$typeMsg[$type];
+        } elseif (0 === strpos($type, 'require')) {
+            $msg = self::$typeMsg['require'];
         } else {
             $msg = $title . '规则错误';
         }
