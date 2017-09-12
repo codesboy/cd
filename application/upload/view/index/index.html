@@ -97,7 +97,7 @@
 
                 //ajax异步上传
                 $.ajax({
-                    url: "{:url('upload')}",
+                    url: "{:url('saveUploadFile')}",
                     type: "POST",
                     data: formData,
                     xhr: function(){ //获取ajaxSettings中的xhr对象，为它的upload属性绑定progress事件的处理函数
@@ -110,10 +110,13 @@
                         return myXhr; //xhr对象返回给jQuery使用
                     },
                     success: function(result){
-                        $("#result").html(result);
+                        // $("#result").html(result.msg);
+                        alert(result.msg);
                     },
-                    fail:function(result){
-                        $("#result").html(result);
+                    error:function(result){
+                        console.log(result)
+                        // alert(result.msg);
+                        // $("#result").html(result);
                     },
                     contentType: false, //必须false才会自动加上正确的Content-Type
                     processData: false  //必须false才会避开jQuery对 formdata 的默认处理
