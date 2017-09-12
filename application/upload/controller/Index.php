@@ -12,9 +12,16 @@ class Index extends Controller{
 
     private function upload(){
         // 获取表单上传文件
+
         $file = request()->file('file');
         $num=request()->param('num');
-
+        // dump($_FILES);die;
+        // dump($file);die;
+        if(!$file){
+            throw new UploadException([
+                'msg'=>'超过post_max_size大小'
+            ]);
+        }
         // 针对getimagesize(): Read error!异常
         try {
             // 上传文件验证
