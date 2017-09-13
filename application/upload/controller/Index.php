@@ -5,6 +5,7 @@ use app\lib\exception\UploadException;
 use app\upload\model\Uploads as UploadsModel;
 use think\Request;
 use think\Image;
+use app\upload\validate\UploadValidate;
 class Index extends Controller{
     public function index(){
         return $this->fetch();
@@ -19,13 +20,16 @@ class Index extends Controller{
         // dump($file);die;
         if(!$file){
             throw new UploadException([
-                'msg'=>'超过post_max_size大小'
+                'code'=>0,
+                'msg'=>'没有选择图片或者图片超过post_max_size大小'
             ]);
         }
+
+        $validate=new UploadValidate();
         // 针对getimagesize(): Read error!异常
         try {
             // 上传文件验证
-            $result = $this->validate(['file' => $file], ['file'=>'require|image|fileSize:6291456'],['file.require' => '请选择上传文件', 'file.image' => '非法图像文件','file.fileSize' => '图片文件大小不能超过6M']);//  20756
+            $result=$validate->check(['file' => $file,'sign_num'=>$num]);
         } catch (\Exception $e) {
             throw new UploadException([
                 'code'=>0,
@@ -36,7 +40,9 @@ class Index extends Controller{
         // 验证不通过
         if(true !== $result){
             throw new UploadException([
-                'msg'=>$this->error($result)
+                // 'msg'=>$this->error($result);
+                'code'=>0,
+                'msg'=>$validate->getError()
             ]);
         }
 
@@ -76,13 +82,15 @@ class Index extends Controller{
                     'code'=>200,
                     'errorCode'=>0
                 ]);
+
             }
         }
     }
 
     public function getUploadsData()
     {
-        $data=UploadsModel::where('sign_num','>',0)->select();
+        $data=UploadsModel::where('sign_num','>',0)->order('create_time','desc')->select();
+        $this->assign('data',$data);
         return $this->fetch();
         // return json($data);
     }
@@ -90,6 +98,5 @@ class Index extends Controller{
     public function test(){
         var_dump(getimagesize('C:\Users\admin\Desktop\2.jpg'));
     }
-
 
 }

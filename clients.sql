@@ -318,13 +318,16 @@ CREATE TABLE `client_uploads` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sign_num` smallint(4) NOT NULL COMMENT '签到号码',
   `img_url` varchar(255) NOT NULL COMMENT '图片路径',
+  `self_lucky_turn` tinyint(3) unsigned DEFAULT NULL COMMENT '内定中奖轮次',
+  `luckied_turn` tinyint(3) unsigned DEFAULT NULL COMMENT '中奖轮次',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `create_time` int(11) unsigned NOT NULL,
+  `update_time` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQUE` (`sign_num`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*Data for the table `client_uploads` */
-
-insert  into `client_uploads`(`id`,`sign_num`,`img_url`) values (1,0,'20170911\\88980b91e4bcbbb672e6c9d177050aa7.png');
 
 /*Table structure for table `client_users_info` */
 
